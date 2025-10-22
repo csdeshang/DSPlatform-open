@@ -1,0 +1,79 @@
+{
+    "name": "alibabacloud/darabonba",
+    "homepage": "https://www.alibabacloud.com/",
+    "description": "Client of Darabonba for PHP",
+    "keywords": [
+        "tea",
+        "client",
+        "alibabacloud",
+        "cloud"
+    ],
+    "type": "library",
+    "license": "Apache-2.0",
+    "support": {
+        "source": "https://github.com/aliyun/tea-php",
+        "issues": "https://github.com/aliyun/tea-php/issues"
+    },
+    "authors": [
+        {
+            "name": "Alibaba Cloud SDK",
+            "email": "sdk-team@alibabacloud.com",
+            "homepage": "http://www.alibabacloud.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-simplexml": "*",
+        "ext-xmlwriter": "*",
+        "adbario/php-dot-notation": "^2.4",
+        "alibabacloud/tea": "^3.2",
+        "guzzlehttp/guzzle": "^6.3|^7.0",
+        "monolog/monolog": "^1.0|^2.1",
+        "psr/http-message": "^0.11.0|^1.0"
+    },
+    "require-dev": {
+        "symfony/dotenv": "^3.4",
+        "phpunit/phpunit": "^4.8.35|^5.4.3|^9.3",
+        "symfony/var-dumper": "^3.4"
+    },
+    "suggest": {
+        "ext-sockets": "To use client-side monitoring"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlibabaCloud\\Dara\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AlibabaCloud\\Dara\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "scripts": {
+        "cs": "phpcs --standard=PSR2 -n ./",
+        "cbf": "phpcbf --standard=PSR2 -n ./",
+        "fixer": "php-cs-fixer fix ./",
+        "unit": [
+            "@clearCache",
+            "XDEBUG_MODE=coverage phpunit --testsuite=Unit --colors=always --coverage-xml ./coverage/xml --coverage-html ./coverage/html --coverage-clover ./coverage/coverage.clover"
+        ],
+        "feature": [
+            "@clearCache",
+            "phpunit --testsuite=Feature --colors=always"
+        ],
+        "clearCache": "rm -rf cache/*",
+        "coverage": "open cache/coverage/index.html"
+    }
+}

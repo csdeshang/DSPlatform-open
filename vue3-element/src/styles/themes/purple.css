@@ -1,0 +1,87 @@
+html.theme-purple {
+  /* 主色调 */
+  --el-color-primary: #8b5cf6;
+  --el-color-primary-light-3: #a78bfa;
+  --el-color-primary-light-9: #f5f3ff;
+  --el-color-primary-dark-2: #7c3aed;
+
+  /* 功能色 */
+  --el-color-success: #10b981;
+  --el-color-warning: #f59e0b;
+  --el-color-danger: #ef4444;
+  --el-color-info: #6b7280;
+
+  /* 中性色 */
+  --el-bg-color: #ffffff;
+  --el-bg-color-page: #f5f3ff;
+  --el-text-color-primary: #5b21b6;
+  --el-text-color-regular: #7e22ce;
+  --el-border-color: #ddd6fe;
+  
+  /* 应用特定变量 */
+  --app-sidebar-bg: #6a1b9a;
+  --app-sidebar-text: #ffffff;
+  --app-sidebar-active-bg: #7b1fa2;
+  --app-sidebar-active-text: #ffffff;
+  --app-sidebar-hover-bg: #7b1fa2;
+  --app-sidebar-border: #6a1b9a;
+  --app-header-bg: #7b1fa2;
+  --app-header-text: #ffffff;
+  --app-header-hover-bg: #6a1b9a;
+  --app-main-bg: #f5f3ff;
+  --app-sidebar-width: 220px;
+  --app-header-height: 60px;
+}
+
+/* 组件样式覆盖 */
+html.theme-purple .el-menu {
+  --el-menu-bg-color: var(--app-sidebar-bg);
+  --el-menu-text-color: #ddd6fe;
+  --el-menu-hover-bg-color: #7e22ce;
+  --el-menu-active-color: #ffffff;
+  --el-menu-active-bg-color: var(--el-color-primary);
+  border-right: none;
+}
+
+html.theme-purple .el-menu-item.is-active {
+  background-color: var(--el-menu-active-bg-color);
+  font-weight: 500;
+}
+
+html.theme-purple .el-sub-menu.is-active .el-sub-menu__title {
+  color: #ffffff;
+}
+
+html.theme-purple .el-menu-item:hover, 
+html.theme-purple .el-sub-menu__title:hover {
+  background-color: var(--el-menu-hover-bg-color);
+}
+
+html.theme-purple .el-button--primary {
+  --el-button-bg-color: var(--el-color-primary);
+  --el-button-border-color: var(--el-color-primary);
+  --el-button-hover-bg-color: #7c3aed;
+  --el-button-hover-border-color: #7c3aed;
+  --el-button-active-bg-color: #6d28d9;
+  --el-button-active-border-color: #6d28d9;
+}
+
+/* 布局组件样式 */
+html.theme-purple .el-header {
+  background-color: var(--app-header-bg);
+  border-bottom: none;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* 侧边栏样式优化 */
+html.theme-purple .el-aside {
+  background-color: var(--app-sidebar-bg);
+  transition: width 0.3s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* 主内容区域 */
+html.theme-purple .el-main {
+  background-color: var(--app-main-bg);
+}

@@ -1,0 +1,7 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            message: '#Unsafe usage of new static\(\)#'
+            paths:
+                - src/Collection.php

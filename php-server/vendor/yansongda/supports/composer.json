@@ -1,0 +1,49 @@
+{
+    "name": "yansongda/supports",
+    "description": "common components",
+    "keywords": ["support", "array", "collection", "config"],
+    "support": {
+        "issues": "https://github.com/yansongda/supports/issues",
+        "source": "https://github.com/yansongda/supports"
+    },
+    "authors": [
+        {
+            "name": "yansongda",
+            "email": "me@yansongda.cn"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-mbstring": "*",
+        "ext-ctype": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "mockery/mockery": "^1.4",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/phpstan": "^1.1.0"
+    },
+    "autoload": {
+        "files": [
+            "src/Functions.php"
+        ],
+        "psr-4": {
+            "Yansongda\\Supports\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yansongda\\Supports\\Tests\\": "tests/"
+        }
+    },
+    "suggest": {
+        "symfony/console": "Use stdout logger",
+        "monolog/monolog": "Use logger"
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit -c phpunit.xml --colors=always",
+        "cs-fix": "php-cs-fixer fix --dry-run --diff 1>&2",
+        "analyse": "phpstan analyse --memory-limit 300M -l 5 -c phpstan.neon ./src"
+    },
+    "license": "MIT"
+}

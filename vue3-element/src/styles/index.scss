@@ -1,0 +1,24 @@
+// Element Plus 原始样式
+@use 'element-plus/dist/index.css';
+
+// 主题文件
+@use './themes/dark.css';
+@use './themes/light.css';
+@use './themes/black.css';
+@use './themes/blue.css';
+@use './themes/green.css';
+@use './themes/purple.css';
+@use './themes/orange.css';
+
+// Iconfont 样式
+@use './iconfont/iconfont.css';
+
+// Element Plus 样式覆盖
+@use './element-plus.scss';
+
+
+//https://www.tailwindcss.cn/
+@use './tailwind.css';
+
+// 公共样式
+@use './common.scss';

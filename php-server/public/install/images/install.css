@@ -1,0 +1,345 @@
+/* 安装程序样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background: #f5f5f5;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.layout {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 头部 */
+.header {
+    background: #2486ff;
+    color: #fff;
+    height: 60px;
+    line-height: 60px;
+}
+
+.header .title {
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.header .version {
+    float: right;
+}
+
+/* 主体 */
+.main {
+    padding: 20px 0;
+    min-height: calc(100vh - 110px);
+}
+
+/* 步骤条 */
+.steps-wrap {
+    margin-bottom: 20px;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 20px 0;
+}
+
+.steps:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 100%;
+    height: 2px;
+    background: #ddd;
+    z-index: 1;
+}
+
+.step {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.step-num {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: #ddd;
+    color: #fff;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+}
+
+.step.active .step-num {
+    background: #2486ff;
+}
+
+.step-text {
+    color: #999;
+}
+
+.step.active .step-text {
+    color: #2486ff;
+    font-weight: bold;
+}
+
+/* 内容 */
+.content {
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+h3 {
+    font-size: 16px;
+    margin: 15px 0 10px;
+}
+
+/* 协议 */
+.license-content {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.license-text {
+    line-height: 1.8;
+}
+
+.license-text h3 {
+    text-align: center;
+}
+
+.license-text p {
+    text-indent: 2em;
+    margin-bottom: 10px;
+}
+
+/* 检测表格 */
+.check-section {
+    margin-bottom: 20px;
+}
+
+.check-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.check-table th,
+.check-table td {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.check-table th {
+    background: #f8f8f8;
+}
+
+.check-table .success {
+    color: green;
+}
+
+.check-table .error {
+    color: red;
+}
+
+/* 表单 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"] {
+    width: 300px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group .help {
+    display: inline-block;
+    margin-left: 10px;
+    color: #999;
+}
+
+/* 按钮 */
+.btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    color: #333;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #e8e8e8;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: #2486ff;
+    border-color: #2486ff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #0d70e7;
+    border-color: #0d70e7;
+}
+
+.btn-disabled {
+    background: #ddd;
+    border-color: #ddd;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.action {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.action .btn {
+    margin: 0 10px;
+}
+
+/* 提示框 */
+.notice-box {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f8f8;
+}
+
+.warning {
+    background: #fff8f0;
+    border-color: #ffb74d;
+    color: #e65100;
+}
+
+.error-box {
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+}
+
+/* 进度条 */
+.progress {
+    height: 20px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #2486ff;
+    text-align: center;
+    line-height: 20px;
+    color: #fff;
+    transition: width 0.3s;
+}
+
+.status-text {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* 安装成功 */
+.success-box {
+    text-align: center;
+    padding: 30px 0;
+}
+
+.success-icon {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    background: #4caf50;
+    color: #fff;
+    font-size: 40px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.success-message {
+    font-size: 20px;
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.install-info {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+.install-info ul {
+    margin-left: 20px;
+    line-height: 2;
+}
+
+/* 底部 */
+.footer {
+    text-align: center;
+    padding: 15px 0;
+    color: #999;
+    font-size: 12px;
+} 

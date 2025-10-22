@@ -1,0 +1,54 @@
+{
+    "name": "hyperf/pimple",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "php",
+        "hyperf",
+        "container",
+        "psr11"
+    ],
+    "description": "Pimple Container",
+    "autoload": {
+        "psr-4": {
+            "Hyperf\\Pimple\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HyperfTest\\": "tests"
+        }
+    },
+    "require": {
+        "php": ">=8.0",
+        "hyperf/context": "^3.0",
+        "hyperf/contract": "^3.0",
+        "pimple/pimple": "^3.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "hyperf/support": "^3.0",
+        "mockery/mockery": "^1.3",
+        "phpstan/phpstan": "^1.0",
+        "phpunit/phpunit": ">=7.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit -c phpunit.xml --colors=always",
+        "analyse": "phpstan analyse --memory-limit 300M -l 0 ./src",
+        "cs-fix": "php-cs-fixer fix $1"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        },
+        "hyperf": {
+            "config": "Hyperf\\Pimple\\ConfigProvider"
+        }
+    }
+}

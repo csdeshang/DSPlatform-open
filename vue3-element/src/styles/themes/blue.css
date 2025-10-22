@@ -1,0 +1,93 @@
+html.theme-blue {
+  /* 主色调 */
+  --el-color-primary: #0ea5e9;
+  --el-color-primary-light-3: #38bdf8;
+  --el-color-primary-light-9: #e0f2fe;
+  --el-color-primary-dark-2: #0284c7;
+
+  /* 功能色 */
+  --el-color-success: #10b981;
+  --el-color-warning: #f59e0b;
+  --el-color-danger: #ef4444;
+  --el-color-info: #6b7280;
+
+  /* 中性色 */
+  --el-bg-color: #ffffff;
+  --el-bg-color-page: #f0f9ff;
+  --el-text-color-primary: #0c4a6e;
+  --el-text-color-regular: #0369a1;
+  --el-border-color: #bae6fd;
+  
+  /* 应用特定变量 */
+  --app-sidebar-bg: #1565c0;
+  --app-sidebar-text: #ffffff;
+  --app-sidebar-active-bg: #1976d2;
+  --app-sidebar-active-text: #ffffff;
+  --app-sidebar-hover-bg: #1976d2;
+  --app-sidebar-border: #1565c0;
+  --app-header-bg: #1976d2;
+  --app-header-text: #ffffff;
+  --app-header-hover-bg: #1565c0;
+  --app-main-bg: #f0f9ff;
+  --app-sidebar-width: 220px;
+  --app-header-height: 60px;
+}
+
+/* 组件样式覆盖 */
+html.theme-blue .el-menu {
+  --el-menu-bg-color: var(--app-sidebar-bg);
+  --el-menu-text-color: #bae6fd;
+  --el-menu-hover-bg-color: #075985;
+  --el-menu-active-color: #ffffff;
+  --el-menu-active-bg-color: var(--el-color-primary);
+  border-right: none;
+}
+
+html.theme-blue .el-menu-item.is-active {
+  background-color: var(--el-menu-active-bg-color);
+  font-weight: 500;
+}
+
+html.theme-blue .el-sub-menu.is-active .el-sub-menu__title {
+  color: #ffffff;
+}
+
+html.theme-blue .el-menu-item:hover, 
+html.theme-blue .el-sub-menu__title:hover {
+  background-color: var(--el-menu-hover-bg-color);
+}
+
+html.theme-blue .el-menu--horizontal > .el-menu-item.is-active,
+html.theme-blue .el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
+  border-bottom-color: #ffffff;
+}
+
+html.theme-blue .el-button--primary {
+  --el-button-bg-color: var(--el-color-primary);
+  --el-button-border-color: var(--el-color-primary);
+  --el-button-hover-bg-color: #0284c7;
+  --el-button-hover-border-color: #0284c7;
+  --el-button-active-bg-color: #0369a1;
+  --el-button-active-border-color: #0369a1;
+}
+
+/* 布局组件样式 */
+html.theme-blue .el-header {
+  background-color: var(--app-header-bg);
+  border-bottom: none;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+/* 侧边栏样式优化 */
+html.theme-blue .el-aside {
+  background-color: var(--app-sidebar-bg);
+  transition: width 0.3s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+
+/* 主内容区域 */
+html.theme-blue .el-main {
+  background-color: var(--app-main-bg);
+}

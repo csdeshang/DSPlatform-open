@@ -1,0 +1,126 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+}
+
+/* Element Plus 覆盖样式 */
+.el-container {
+    height: 100%;
+}
+
+.el-aside {
+    transition: width 0.3s;
+}
+
+.el-scrollbar__wrap {
+    overflow-x: hidden !important;
+}
+
+
+// 详情页
+.ds-detail {
+    padding: 0 10px;
+
+    .section-hd {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+
+        .section-hd-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .section-hd-top-left {
+                display: flex;
+                align-items: center;
+
+                .avatar {
+                    margin-right: 20px;
+                }
+
+                .info {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+
+            .section-hd-top-right {
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .section-hd-center {
+            margin-top: 10px;
+
+            .item {
+                display: flex;
+                margin-bottom: 10px;
+
+                .item-title {
+                    font-size: 14px;
+                    color: #333;
+                }
+
+                .item-content {
+                    font-size: 14px;
+                    color: #666;
+                }
+            }
+        }
+
+        .section-hd-center.style-1 {
+            .item {
+                flex-direction: column;
+
+                .item-title {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+
+    }
+
+    .section-bd {
+        .section-bd-block {
+            padding: 20px 0;
+            border-bottom: 1px dashed var(--el-border-color);
+
+            .section-bd-block-title {
+                font-size: 14px;
+                border-left: 3px solid var(--el-color-primary);
+                padding-left: 10px;
+                color: #333;
+            }
+
+            .section-bd-block-content {
+                line-height: 30px;
+                color: #666;
+                margin-top: 10px;
+                /* 添加非编辑模式下的文本样式 */
+                .form-text {
+                    line-height: 32px;
+                    min-height: 32px;
+                }
+            }
+        }
+        .section-bd-block-footer{
+            display: flex;
+            // 居中
+            justify-content: center;
+            margin-top: 20px;
+        }
+    }
+}

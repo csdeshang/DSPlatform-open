@@ -1,0 +1,140 @@
+DROP TABLE IF EXISTS `#__points_goods`;
+CREATE TABLE `#__points_goods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '积分商品自增ID',
+  `goods_name` varchar(128) NOT NULL COMMENT '积分商品名称',
+  `goods_advword` varchar(150) DEFAULT NULL COMMENT '商品广告词',
+  `goods_body` text COMMENT '商品详情描述',
+  `goods_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '商品状态 0:下架 1:上架',
+  `goods_image` varchar(255) NOT NULL DEFAULT '' COMMENT '商品主图',
+  `category_id` int(11) NOT NULL DEFAULT '0' COMMENT '积分商品分类ID',
+  `slide_image` varchar(2000) NOT NULL DEFAULT '' COMMENT '商品轮播图',
+  `points_price` int(11) NOT NULL DEFAULT '0' COMMENT '积分价格',
+  `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场参考价格',
+  `stock_num` int(11) NOT NULL DEFAULT '0' COMMENT '库存数量',
+  `limit_per_user` int(11) NOT NULL DEFAULT '0' COMMENT '每人限购数量 0为不限制',
+  `limit_per_day` int(11) NOT NULL DEFAULT '0' COMMENT '每日限购数量 0为不限制',
+  `click_num` int(11) NOT NULL DEFAULT '0' COMMENT '点击数量',
+  `exchange_num` int(11) NOT NULL DEFAULT '0' COMMENT '兑换数量',
+  `evaluate_num` int(11) NOT NULL DEFAULT '0' COMMENT '评价数量',
+  `avg_evaluate_score` decimal(3,2) NOT NULL DEFAULT '5.00' COMMENT '平均评价分数',
+  `goods_sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序权重',
+  `is_hot` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否热门 0:否 1:是',
+  `is_recommend` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否推荐 0:否 1:是',
+  `is_new` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否新品 0:否 1:是',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `update_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `is_deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态 0:未删除 1:已删除',
+  `deleted_at` int(11) DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_goods_name` (`goods_name`),
+  KEY `idx_category_id` (`category_id`),
+  KEY `idx_goods_status` (`goods_status`),
+  KEY `idx_points_price` (`points_price`),
+  KEY `idx_stock_num` (`stock_num`),
+  KEY `idx_is_deleted` (`is_deleted`),
+  KEY `idx_create_at` (`create_at`),
+  KEY `idx_goods_sort` (`goods_sort`),
+  KEY `idx_exchange_num` (`exchange_num`),
+  KEY `idx_evaluate_num` (`evaluate_num`),
+  KEY `idx_avg_evaluate_score` (`avg_evaluate_score`),
+  KEY `idx_is_hot` (`is_hot`),
+  KEY `idx_is_recommend` (`is_recommend`),
+  KEY `idx_is_new` (`is_new`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分商品表';
+
+
+DROP TABLE IF EXISTS `#__points_goods_category`;
+CREATE TABLE `#__points_goods_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '分类自增ID',
+  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级分类ID',
+  `name` varchar(32) NOT NULL COMMENT '分类名称',
+  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '分类图片',
+  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序权重',
+  `is_show` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否显示 0:隐藏 1:显示',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `update_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_pid` (`pid`),
+  KEY `idx_sort` (`sort`),
+  KEY `idx_is_show` (`is_show`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分商品分类表';
+
+
+DROP TABLE IF EXISTS `#__points_goods_order`;
+CREATE TABLE `#__points_goods_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '兑换订单自增ID',
+  `order_sn` varchar(32) NOT NULL COMMENT '兑换订单号',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `goods_id` int(11) NOT NULL COMMENT '积分商品ID',
+  `goods_name` varchar(128) NOT NULL COMMENT '商品名称',
+  `goods_image` varchar(255) NOT NULL DEFAULT '' COMMENT '商品图片',
+  `points_price` int(11) NOT NULL DEFAULT '0' COMMENT '积分价格',
+  `exchange_num` int(11) NOT NULL DEFAULT '1' COMMENT '兑换数量',
+  `total_points` int(11) NOT NULL DEFAULT '0' COMMENT '总积分',
+  `order_status` tinyint(4) NOT NULL DEFAULT '10' COMMENT '订单状态 0:已取消 10:待发货 20:已发货 30:已收货 40:已完成',
+  `delivery_method` varchar(20) NOT NULL DEFAULT 'express' COMMENT '配送方式 express:快递 delivery:自提',
+  `receiver_name` varchar(32) NOT NULL COMMENT '收货人姓名',
+  `receiver_mobile` varchar(11) NOT NULL COMMENT '收货人手机',
+  `receiver_address` varchar(255) NOT NULL COMMENT '收货详细地址',
+  `express_company` varchar(32) NOT NULL DEFAULT '' COMMENT '快递公司',
+  `express_no` varchar(32) NOT NULL DEFAULT '' COMMENT '快递单号',
+  `express_time` int(11) NOT NULL DEFAULT '0' COMMENT '发货时间',
+  `receive_time` int(11) NOT NULL DEFAULT '0' COMMENT '收货时间',
+  `is_evaluate` tinyint(4) NOT NULL DEFAULT '0' COMMENT '评价状态 0:未评价 1:已评价',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `update_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `is_deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态 0:未删除 1:已删除',
+  `deleted_at` int(11) DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `udx_order_sn` (`order_sn`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_goods_id` (`goods_id`),
+  KEY `idx_order_status` (`order_status`),
+  KEY `idx_is_evaluate` (`is_evaluate`),
+  KEY `idx_create_at` (`create_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分兑换订单表';
+
+DROP TABLE IF EXISTS `#__points_goods_order_log`;
+CREATE TABLE `#__points_goods_order_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL COMMENT '订单ID',
+  `order_status` tinyint(4) NOT NULL COMMENT '订单状态',
+  `message` varchar(255) NOT NULL COMMENT '日志描述',
+  `create_role` varchar(10) NOT NULL COMMENT '创建人角色',
+  `create_by` varchar(32) NOT NULL COMMENT '创建人',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `extra` varchar(255) DEFAULT NULL COMMENT '参数',
+  PRIMARY KEY (`id`),
+  KEY `idx_order_id` (`order_id`),
+  KEY `idx_order_status` (`order_status`),
+  KEY `idx_create_at` (`create_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分商品订单日志';
+
+
+DROP TABLE IF EXISTS `#__points_goods_evaluate`;
+CREATE TABLE `#__points_goods_evaluate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '评价自增ID',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `goods_id` int(11) NOT NULL COMMENT '积分商品ID',
+  `order_id` int(11) NOT NULL COMMENT '兑换订单ID',
+  `evaluate_content` text NOT NULL COMMENT '评价内容',
+  `evaluate_images` varchar(2000) NOT NULL DEFAULT '' COMMENT '评价图片',
+  `evaluate_score` tinyint(4) NOT NULL DEFAULT '5' COMMENT '评价分数 1-5星',
+  `is_anonymous` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否匿名 0:否 1:是',
+  `reply_content` text COMMENT '商家回复内容',
+  `reply_time` int(11) NOT NULL DEFAULT '0' COMMENT '回复时间',
+  `is_show` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否显示 0:隐藏 1:显示',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `update_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `is_deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除状态 0:未删除 1:已删除',
+  `deleted_at` int(11) DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_goods_id` (`goods_id`),
+  KEY `idx_order_id` (`order_id`),
+  KEY `idx_evaluate_score` (`evaluate_score`),
+  KEY `idx_is_show` (`is_show`),
+  KEY `idx_create_at` (`create_at`),
+  KEY `idx_is_deleted` (`is_deleted`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='积分商品评价表';

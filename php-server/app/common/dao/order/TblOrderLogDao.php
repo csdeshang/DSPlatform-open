@@ -1,0 +1,135 @@
+<?php
+
+namespace app\common\dao\order;
+
+use app\common\dao\BaseDao;
+use app\common\model\order\TblOrderLogModel;
+
+/**
+ * 订单日志数据访问对象
+ * 
+ * 负责订单操作日志的数据库交互操作
+ */
+class TblOrderLogDao extends BaseDao
+{
+    /**
+     * 构造函数
+     * 
+     * 初始化TblOrderLogModel模型实例
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->model = new TblOrderLogModel();
+    }
+    
+    /**
+     * 创建订单日志
+     * 
+     * @param array $data 日志数据
+     * @return int 新创建的日志ID
+     */
+    public function createOrderLog(array $data): int
+    {
+        $result = $this->model->create($data);
+        return $result->id;
+    }
+
+    /**
+     * 删除订单日志
+     * 
+     * @param array $condition 删除条件
+     * @return int 受影响的行数
+     */
+    public function deleteOrderLog(array $condition): int
+    {
+        return $this->model->where($condition)->delete();
+    }
+    
+    /**
+     * 更新订单日志
+     * 
+     * @param array $condition 更新条件
+     * @param array $data 更新数据
+     * @return bool 是否更新成功
+     */
+    public function updateOrderLog(array $condition, array $data): bool
+    {
+        $result = $this->model::update($data, $condition);
+        return true;
+    }
+
+    /**
+     * 获取订单日志列表
+     * 
+     * @param array $condition 查询条件
+     * @param string $field 查询字段，默认为所有字段
+     * @param string $order 排序规则，默认按ID降序
+     * @return array 日志列表
+     */
+    public function getOrderLogList(array $condition, string $field = '*', string $order = 'id desc'): array
+    {
+        return $this->model->where($condition)->field($field)->order($order)->select()->toArray();
+    }
+    /**
+     * 获取订单日志分页
+     * 
+     * @param array $condition 查询条件
+     * @param string $field 查询字段，默认为所有字段
+     * @param string $order 排序规则，默认按ID升序
+     * @return array 日志分页
+     */
+    public function getOrderLogPages(array $condition, string $field = '*', string $order = 'id desc'): array
+    {
+        $result = $this->model->where($condition)->field($field)->order($order);
+        return $this->getPaginate($result);
+    }
+
+
+    /**
+     * 获取单条订单日志信息
+     * 
+     * @param array $condition 查询条件
+     * @param string $field 查询字段，默认为所有字段
+     * @return array 日志信息
+     */
+    public function getOrderLogInfo(array $condition, string $field = '*'): array
+    {
+        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+    }
+    
+    /**
+     * 根据ID获取订单日志信息
+     * 
+     * @param int $id 日志ID
+     * @param string $field 查询字段，默认为所有字段
+     * @return array 日志信息
+     */
+    public function getOrderLogInfoById(int $id, string $field = '*'): array
+    {
+        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+    }
+    
+    /**
+     * 获取订单日志数量
+     * 
+     * @param array $condition 查询条件
+     * @return int 日志数量
+     */
+    public function getOrderLogCount(array $condition): int
+    {
+        return $this->model->where($condition)->count();
+    }
+    
+    /**
+     * 获取订单日志列
+     * 
+     * @param array $condition 查询条件
+     * @param string $column 列名
+     * @return array 列数据
+     */
+    public function getOrderLogColumn(array $condition, string $column): array
+    {
+        return $this->model->where($condition)->column($column);
+    }
+}

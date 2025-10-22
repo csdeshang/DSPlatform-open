@@ -1,0 +1,63 @@
+{
+    "name": "yansongda/artful",
+    "description": "Artful 是一个简单易用的 API 请求框架 PHP Api RequesT Framwork U Like。",
+    "keywords": ["artful", "api", "request", "framework"],
+    "type": "library",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/yansongda/artful/issues",
+        "source": "https://github.com/yansongda/artful",
+        "homepage": "https://artful.yansongda.cn"
+    },
+    "authors": [
+        {
+            "name": "yansongda",
+            "email": "me@yansongda.cn"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "psr/event-dispatcher": "^1.0",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
+        "psr/container": "^1.1 || ^2.0",
+        "psr/http-client": "^1.0",
+        "psr/http-message": "^1.1 || ^2.0",
+        "yansongda/supports": "~4.0.10",
+        "guzzlehttp/psr7": "^2.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "mockery/mockery": "^1.4",
+        "friendsofphp/php-cs-fixer": "^3.44",
+        "phpstan/phpstan": "^1.0.0 || ^2.0.0",
+        "monolog/monolog": "^2.2",
+        "symfony/var-dumper": "^5.1",
+        "symfony/http-foundation": "^5.2.0",
+        "symfony/event-dispatcher": "^5.2.0",
+        "symfony/psr-http-message-bridge": "^2.1",
+        "hyperf/pimple": "^2.2",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yansongda\\Artful\\": "src"
+        },
+        "files": [
+            "src/Functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yansongda\\Artful\\Tests\\": "tests"
+        }
+    },
+    "suggest": {
+        "illuminate/container": "其它/无框架下使用 SDK，请安装，任选其一",
+        "hyperf/pimple": "其它/无框架下使用 SDK，请安装，任选其一"
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit -c phpunit.xml --colors=always",
+        "cs-fix": "php-cs-fixer fix --dry-run --diff 1>&2",
+        "analyse": "phpstan analyse --memory-limit 300M -l 5 -c phpstan.neon ./src"
+    }
+}

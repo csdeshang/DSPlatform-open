@@ -1,0 +1,105 @@
+/* Element Plus 样式覆盖 - 最小化版本 */
+
+/* 滚动条组件修复 */
+.el-scrollbar {
+  height: 100%;
+  overflow: hidden;
+}
+
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}
+
+.el-scrollbar__view {
+  height: 100%;
+}
+
+/* 确保菜单高度正确 */
+.el-menu {
+  height: 100%;
+}
+
+/* 修复侧边栏中的滚动区域 */
+.el-aside .el-scrollbar,
+.el-aside .el-scrollbar__wrap,
+.el-aside .el-scrollbar__view {
+  height: 100%;
+}
+
+/* 菜单组件通用样式 */
+.el-menu {
+  --el-menu-bg-color: var(--app-sidebar-bg);
+  --el-menu-text-color: var(--app-sidebar-text);
+  --el-menu-hover-bg-color: var(--app-sidebar-hover-bg);
+  --el-menu-active-color: var(--app-sidebar-active-text);
+  --el-menu-active-bg-color: var(--app-sidebar-active-bg);
+}
+
+/* 侧边栏菜单样式 */
+.el-aside .el-menu {
+  border-right: none;
+}
+
+/* 头部组件样式 */
+.el-header {
+  padding: 0; /* 只移除内边距，不影响边框 */
+}
+
+/* 水平菜单样式 */
+.el-header .el-menu--horizontal {
+  background-color: transparent;
+  border-bottom: none;
+}
+
+/* 菜单项高度 */
+.el-menu-item, .el-sub-menu__title {
+  height: var(--el-menu-item-height);
+  line-height: var(--el-menu-item-height);
+}
+
+/* 折叠菜单样式 */
+.el-menu--collapse {
+  width: var(--app-sidebar-collapsed-width, 64px);
+}
+
+/* 弹出菜单样式 */
+.el-menu--popup {
+  background-color: var(--app-sidebar-bg) !important;
+  min-width: 180px;
+  padding: 5px 0;
+}
+
+.el-menu--popup .el-menu-item {
+  color: var(--app-sidebar-text) !important;
+}
+
+.el-menu--popup .el-menu-item:hover {
+  background-color: var(--app-sidebar-hover-bg) !important;
+}
+
+.el-menu--popup .el-menu-item.is-active {
+  background-color: var(--app-sidebar-active-bg) !important;
+  color: var(--app-sidebar-active-text) !important;
+}
+
+/* 适配不同布局的菜单样式 */
+.header-sidebar-layout .el-header .el-menu--horizontal,
+.header-only-layout .el-header .el-menu--horizontal {
+  height: var(--app-header-height);
+}
+
+.sidebar-only-layout .el-aside .el-menu,
+.header-sidebar-layout .el-aside .el-menu {
+  height: 100%;
+}
+
+.el-main {
+  padding: 0;
+}
+
+/* 调整 el-table 的文字大小 */
+.el-table {
+  font-size: 13px; /* 设置表格整体字体大小 */
+}
+
+
