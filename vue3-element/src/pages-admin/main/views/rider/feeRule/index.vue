@@ -54,10 +54,6 @@
             <el-table-column label="操作" width="200" fixed="right">
                 <template #default="{ row }">
                     <el-button type="primary" size="small" plain @click="handleEditRule(row)">编辑</el-button>
-                    <el-button :type="row.is_enabled ? 'danger' : 'success'" size="small" plain
-                        @click="handleToggleStatus(row)">
-                        {{ row.is_enabled ? '禁用' : '启用' }}
-                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -77,7 +73,7 @@
 
 import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { getRiderFeeRulePages, updateRiderFeeRuleStatus } from '@/pages-admin/main/api/rider/feeRule';
+import { getRiderFeeRulePages } from '@/pages-admin/main/api/rider/feeRule';
 import { usePagination } from '@/hooks/usePagination';
 import FeeRuleForm from './form.vue';
 
@@ -112,27 +108,6 @@ const handleEditRule = (row) => {
     feeRuleFormRef.value.openDialog(row);
 }
 
-// 切换启用状态
-const handleToggleStatus = (row) => {
-    const statusText = row.is_enabled ? '禁用' : '启用';
 
-    ElMessageBox.confirm(`确定要${statusText}该规则吗？`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-    }).then(async () => {
-        try {
-            await updateRiderFeeRuleStatus({
-                id: row.id,
-                is_enabled: row.is_enabled ? 0 : 1
-            });
-            ElMessage.success(`${statusText}成功`);
-            getTableList();
-        } catch (error) {
-            console.error(error);
-            ElMessage.error(`${statusText}失败`);
-        }
-    }).catch(() => { });
-}
 
 </script>

@@ -4,7 +4,7 @@ namespace app\adminapi\controller\system;
 
 use app\deshang\base\controller\BaseAdminController;
 use app\adminapi\service\system\SysClearService;
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
 
 
 /**
@@ -15,7 +15,7 @@ class SysClear extends BaseAdminController
 {
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *     path="/adminapi/system/clear/cache",
      *     summary="清理系统缓存",
      *     tags={"admin-api/system/SysClear"},
@@ -23,7 +23,7 @@ class SysClear extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -33,12 +33,12 @@ class SysClear extends BaseAdminController
     // 清理缓存
     public function clearCache()
     {
-        CacheUtil::clear(); 
+        KvManager::cache()->clear(); 
         return ds_json_success('操作成功');
     }
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *     path="/adminapi/system/clear/logs",
      *     summary="清理系统日志",
      *     tags={"admin-api/system/SysClear"},
@@ -46,7 +46,7 @@ class SysClear extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -78,7 +78,7 @@ class SysClear extends BaseAdminController
 
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *     path="/adminapi/system/clear/access-logs",
      *     summary="清理系统访问日志[数据库]",
      *     tags={"admin-api/system/SysClear"},
@@ -86,7 +86,7 @@ class SysClear extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -100,7 +100,7 @@ class SysClear extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *     path="/adminapi/system/clear/error-logs",
      *     summary="清理系统错误日志[数据库]",
      *     tags={"admin-api/system/SysClear"},
@@ -108,7 +108,7 @@ class SysClear extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -122,7 +122,7 @@ class SysClear extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *     path="/adminapi/system/clear/admin-logs",
      *     summary="清理管理员日志[数据库]",
      *     tags={"admin-api/system/SysClear"},
@@ -130,7 +130,7 @@ class SysClear extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

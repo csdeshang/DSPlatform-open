@@ -1,17 +1,17 @@
 import request, { API_BASE_URLS } from '@/utils/request'
 
 export function getSysAgreementList(params: Record<string, any>) {
-  return request.get(`${API_BASE_URLS.ADMIN}/system/agreement/list`, { params })
+  return request.get(`${API_BASE_URLS.ADMIN}/system/agreements/list`, { params })
 }
 
 export function getSysAgreementInfo(id: number) {
-  return request.get(`${API_BASE_URLS.ADMIN}/system/agreement/${id}`)
+  return request.get(`${API_BASE_URLS.ADMIN}/system/agreements/${id}`)
 }
 
 export function createSysAgreement(data: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/system/agreement`, data)
+  return request.post(`${API_BASE_URLS.ADMIN}/system/agreements`, data)
 }
 
 export function updateSysAgreement(data: Record<string, any>) {
-  return request.put(`${API_BASE_URLS.ADMIN}/system/agreement/${data.id}`, data)
+  return request.put(`${API_BASE_URLS.ADMIN}/system/agreements/${data.id}`, data)
 }

@@ -11,7 +11,7 @@ class TblStoreAuthUser extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/auth-user/list",
+     *     path="/adminapi/tbl-store/store-auths",
      *     summary="获取店铺授权用户列表",
      *     tags={"admin-api/tblStore/TblStoreAuthUser"},
      *     @OA\Parameter(
@@ -32,7 +32,7 @@ class TblStoreAuthUser extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -52,7 +52,7 @@ class TblStoreAuthUser extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/tbl-store/auth-user/create",
+     *     path="/adminapi/tbl-store/store-auths",
      *     summary="添加店铺授权用户",
      *     tags={"admin-api/tblStore/TblStoreAuthUser"},
      *     @OA\RequestBody(
@@ -68,7 +68,7 @@ class TblStoreAuthUser extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -86,23 +86,28 @@ class TblStoreAuthUser extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/tbl-store/auth-user/delete",
+     *     path="/adminapi/tbl-store/store-auths",
      *     summary="删除店铺授权用户",
      *     tags={"admin-api/tblStore/TblStoreAuthUser"},
-     *     @OA\RequestBody(
+     *     @OA\Parameter(
+     *         name="store_id",
+     *         in="query",
      *         required=true,
-     *         description="删除授权信息",
-     *         @OA\JsonContent(
-     *             required={"store_id", "user_id"},
-     *             @OA\Property(property="store_id", type="integer", example=1, description="店铺ID"),
-     *             @OA\Property(property="user_id", type="integer", example=1, description="用户ID")
-     *         )
+     *         description="店铺ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         required=true,
+     *         description="用户ID",
+     *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

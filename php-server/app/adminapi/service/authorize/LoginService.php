@@ -58,8 +58,8 @@ class LoginService extends BaseService
             'admin_is_super' => $adminInfo['is_super'],
         );
 
-        // 有效期 1 小时
-        $access_token = (new JwtToken())->generateToken($access_payload_data, 3600);
+        // 有效期 2 小时
+        $access_token = (new JwtToken())->generateToken($access_payload_data, 7200);
 
         //生成 refresh_token   
         $refresh_payload_data = array(

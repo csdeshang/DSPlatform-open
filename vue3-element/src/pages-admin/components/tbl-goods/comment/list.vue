@@ -80,7 +80,7 @@
                 <el-table-column label="商品信息" min-width="300">
                     <template #default="{ row }">
                         <div class="flex items-center" @click="handleTblGoodsDtail(row.goods_id)">
-                            <el-image v-if="row.goods?.cover_image" :src="formatFileUrl(row.goods.cover_image)"
+                            <el-image v-if="row.goods?.cover_image" :src="formatImageUrl(row.goods.cover_image, ThumbnailPresets.small, 'goods')"
                                 style="width: 40px; height: 40px;" class="mr-2" />
                             <span class="text-blue-500 cursor-pointer">{{ row.goods?.goods_name || '未知商品' }}</span>
                         </div>
@@ -164,7 +164,7 @@
 import { reactive, ref } from 'vue'
 import { getTblGoodsCommentPages, toggleTblGoodsCommentField } from '@/pages-admin/main/api/tbl-goods/tblGoodsComment'
 import { usePagination } from '@/hooks/usePagination'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const props = defineProps({

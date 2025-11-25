@@ -3,6 +3,8 @@
 namespace app\deshang\service\order;
 
 use app\deshang\exceptions\CommonException;
+use app\deshang\exceptions\PermissionException;
+use app\deshang\exceptions\StateException;
 use app\deshang\service\BaseDeshangService;
 
 
@@ -23,6 +25,7 @@ use app\deshang\service\merchant\DeshangMerchantBalanceService;
 use app\deshang\service\distributor\DeshangDistributorOrderService;
 use app\deshang\service\rider\DeshangRiderBalanceService;
 use app\deshang\service\technician\DeshangTechnicianBalanceService;
+use app\deshang\service\order\DeshangTblOrderRefundService;
 use app\common\enum\trade\TradePaymentConfigEnum;
 
 
@@ -34,8 +37,70 @@ class DeshangTblOrderService  extends BaseDeshangService
     public function __construct()
     {
         parent::__construct();
-        $this->dao = new TblOrderDao();
     }
+
+
+    /**
+     * 获取订单显示状态描述（综合考虑订单状态、退款状态和交付状态）
+     * 
+     * 状态优先级：
+     * 1. 退款中状态（最高优先级）
+     * 2. 退款完成状态（全额退款/部分退款）
+     * 3. 交付状态（已发货/已确认订单，且有交付信息时）
+     * 4. 订单基础状态（默认）
+     * 
+     * @param array $order_info 订单信息（包含 orderDelivery 关联数据）
+     * @return string 显示状态描述
+     */
+    public function getDisplayStatusDesc(array $order_info): string
+    {
+        // 提取订单相关状态信息
+        $order_status = $order_info['order_status'] ?? 0;
+        $refunding_count = $order_info['refunding_count'] ?? 0;
+        $refund_status = $order_info['refund_status'] ?? 0;
+
+        // 检查订单状态描述是否存在（DAO层应该已经通过append获取）
+        if(empty($order_info['order_status_desc'])) {
+            throw new CommonException('订单状态描述不存在');
+        }
+
+        // 初始化基础状态为订单状态描述
+        $baseStatus = $order_info['order_status_desc'];
+
+        // 如果订单状态是已发货(ACCEPTED)或已确认(CONFIRMED)，优先使用交付状态
+        // 例如：已发货订单，如果有交付信息（如：服务中、配送中），则显示交付状态而非"已发货"
+        if (in_array($order_status, [
+            TblOrderEnum::ORDER_STATUS_ACCEPTED,
+            TblOrderEnum::ORDER_STATUS_CONFIRMED
+        ])) {
+            // 检查是否有交付信息（关联查询出来的 orderDelivery）
+            if(!empty($order_info['orderDelivery']) && !empty($order_info['orderDelivery']['delivery_status_desc'])) {
+                // 使用交付状态描述替换基础状态（如：服务中、配送中、已到达等）
+                $baseStatus = $order_info['orderDelivery']['delivery_status_desc'];
+            }
+            // 如果没有交付信息，继续使用订单状态描述（如：已发货）
+        }
+        
+        // 如果有正在进行的退款（refunding_count > 0），在基础状态后追加"(退款中)"
+        if ($refunding_count > 0) {
+            return $baseStatus . '(退款中)';
+        }
+        
+        // 检查退款完成状态
+        // 如果全额退款，直接显示"已完成(全额退款)"
+        if ($refund_status == TblOrderEnum::REFUND_STATUS_FULL_REFUNDED) {
+            return '已完成(全额退款)';
+        }
+        
+        // 如果部分退款，在基础状态后追加"(部分退款)"
+        if ($refund_status == TblOrderEnum::REFUND_STATUS_PARTIAL_REFUNDED) {
+            return $baseStatus . '(部分退款)';
+        }
+        
+        // 其他情况返回基础状态（可能是订单状态或交付状态）
+        return $baseStatus;
+    }
+
 
 
     // 获取店铺可操作的订单状态
@@ -124,7 +189,7 @@ class DeshangTblOrderService  extends BaseDeshangService
         // 订单状态是已发货 
         if ($order_info['order_status'] == TblOrderEnum::ORDER_STATUS_ACCEPTED) {
             // 没有正在退款的订单，才能确认收货
-            if($order_info['refunding_count'] == 0){
+            if ($order_info['refunding_count'] == 0) {
                 $actions[] = 'confirm';
             }
 
@@ -134,7 +199,7 @@ class DeshangTblOrderService  extends BaseDeshangService
         // 订单状态是已确认(针对外卖)
         if ($order_info['order_status'] == TblOrderEnum::ORDER_STATUS_CONFIRMED) {
             // 没有正在退款的订单，才能确认收货
-            if($order_info['refunding_count'] == 0){
+            if ($order_info['refunding_count'] == 0) {
                 $actions[] = 'confirm';
             }
             $actions[] = 'refund';
@@ -152,8 +217,8 @@ class DeshangTblOrderService  extends BaseDeshangService
 
             // $actions[] = 'delete';
 
-            // 评价
-            if ($order_info['is_evaluate'] == 0) {
+            // 评价 (用于未评价，未有退款中的订单，以及无全额退款)
+            if ($order_info['is_evaluate'] == 0 && $order_info['refunding_count'] == 0 && $order_info['refund_status'] != TblOrderEnum::REFUND_STATUS_FULL_REFUNDED) {
                 $actions[] = 'evaluate';
             }
         }
@@ -191,7 +256,7 @@ class DeshangTblOrderService  extends BaseDeshangService
         // 订单状态是已发货 
         if ($order_info['order_status'] == TblOrderEnum::ORDER_STATUS_ACCEPTED) {
             // 没有正在退款的订单，才能确认收货
-            if($order_info['refunding_count'] == 0){
+            if ($order_info['refunding_count'] == 0) {
                 $actions[] = 'confirm';
             }
         }
@@ -199,7 +264,7 @@ class DeshangTblOrderService  extends BaseDeshangService
         // 订单状态是已确认(针对外卖)
         if ($order_info['order_status'] == TblOrderEnum::ORDER_STATUS_CONFIRMED) {
             // 没有正在退款的订单，才能确认收货
-            if($order_info['refunding_count'] == 0){
+            if ($order_info['refunding_count'] == 0) {
                 $actions[] = 'confirm';
             }
         }
@@ -246,7 +311,13 @@ class DeshangTblOrderService  extends BaseDeshangService
         $update['order_status'] = TblOrderEnum::ORDER_STATUS_PAID;
 
 
-        $this->dao->updateOrder(['id' => $order_info['id']], $update);
+        $affected = (new TblOrderDao())->updateOrder([
+            ['id', '=', $order_info['id']]
+        ], $update);
+
+        if ($affected <= 0) {
+            throw new CommonException('修改订单状态失败');
+        }
 
         $order_log = [
             'order_id' => $order_info['id'],
@@ -265,7 +336,7 @@ class DeshangTblOrderService  extends BaseDeshangService
         (new DeshangDistributorOrderService())->receivePayDistributorOrder($order_info['id']);
 
 
-        // 触发支付成功事件
+        // 触发支付成功事件 [PHP事件为同步执行，没有线程池]
         event('OrderPaySuccessListener', [
             'order_info' => $order_info,
         ]);
@@ -284,23 +355,23 @@ class DeshangTblOrderService  extends BaseDeshangService
         if ($role == 'user') {
             $user_available_actions = $this->getUserAvailableActions($order_info);
             if (!in_array('cancel', $user_available_actions)) {
-                throw new CommonException('用户没有取消订单权限');
+                throw new PermissionException('用户没有取消订单权限');
             }
         } else if ($role == 'store') {
             $store_available_actions = $this->getStoreAvailableActions($order_info);
             if (!in_array('cancel', $store_available_actions)) {
-                throw new CommonException('店铺没有取消订单权限');
+                throw new PermissionException('店铺没有取消订单权限');
             }
         } else if ($role == 'system') {
             $system_available_actions = $this->getSystemAvailableActions($order_info);
             if (!in_array('cancel', $system_available_actions)) {
-                throw new CommonException('系统没有取消订单权限');
+                throw new PermissionException('系统没有取消订单权限');
             }
         } else {
             throw new CommonException('非法操作');
         }
 
-        
+
 
         // 修改分销商订单状态
         (new DeshangDistributorOrderService())->cancelDistributorOrderByOrderId($order_info['id']);
@@ -327,17 +398,17 @@ class DeshangTblOrderService  extends BaseDeshangService
         if ($role == 'user') {
             $user_available_actions = $this->getUserAvailableActions($order_info);
             if (!in_array('close', $user_available_actions)) {
-                throw new CommonException('用户没有关闭订单权限');
+                throw new PermissionException('用户没有关闭订单权限');
             }
         } else if ($role == 'store') {
             $store_available_actions = $this->getStoreAvailableActions($order_info);
             if (!in_array('close', $store_available_actions)) {
-                throw new CommonException('店铺没有关闭订单权限');
+                throw new PermissionException('店铺没有关闭订单权限');
             }
         } else if ($role == 'system') {
             $system_available_actions = $this->getSystemAvailableActions($order_info);
             if (!in_array('close', $system_available_actions)) {
-                throw new CommonException('系统没有关闭订单权限');
+                throw new PermissionException('系统没有关闭订单权限');
             }
         } else {
             throw new CommonException('非法操作');
@@ -352,8 +423,15 @@ class DeshangTblOrderService  extends BaseDeshangService
         $order_update['order_status'] = TblOrderEnum::ORDER_STATUS_CLOSED;
         $order_update['close_time'] = time();
 
-        // 修改订单状态
-        $this->dao->updateOrder(['id' => $order_info['id']], $order_update);
+        // 修改订单状态 , 只有未付款的订单才能关闭
+        $affected = (new TblOrderDao())->updateOrder([
+            ['id', '=', $order_info['id']],
+            ['order_status', '=', TblOrderEnum::ORDER_STATUS_PENDING]
+        ], $order_update);
+
+        if ($affected <= 0) {
+            throw new CommonException('关闭订单失败');
+        }
 
 
         // 修改订单日志
@@ -386,17 +464,17 @@ class DeshangTblOrderService  extends BaseDeshangService
         if ($role == 'user') {
             $user_available_actions = $this->getUserAvailableActions($order_info);
             if (!in_array('confirm', $user_available_actions)) {
-                throw new CommonException('用户没有确认收货权限');
+                throw new PermissionException('用户没有确认收货权限');
             }
         } else if ($role == 'store') {
             $store_available_actions = $this->getStoreAvailableActions($order_info);
             if (!in_array('confirm', $store_available_actions)) {
-                throw new CommonException('店铺没有确认收货权限');
+                throw new PermissionException('店铺没有确认收货权限');
             }
         } else if ($role == 'system') {
             $system_available_actions = $this->getSystemAvailableActions($order_info);
             if (!in_array('confirm', $system_available_actions)) {
-                throw new CommonException('系统没有确认收货权限');
+                throw new PermissionException('系统没有确认收货权限');
             }
         } else {
             throw new CommonException('非法操作');
@@ -424,7 +502,13 @@ class DeshangTblOrderService  extends BaseDeshangService
 
 
         // 修改订单状态
-        $this->dao->updateOrder(['id' => $order_info['id']], $order_update);
+        $affected = (new TblOrderDao())->updateOrder([
+            ['id', '=', $order_info['id']]
+        ], $order_update);
+
+        if ($affected <= 0) {
+            throw new CommonException('确认收货失败');
+        }
 
 
         // 添加订单日志
@@ -550,7 +634,6 @@ class DeshangTblOrderService  extends BaseDeshangService
                 'change_desc' => '确认收货，师傅服务费' . $technician_fee . '元,其中路程费' . $order_info['shipping_amount'] . '元' . '(订单ID：' . $order_info['id'] . ')',
             ];
             (new DeshangTechnicianBalanceService())->modifyTechnicianBalance($balance_data);
-
         }
 
 
@@ -563,22 +646,43 @@ class DeshangTblOrderService  extends BaseDeshangService
             'distributor_amount' => $total_commission_amount,
             // 店铺给平台的佣金(服务费)
             'store_sys_amount' => $order_info['service_amount'],
-            // 骑手配送费
-            'rider_amount' => $order_delivery_info['rider_fee'],
-            // 骑手给平台的佣金
-            'rider_sys_amount' => $order_delivery_info['rider_total_fee'] - $order_delivery_info['rider_fee'],
-            // 师傅服务费
-            'technician_amount' => $order_delivery_info['technician_fee'] + $order_info['shipping_amount'],
-            'technician_service_fee' => $order_delivery_info['technician_fee'],
-            'technician_trip_fee' => $order_info['shipping_amount'],
             // 结算状态
             'finance_status' => 1,
             'settle_time' => time(),
         );
-        $order_finance['store_amount'] = $order_info['pay_amount'] - $total_commission_amount - $order_info['service_amount'] - $order_delivery_info['rider_total_fee'] - $order_delivery_info['technician_fee'] - $order_info['shipping_amount'];
+
+        //骑手资金分配
+        if ($order_info['delivery_method'] == TblOrderEnum::DELIVERY_RIDER) {
+            // 骑手配送费
+            $order_finance['rider_amount'] = $order_delivery_info['rider_fee'];
+            // 骑手给平台的佣金
+            $order_finance['rider_sys_amount'] = $order_delivery_info['rider_total_fee'] - $order_delivery_info['rider_fee'];
+        }
+
+        // 师傅服务费
+        if ($order_info['delivery_method'] == TblOrderEnum::DELIVERY_TECHNICIAN) {
+            // 师傅服务费
+            $order_finance['technician_amount'] = $order_delivery_info['technician_fee'] + $order_info['shipping_amount'];
+            // 师傅给平台的佣金
+            $order_finance['technician_service_fee'] = $order_delivery_info['technician_fee'];
+            $order_finance['technician_trip_fee'] = $order_info['shipping_amount'];
+        }
+
+        // 计算店铺实际收入
+        $deduct_amount = $total_commission_amount + $order_info['service_amount'];
+
+        // 根据配送方式扣除相应费用
+        if ($order_info['delivery_method'] == TblOrderEnum::DELIVERY_RIDER) {
+            // $order_delivery_info['rider_total_fee'] === $order_info['shipping_amount']
+            $deduct_amount += $order_delivery_info['rider_total_fee'];
+        } elseif ($order_info['delivery_method'] == TblOrderEnum::DELIVERY_TECHNICIAN) {
+            $deduct_amount += $order_delivery_info['technician_fee'] + $order_info['shipping_amount'];
+        }
+
+        $order_finance['store_amount'] = $order_info['pay_amount'] - $deduct_amount;
+
         (new TblOrderFinanceDao())->createOrderFinance($order_finance);
 
-        // 使用事件或消息队列(待完善)
 
         return true;
     }
@@ -601,7 +705,7 @@ class DeshangTblOrderService  extends BaseDeshangService
         if ($role == 'store') {
             $store_available_actions = $this->getStoreAvailableActions($order_info);
             if (!in_array('editAmount', $store_available_actions)) {
-                throw new CommonException('店铺没有修改订单金额权限');
+                throw new PermissionException('店铺没有修改订单金额权限');
             }
         } else {
             throw new CommonException('非法操作');
@@ -610,7 +714,7 @@ class DeshangTblOrderService  extends BaseDeshangService
 
         // 判断订单是否是未支付状态
         if ($order_info['order_status'] !== TblOrderEnum::ORDER_STATUS_PENDING) {
-            throw new CommonException('订单状态不是未付款，不能修改订单金额');
+            throw new StateException('订单状态不是未付款，不能修改订单金额');
         }
 
         // 验证参数
@@ -670,10 +774,16 @@ class DeshangTblOrderService  extends BaseDeshangService
         $pay_amount = $total_pay_price + $shipping_amount;
 
         // 更新订单金额
-        $this->dao->updateOrder(['id' => $order_info['id']], [
+        $affected = (new TblOrderDao())->updateOrder([
+            ['id', '=', $order_info['id']]
+        ], [
             'shipping_amount' => $shipping_amount,
             'pay_amount' => $pay_amount,
         ]);
+
+        if ($affected <= 0) {
+            throw new CommonException('修改订单金额失败');
+        }
 
         // 记录订单日志
         $log_data = [

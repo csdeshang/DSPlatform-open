@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 
-import { fetchRemoteIconUrl } from '@/utils/util'
+import { fetchRemoteIconUrl } from '@/utils/image'
 import { getPaymentConfigByMerchant } from './paymentConfig'
 
 import paymentConfigEdit from './edit.vue'

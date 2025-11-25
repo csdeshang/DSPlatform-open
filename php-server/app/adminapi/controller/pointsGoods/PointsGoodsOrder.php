@@ -12,7 +12,7 @@ class PointsGoodsOrder extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/points-goods/order/pages",
+     *     path="/adminapi/points-goods/orders/pages",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="获取积分兑换订单分页列表",
      *     @OA\Parameter(
@@ -75,7 +75,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功获取积分兑换订单分页列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -103,7 +103,7 @@ class PointsGoodsOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/points-goods/order/{id}",
+     *     path="/adminapi/points-goods/orders/{id}",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="获取积分兑换订单详情",
      *     @OA\Parameter(
@@ -116,7 +116,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功获取积分兑换订单详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -140,7 +140,7 @@ class PointsGoodsOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/points-goods/order/logs/{id}",
+     *     path="/adminapi/points-goods/orders/{id}/logs",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="获取积分兑换订单日志",
      *     @OA\Parameter(
@@ -153,7 +153,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功获取积分兑换订单日志",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array")
      *         )
@@ -174,7 +174,7 @@ class PointsGoodsOrder extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/points-goods/order/{id}",
+     *     path="/adminapi/points-goods/orders/{id}",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="更新积分兑换订单",
      *     @OA\Parameter(
@@ -199,7 +199,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功更新积分兑换订单",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -226,8 +226,8 @@ class PointsGoodsOrder extends BaseAdminController
     }
 
     /**
-     * @OA\Put(
-     *     path="/adminapi/points-goods/order/cancel/{id}",
+     * @OA\Post(
+     *     path="/adminapi/points-goods/orders/{id}/cancel",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="取消积分兑换订单",
      *     @OA\Parameter(
@@ -240,7 +240,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功取消积分兑换订单",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -257,8 +257,8 @@ class PointsGoodsOrder extends BaseAdminController
     }
 
     /**
-     * @OA\Put(
-     *     path="/adminapi/points-goods/order/ship/{id}",
+     * @OA\Post(
+     *     path="/adminapi/points-goods/orders/{id}/ship",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="发货积分兑换订单",
      *     @OA\Parameter(
@@ -280,7 +280,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功发货积分兑换订单",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -304,8 +304,8 @@ class PointsGoodsOrder extends BaseAdminController
     }
 
     /**
-     * @OA\Put(
-     *     path="/adminapi/points-goods/order/confirm/{id}",
+     * @OA\Post(
+     *     path="/adminapi/points-goods/orders/{id}/confirm",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="确认收货积分兑换订单",
      *     @OA\Parameter(
@@ -318,7 +318,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功确认收货积分兑换订单",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -336,7 +336,7 @@ class PointsGoodsOrder extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/points-goods/order/{id}",
+     *     path="/adminapi/points-goods/orders/{id}",
      *     tags={"admin-api/points-goods/PointsGoodsOrder"},
      *     summary="删除积分兑换订单",
      *     @OA\Parameter(
@@ -349,7 +349,7 @@ class PointsGoodsOrder extends BaseAdminController
      *         response=200,
      *         description="成功删除积分兑换订单",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

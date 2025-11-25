@@ -120,7 +120,7 @@
                                     'border-2 border-transparent': !selectedFile[row.id],
                                     'border-2 border-red-500': !!selectedFile[row.id]
                                 }">
-                                <el-image style="width:100%; height: 100%;object-fit: contain;" :src="formatFileUrl(row.path)" fit="contain" v-if="type == 'image'"
+                                <el-image style="width:100%; height: 100%;object-fit: contain;" :src="formatImageUrl(row.path, ThumbnailPresets.medium)" fit="contain" v-if="type == 'image'"
                                     :alt="row.name">
                                 </el-image>
                                 <video :src="formatFileUrl(row.path)" v-if="type == 'video'" controls/>
@@ -163,7 +163,7 @@
                                     'border-2 border-transparent': !selectedFile[row.id],
                                     'border-2 border-red-500': !!selectedFile[row.id]
                                 }">
-                                <el-image style="width:100%; height: 100%;object-fit: contain;" :src="formatFileUrl(row.path)" fit="contain" v-if="type == 'image'"
+                                <el-image style="width:100%; height: 100%;object-fit: contain;" :src="formatImageUrl(row.path, ThumbnailPresets.medium)" fit="contain" v-if="type == 'image'"
                                     :alt="row.name">
                                 </el-image>
                                 <video :src="formatFileUrl(row.path)" v-if="type == 'video'" controls/>
@@ -215,6 +215,7 @@ import { computed, ref, watch } from 'vue'
 import { useAttachmentCate, useAttachmentFile } from './list'
 
 import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import popoverInput from '@/components/popover-input/index.vue'
 import Icon from '@/components/icon/index.vue'
 import uploadBtn from '@/components/attachment/upload-btn.vue'

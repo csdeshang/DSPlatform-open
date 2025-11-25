@@ -11,53 +11,62 @@ Route::group('user', function () {
 
 
 
-    
-    // 用户推广关系 （需要放在 user/:id 之前）
-    Route::get('user/relation/list', 'user.User/getUserRelationList');
+    // 用户推广关系 （需要放在 users/:id 之前）
+    Route::get('users/relation/list', 'user.User/getUserRelationList');
+
     // 会员
-    Route::get('user/pages', 'user.User/getUserPages');
-    Route::post('user', 'user.User/createUser');
-    Route::get('user/:id', 'user.User/getUserInfo');
-    Route::put('user/:id', 'user.User/updateUser');
+    //  users/:id/balance (3段) 必须在 users/:id (2段) 前面 否则 PUT /users/123/balance 会被 users/:id 匹配
+    // 修改会员余额
+    Route::put('users/:id/balance', 'user.UserBalance/modifyUserBalance');
+    // users/:id/points (3段) 必须在 users/:id (2段) 前面
+    Route::put('users/:id/points', 'user.UserPoints/modifyUserPoints');
+    // users/:id/growth (3段) 必须在 users/:id (2段) 前面
+    Route::put('users/:id/growth', 'user.UserGrowth/modifyUserGrowth');
+    // users/pages (2段) 必须在 users/:id (2段) 前面 否则 GET /users/pages 会被 users/:id 匹配
+    Route::get('users/pages', 'user.User/getUserPages');
+    Route::get('users/:id', 'user.User/getUserInfo');
+    Route::put('users/:id', 'user.User/updateUser');
+    Route::post('users', 'user.User/createUser');
 
 
-    //余额
-    Route::get('balance-log/pages', 'user.UserBalance/getUserBalanceLogPages');
-    Route::post('balance/modifyUserBalance', 'user.UserBalance/modifyUserBalance');
-    Route::get('balance/getUserBalanceInfo/:id', 'user.UserBalance/getUserBalanceInfo');
+    // 余额日志
+    Route::get('balance-logs/pages', 'user.UserBalance/getUserBalanceLogPages');
 
     // 用户充值日志
-    Route::get('recharge-log/pages', 'user.UserRecharge/getUserRechargeLogPages');
+    Route::get('recharge-logs/pages', 'user.UserRecharge/getUserRechargeLogPages');
 
     // 用户提现日志
-    Route::get('withdrawal-log/pages', 'user.UserWithdrawal/getUserWithdrawalLogPages');
-    Route::get('withdrawal-log/info/:id', 'user.UserWithdrawal/getUserWithdrawalLogInfo');
+    Route::get('withdrawal-logs/pages', 'user.UserWithdrawal/getUserWithdrawalLogPages');
+    // withdrawal-logs/:id/operation (3段) 必须在 withdrawal-logs/:id (2段) 前面
     // 管理员操作提现
-    Route::post('withdrawal-log/operation/:id', 'user.UserWithdrawal/operationUserWithdrawal');
+    Route::post('withdrawal-logs/:id/operation', 'user.UserWithdrawal/operationUserWithdrawal');
+    Route::get('withdrawal-logs/:id', 'user.UserWithdrawal/getUserWithdrawalLogInfo');
 
-    // 用户成长值
-    Route::post('growth/modifyUserGrowth', 'user.UserGrowth/modifyUserGrowth');
-    Route::get('growth-log/pages', 'user.UserGrowth/getUserGrowthLogPages');
-    Route::get('growth-log/:id', 'user.UserGrowth/getUserGrowthLogInfo');
+    // 用户成长值日志
+    Route::get('growth-logs/pages', 'user.UserGrowth/getUserGrowthLogPages');
+    Route::get('growth-logs/:id', 'user.UserGrowth/getUserGrowthLogInfo');
 
     // 成长值等级
-    Route::get('growth-level/list', 'user.UserGrowthLevel/getUserGrowthLevelList');
-    Route::get('growth-level/:id', 'user.UserGrowthLevel/getUserGrowthLevelInfo');
-    Route::put('growth-level/:id', 'user.UserGrowthLevel/updateUserGrowthLevel');
-    Route::post('growth-level', 'user.UserGrowthLevel/createUserGrowthLevel');
-    Route::delete('growth-level/:id', 'user.UserGrowthLevel/deleteUserGrowthLevel');
+    // growth-levels/list (2段) 必须在 growth-levels/:id (2段) 前面 否则 GET /growth-levels/list 会被 growth-levels/:id 匹配
+    Route::get('growth-levels/list', 'user.UserGrowthLevel/getUserGrowthLevelList');
+    Route::get('growth-levels/:id', 'user.UserGrowthLevel/getUserGrowthLevelInfo');
+    Route::put('growth-levels/:id', 'user.UserGrowthLevel/updateUserGrowthLevel');
+    Route::post('growth-levels', 'user.UserGrowthLevel/createUserGrowthLevel');
+    Route::delete('growth-levels/:id', 'user.UserGrowthLevel/deleteUserGrowthLevel');
 
     // 积分日志
-    Route::post('points/modifyUserPoints', 'user.UserPoints/modifyUserPoints');
-    Route::get('points-log/pages', 'user.UserPoints/getUserPointsLogPages');
-    Route::get('points-log/:id', 'user.UserPoints/getUserPointsLogInfo');
+    Route::get('points-logs/pages', 'user.UserPoints/getUserPointsLogPages');
+    Route::get('points-logs/:id', 'user.UserPoints/getUserPointsLogInfo');
 
     // 用户行为日志
-    Route::get('behavior-log/pages', 'user.UserBehaviorLog/getUserBehaviorLogPages');
-    Route::get('behavior-log/:id', 'user.UserBehaviorLog/getUserBehaviorLogInfo');
+    Route::get('behavior-logs/pages', 'user.UserBehaviorLog/getUserBehaviorLogPages');
+    Route::get('behavior-logs/:id', 'user.UserBehaviorLog/getUserBehaviorLogInfo');
+    Route::delete('behavior-logs/:id', 'user.UserBehaviorLog/deleteUserBehaviorLog');
 
     // 用户绑定第三方账号列表
-    Route::get('identity/list', 'user.UserIdentity/getUserIdentityList');
+    Route::get('user-identities/list', 'user.UserIdentity/getUserIdentityList');
+
+    
 })->middleware([
     AdminAuthorizeToken::class,
     AdminAuthorizeRole::class,

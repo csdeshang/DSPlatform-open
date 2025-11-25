@@ -25,5 +25,21 @@ return [
             'serialize'  => [],
         ],
         // 更多的缓存连接
+        'redis' => [
+            // 驱动方式
+            'type'       => 'Redis',
+            // Redis 主机
+            'host'       => '127.0.0.1',
+            // Redis 端口
+            'port'       => 6379,
+            // Redis 密码
+            'password'   => '', 
+            // Redis 数据库
+            'select'     => 0,
+            // Redis 超时时间
+            'timeout'    => 0,
+            // Redis 缓存有效期
+            'expire'     => 0,
+        ],
     ],
 ];

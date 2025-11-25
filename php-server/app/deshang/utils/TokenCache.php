@@ -2,6 +2,8 @@
 
 namespace app\deshang\utils;
 
+use app\deshang\kv\KvManager;
+
 /**
  * Token缓存管理类
  * 负责Token版本控制和失效管理
@@ -30,7 +32,7 @@ class TokenCache
     {
         // 检查全局版本号
         $cache_key = self::TOKEN_VERSION_PREFIX . "{$role}_{$user_id}";
-        $current_version = CacheUtil::get($cache_key, 1);
+        $current_version = KvManager::cache()->get($cache_key, 1);
         
         return $current_version == $token_version;
     }
@@ -47,13 +49,13 @@ class TokenCache
         $cache_key = self::TOKEN_VERSION_PREFIX . "{$role}_{$user_id}";
         
         // 获取当前版本号
-        $current_version = CacheUtil::get($cache_key, 1);
+        $current_version = KvManager::cache()->get($cache_key, 1);
         
         // 版本号+1
         $new_version = $current_version + 1;
         
         // 设置新版本号
-        CacheUtil::set($cache_key, $new_version, self::DEFAULT_EXPIRE);
+        KvManager::cache()->set($cache_key, $new_version, self::DEFAULT_EXPIRE);
     }
 
     /**
@@ -66,6 +68,6 @@ class TokenCache
     public function getCurrentVersion(string $role, int $user_id): int
     {
         $cache_key = self::TOKEN_VERSION_PREFIX . "{$role}_{$user_id}";
-        return CacheUtil::get($cache_key, 1);
+        return KvManager::cache()->get($cache_key, 1);
     }
 }

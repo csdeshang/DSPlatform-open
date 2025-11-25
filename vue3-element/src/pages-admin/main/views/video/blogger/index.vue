@@ -44,7 +44,7 @@
                 <el-table-column label="博主昵称" prop="blogger_name" min-width="120" />
                 <el-table-column label="头像" min-width="80">
                     <template #default="{ row }">
-                        <el-avatar v-if="row.avatar" :src="row.avatar" :size="40" />
+                        <el-avatar v-if="row.avatar" :src="formatImageUrl(row.avatar, ThumbnailPresets.small, 'avatar')" :size="40" />
                         <span v-else>--</span>
                     </template>
                 </el-table-column>
@@ -152,6 +152,7 @@ import { reactive, ref } from 'vue';
 import { getBloggerPages, toggleBloggerField } from '@/pages-admin/main/api/video/blogger'
 import { usePagination } from '@/hooks/usePagination'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import BloggerDetail from './detail.vue'
 import UserDetail from '@/pages-admin/components/user/detail.vue'

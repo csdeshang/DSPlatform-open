@@ -209,7 +209,7 @@
                                         <el-form-item label="退款凭证" prop="refund_images">
                                             <div class="refund-images">
                                                 <el-image v-for="(img, index) in refundInfo.refund_images.split(',')"
-                                                    :key="index" :src="formatFileUrl(img)"
+                                                    :key="index" :src="formatImageUrl(img, ThumbnailPresets.small)"
                                                     style="width: 80px; height: 80px; margin-right: 10px;"
                                                     :preview-src-list="refundInfo.refund_images.split(',')" />
                                             </div>
@@ -250,7 +250,7 @@
 
 import { computed, reactive, ref } from 'vue';
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 
 import { ElMessage, ElMessageBox } from 'element-plus';

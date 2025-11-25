@@ -13,7 +13,7 @@ class TechnicianBalance extends BaseAdminController
     /**
      * 获取师傅余额日志分页列表
      * @OA\Get(
-     *     path="/adminapi/technician/balance-log/pages",
+     *     path="/adminapi/technician/balance-logs/pages",
      *     tags={"admin-api/technician/TechnicianBalance"},
      *     summary="获取师傅余额日志分页列表",
      *     description="获取师傅余额变动记录的分页列表",
@@ -42,7 +42,7 @@ class TechnicianBalance extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -62,18 +62,24 @@ class TechnicianBalance extends BaseAdminController
 
     /**
      * 修改师傅余额
-     * @OA\Post(
-     *     path="/adminapi/technician/balance/modifyTechnicianBalance",
+     * @OA\Put(
+     *     path="/adminapi/technician/technicians/{id}/balance",
      *     tags={"admin-api/technician/TechnicianBalance"},
      *     summary="修改师傅余额",
      *     description="管理员调整师傅余额",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="师傅ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"technician_id", "change_mode", "change_amount"},
-     *             @OA\Property(property="technician_id", type="integer", description="师傅ID", example=1),
+     *             required={"change_mode", "change_amount"},
      *             @OA\Property(property="change_mode", type="integer", description="变动方式 1增加 2减少", example=1),
-     *             @OA\Property(property="change_amount", type="number", description="变动金额", example=100.00),
+     *             @OA\Property(property="change_amount", type="number", format="decimal", description="变动金额", example=100.00),
      *             @OA\Property(property="change_desc", type="string", description="变动说明", example="管理员调整")
      *         )
      *     ),
@@ -81,17 +87,17 @@ class TechnicianBalance extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     )
      * )
      */
-    public function modifyTechnicianBalance()
+    public function modifyTechnicianBalance($id)
     {
         $data = array(
-            'technician_id' => input('param.technician_id'),
+            'technician_id' => $id,
             'change_mode' => input('param.change_mode'),
             'change_amount' => number_format(input('param.change_amount'), 2, '.', ''),
             'change_desc' => input('param.change_desc', '管理员操作'),

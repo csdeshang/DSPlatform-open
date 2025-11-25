@@ -41,7 +41,7 @@
                     <template #default="{ row }">
                         <el-image 
                             v-if="row.cover_image" 
-                            :src="formatFileUrl(row.cover_image)" 
+                            :src="formatImageUrl(row.cover_image, ThumbnailPresets.medium)" 
                             fit="cover"
                             style="width: 60px; height: 40px; border-radius: 4px;"
                         />
@@ -144,7 +144,7 @@
 
 <script lang="ts" setup name="VideoShortIndex">
 import { reactive, ref } from 'vue';
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { getVideoShortPages, toggleVideoShortField, auditVideoShort } from '@/pages-admin/main/api/video/short'
 import { usePagination } from '@/hooks/usePagination'
 import { ElMessage, ElMessageBox } from 'element-plus'

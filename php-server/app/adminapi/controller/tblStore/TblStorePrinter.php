@@ -12,7 +12,7 @@ class TblStorePrinter extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/printer/pages",
+     *     path="/adminapi/tbl-store/printers/pages",
      *     summary="获取店铺打印机分页列表",
      *     description="管理员查看所有店铺的打印机分页列表",
      *     tags={"admin-api/tblStore/TblStorePrinter"},
@@ -55,7 +55,7 @@ class TblStorePrinter extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -79,7 +79,7 @@ class TblStorePrinter extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/printer/info/{id}",
+     *     path="/adminapi/tbl-store/printers/{id}",
      *     summary="获取店铺打印机详情",
      *     description="管理员查看指定打印机的详细信息",
      *     tags={"admin-api/tblStore/TblStorePrinter"},
@@ -94,7 +94,7 @@ class TblStorePrinter extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -112,7 +112,7 @@ class TblStorePrinter extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/printer/log/pages",
+     *     path="/adminapi/tbl-store/printer-logs/pages",
      *     summary="获取店铺打印机日志分页列表",
      *     description="管理员查看所有店铺的打印机日志分页列表",
      *     tags={"admin-api/tblStore/TblStorePrinter"},
@@ -162,7 +162,7 @@ class TblStorePrinter extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

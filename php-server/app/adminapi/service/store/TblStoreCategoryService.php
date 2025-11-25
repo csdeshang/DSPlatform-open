@@ -6,7 +6,8 @@ namespace app\adminapi\service\store;
 use app\deshang\base\service\BaseAdminService;
 use app\deshang\exceptions\CommonException;
 use app\common\dao\store\TblStoreCategoryDao;
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 
 // 店铺分类 多平台通用
@@ -83,7 +84,7 @@ class TblStoreCategoryService extends BaseAdminService
         $result = (new TblStoreCategoryDao())->updateStoreCategory($condition, $data);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::STORE_CATEGORY_TAG);
+        KvManager::cache()->clear(CacheKeyManager::STORE_CATEGORY_TAG);
 
         return $result;
     }
@@ -103,7 +104,7 @@ class TblStoreCategoryService extends BaseAdminService
         $result = (new TblStoreCategoryDao())->deleteStoreCategory([['id', '=', $id]]);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::STORE_CATEGORY_TAG);
+        KvManager::cache()->clear(CacheKeyManager::STORE_CATEGORY_TAG);
 
         return $result;
     }

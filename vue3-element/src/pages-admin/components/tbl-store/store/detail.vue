@@ -12,7 +12,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formatFileUrl(storeInfo.store_logo)" />
+                            <el-avatar :size="80" :src="formatImageUrl(storeInfo.store_logo, ThumbnailPresets.compact, 'store_logo')" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -110,6 +110,23 @@
                                                 <div class="form-text">{{ storeInfo.platform }}</div>
                                             </el-form-item>
                                         </el-col>
+
+                                        <el-col :span="12">
+                                            <el-form-item label="店铺分类" prop="category_id">
+                                                <el-cascader 
+                                                    v-model="formData.category_id" 
+                                                    :options="categoryOptions"
+                                                    :props="{ multiple: false, checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" 
+                                                    :disabled="!isEditMode"
+                                                    clearable
+                                                    filterable 
+                                                    placeholder="请选择店铺分类" />
+                                            </el-form-item>
+                                        </el-col>
+
+
+
+
                                         
                                         <el-col :span="12">
                                             <el-form-item label="店铺状态" prop="store_business_status">
@@ -196,7 +213,7 @@
                                         <el-col :span="24">
                                             <el-form-item label="店铺介绍" prop="store_introduction">
                                                 <template v-if="isEditMode">
-                                                    <el-input v-model="formData.store_introduction" type="textarea" rows="3" placeholder="请输入店铺介绍" />
+                                                    <el-input v-model="formData.store_introduction" type="textarea" :rows="3" placeholder="请输入店铺介绍" />
                                                 </template>
                                                 <template v-else>
                                                     <div class="form-text">{{ storeInfo.store_introduction || '无' }}</div>
@@ -280,7 +297,7 @@
                                         <el-col :span="24">
                                             <el-form-item label="SEO描述" prop="seo_description">
                                                 <template v-if="isEditMode">
-                                                    <el-input v-model="formData.seo_description" type="textarea" rows="3" placeholder="请输入SEO描述" />
+                                                    <el-input v-model="formData.seo_description" type="textarea" :rows="3" placeholder="请输入SEO描述" />
                                                 </template>
                                                 <template v-else>
                                                     <div class="form-text">{{ storeInfo.seo_description || '未设置' }}</div>
@@ -315,7 +332,7 @@
                                         <el-col :span="24">
                                             <el-form-item label="申请备注">
                                                 <template v-if="isEditMode">
-                                                    <el-input v-model="formData.apply_remark" placeholder="请输入申请备注" type="textarea" rows="3" />
+                                                    <el-input v-model="formData.apply_remark" placeholder="请输入申请备注" type="textarea" :rows="3" />
                                                 </template>
                                                 <template v-else>
                                                     <div class="form-text">{{ storeInfo.apply_remark || '未设置' }}</div>
@@ -326,7 +343,7 @@
                                         <el-col :span="24">
                                             <el-form-item label="审核备注">
                                                 <template v-if="isEditMode">
-                                                    <el-input v-model="formData.audit_remark" placeholder="请输入审核备注" type="textarea" rows="3" />
+                                                    <el-input v-model="formData.audit_remark" placeholder="请输入审核备注" type="textarea" :rows="3" />
                                                 </template>
                                                 <template v-else>
                                                     <div class="form-text">{{ storeInfo.audit_remark || '未设置' }}</div>
@@ -426,13 +443,14 @@
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { getTblStoreInfo, updateTblStore } from '@/pages-admin/main/api/tbl-store/tblStore'
+import { getTblStoreCategoryTree } from '@/pages-admin/main/api/tbl-store/tblStoreCategory'
 
 import AddAuthUser from './add-auth-user.vue'
 
 import DetailUserList from './detail-user-list.vue'
 import DetailOrderList from './detail-order-list.vue'
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 const tabSelected = ref('base')
 
@@ -449,7 +467,7 @@ const storeInfo = reactive({
     platform: '',
     store_business_status: 1,
     store_introduction: '',
-    service_fee_rate: '0.00',
+    service_fee_rate: 0.00,
     category_id: 0,
     area_id: 0,
     area_info: '',
@@ -497,6 +515,7 @@ const initialFormData = {
     seo_title: '',
     seo_keywords: '',
     seo_description: '',
+    category_id: 0,
 
     // 申请状态
     apply_status: 0,
@@ -509,6 +528,23 @@ const initialFormData = {
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
+
+// 店铺分类选项
+const categoryOptions = ref<{ id: string, name: string }[]>([])
+
+// 获取店铺分类树
+const fetchTblStoreCategoryTree = async () => {
+    try {
+        if (storeInfo.platform) {
+            const response = await getTblStoreCategoryTree({
+                platform: storeInfo.platform,
+            })
+            categoryOptions.value = response.data || []
+        }
+    } catch (error) {
+        console.error('获取店铺分类列表失败:', error)
+    }
+}
 
 
 // 表单验证规则
@@ -564,6 +600,8 @@ const setDialogData = async (row: any = null) => {
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
+        // 加载店铺分类数据
+        await fetchTblStoreCategoryTree()
     }
     loading.value = false
 }

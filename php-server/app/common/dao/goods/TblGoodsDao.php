@@ -51,12 +51,12 @@ class TblGoodsDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateGoods(array $condition, array $data): bool
+    public function updateGoods(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -140,13 +140,14 @@ class TblGoodsDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 商品信息
      */
-    public function getGoodsInfo(array $condition, string $field = '*'): array
+    public function getGoodsInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
         ->append(['sys_status_desc', 'goods_status_desc'])
-        ->field($field)->findOrEmpty()->toArray();
+        ->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -154,11 +155,12 @@ class TblGoodsDao extends BaseDao
      * 
      * @param int $id 商品ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 商品信息
      */
-    public function getGoodsInfoById(int $id, string $field = '*'): array
+    public function getGoodsInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

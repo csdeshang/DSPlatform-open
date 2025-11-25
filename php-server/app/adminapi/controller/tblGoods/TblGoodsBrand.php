@@ -12,7 +12,7 @@ class TblGoodsBrand extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-goods/brand/tree",
+     *     path="/adminapi/tbl-goods/brands/tree",
      *     tags={"admin-api/tblGoods/TblGoodsBrand"},
      *     summary="获取商品品牌树组结构",
      *     @OA\Parameter(
@@ -25,7 +25,7 @@ class TblGoodsBrand extends BaseAdminController
      *         response=200,
      *         description="成功获取商品品牌分页列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -50,7 +50,7 @@ class TblGoodsBrand extends BaseAdminController
     
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-goods/brand/{id}",
+     *     path="/adminapi/tbl-goods/brands/{id}",
      *     tags={"admin-api/tblGoods/TblGoodsBrand"},
      *     summary="获取商品品牌信息",
      *     @OA\Parameter(
@@ -69,7 +69,7 @@ class TblGoodsBrand extends BaseAdminController
      *         response=200,
      *         description="成功获取商品品牌信息",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object", 
      *                 @OA\Property(property="id", type="integer", example=1),
@@ -99,7 +99,7 @@ class TblGoodsBrand extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/tbl-goods/brand",
+     *     path="/adminapi/tbl-goods/brands",
      *     tags={"admin-api/tblGoods/TblGoodsBrand"},
      *     summary="创建新商品品牌",
      *     @OA\RequestBody(
@@ -147,7 +147,7 @@ class TblGoodsBrand extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/tbl-goods/brand/{id}",
+     *     path="/adminapi/tbl-goods/brands/{id}",
      *     tags={"admin-api/tblGoods/TblGoodsBrand"},
      *     summary="更新商品品牌信息",
      *     @OA\Parameter(
@@ -172,7 +172,7 @@ class TblGoodsBrand extends BaseAdminController
      *         response=200,
      *         description="成功更新商品品牌信息",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -200,7 +200,7 @@ class TblGoodsBrand extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/tbl-goods/brand/{id}",
+     *     path="/adminapi/tbl-goods/brands/{id}",
      *     tags={"admin-api/tblGoods/TblGoodsBrand"},
      *     summary="删除商品品牌",
      *     @OA\Parameter(
@@ -213,7 +213,7 @@ class TblGoodsBrand extends BaseAdminController
      *         response=200,
      *         description="成功删除商品品牌",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

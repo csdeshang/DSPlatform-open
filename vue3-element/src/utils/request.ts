@@ -378,6 +378,16 @@ class Request {
         return this.instance.delete(url, config)
     }
 
+    /**
+     * 发送PATCH请求
+     * @param url 请求URL
+     * @param data 请求数据
+     * @param config 请求配置
+     * @returns Promise
+     */
+    public patch<T = any, D = any>(url: string, data?: D, config?: RequestConfig): Promise<ApiResponse<T>> {
+        return this.instance.patch(url, data, config)
+    }
 
     /**
      * 上传文件

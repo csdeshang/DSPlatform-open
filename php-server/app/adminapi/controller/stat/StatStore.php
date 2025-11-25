@@ -4,11 +4,41 @@ namespace app\adminapi\controller\stat;
 use app\deshang\base\controller\BaseAdminController;
 use app\adminapi\service\stat\StatStoreService;
 
-
-
+/**
+ * @OA\Tag(name="admin-api/stat/StatStore", description="店铺统计接口")
+ */
 class StatStore extends BaseAdminController
 {
-    // 获取店铺概览数据
+    /**
+     * @OA\Get(
+     *     path="/adminapi/stat/stores/overview",
+     *     summary="获取店铺概览统计数据",
+     *     tags={"admin-api/stat/StatStore"},
+     *     @OA\Parameter(
+     *         name="platform",
+     *         in="query",
+     *         required=false,
+     *         description="平台类型",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="forceRefresh",
+     *         in="query",
+     *         required=false,
+     *         description="是否强制刷新缓存",
+     *         @OA\Schema(type="string", example="false")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="获取数据成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="获取最新数据成功"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
+     */
     public function getStatStoreOverview()
     {
         // 获取是否强制刷新参数，并转换为布尔值

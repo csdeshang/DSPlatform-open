@@ -374,6 +374,7 @@
       { label: '家政购物车', value: '/home/platform/house/pages/cart/index' },
       { label: '商品列表', value: '/home/platform/house/pages/search/goodslist/index' },
       { label: '店铺列表', value: '/home/platform/house/pages/search/storelist/index' },
+      { label: '师傅列表', value: '/home/pages/technician/list' },
     ]
   }
   

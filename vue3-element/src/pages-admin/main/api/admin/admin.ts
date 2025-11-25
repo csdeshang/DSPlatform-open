@@ -6,22 +6,22 @@ import request, { API_BASE_URLS } from '@/utils/request';
  * @returns
  */
 export function getAdminPages(params: Record<string, any>) {
-  return request.get(`${API_BASE_URLS.ADMIN}/admin/admin/pages`, { params })
+  return request.get(`${API_BASE_URLS.ADMIN}/admin/admins/pages`, { params })
 }
 
 export function getAdminInfo(id: number) {
-  return request.get(`${API_BASE_URLS.ADMIN}/admin/admin/${ id }`);
+  return request.get(`${API_BASE_URLS.ADMIN}/admin/admins/${ id }`);
 }
 
 
 export function createAdmin(params: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/admin/admin`,   params )
+  return request.post(`${API_BASE_URLS.ADMIN}/admin/admins`,   params )
 }
 
 export function updateAdmin(params: Record<string, any>) {
-  return request.put(`${API_BASE_URLS.ADMIN}/admin/admin/${ params.id }`,   params )
+  return request.put(`${API_BASE_URLS.ADMIN}/admin/admins/${ params.id }`,   params )
 }
 
 export function deleteAdmin(id: number) {
-  return request.delete(`${API_BASE_URLS.ADMIN}/admin/admin/${ id }`)
+  return request.delete(`${API_BASE_URLS.ADMIN}/admin/admins/${ id }`)
 }

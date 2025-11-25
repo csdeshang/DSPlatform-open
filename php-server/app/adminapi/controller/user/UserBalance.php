@@ -14,7 +14,7 @@ class UserBalance extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/balance-log/pages",
+     *     path="/adminapi/user/balance-logs/pages",
      *     summary="获取会员余额变动日志分页列表",
      *     tags={"admin-api/user/UserBalance"},
      *     @OA\Parameter(
@@ -63,7 +63,7 @@ class UserBalance extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -87,16 +87,22 @@ class UserBalance extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/user/balance/modifyUserBalance",
+     * @OA\Put(
+     *     path="/adminapi/user/users/{id}/balance",
      *     summary="修改会员余额",
      *     tags={"admin-api/user/UserBalance"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="会员ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="修改余额信息",
      *         @OA\JsonContent(
-     *             required={"user_id", "change_mode", "change_amount"},
-     *             @OA\Property(property="user_id", type="integer", example=1, description="会员ID"),
+     *             required={"change_mode", "change_amount"},
      *             @OA\Property(property="change_mode", type="integer", example=1, description="变动模式（1:增加 2:减少）"),
      *             @OA\Property(property="change_amount", type="number", format="decimal", example=100.00, description="变动金额")
      *         )
@@ -105,15 +111,15 @@ class UserBalance extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
      * )
      */
-    public function modifyUserBalance(){
+    public function modifyUserBalance($id){
         $data = array(
-            'user_id' => input('param.user_id'),
+            'user_id' => $id,
             'change_mode' => input('param.change_mode'),
             'change_amount' => number_format(input('param.change_amount'), 2, '.', ''),
         );

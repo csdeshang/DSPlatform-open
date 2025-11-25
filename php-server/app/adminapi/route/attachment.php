@@ -13,23 +13,23 @@ Route::group('attachment', function () {
 
     
     //附件分类
-    Route::get('category/list', 'attachment.AttachmentCate/getAttachmentCateList');
-    Route::post('category', 'attachment.AttachmentCate/createAttachmentCate');
-    Route::put('category/:id', 'attachment.AttachmentCate/updateAttachmentCate');
-    Route::delete('category/:id', 'attachment.AttachmentCate/deleteAttachmentCate');
+    Route::get('categories', 'attachment.AttachmentCate/getAttachmentCateList');
+    Route::post('categories', 'attachment.AttachmentCate/createAttachmentCate');
+    Route::put('categories/:id', 'attachment.AttachmentCate/updateAttachmentCate');
+    Route::delete('categories/:id', 'attachment.AttachmentCate/deleteAttachmentCate');
 
 
-    // 添加视频
-    Route::post('file/video', 'attachment.AttachmentFile/video');
-
-
-    //添加图片
-    Route::post('file/image', 'attachment.AttachmentFile/image');
-    Route::get('file/pages', 'attachment.AttachmentFile/getAttachmentFilePages');
-    // 批量编辑图片
-    Route::post('file/update-batch', 'attachment.AttachmentFile/updateBatchAttachmentFile');
-    // 批量删除图片
-    Route::post('file/del-batch', 'attachment.AttachmentFile/deleteBatchAttachmentFile');
+    //附件文件管理
+    // 注意路由顺序：批量操作（2段）和特殊路径（2段）必须在动态路径（2段）前面
+    Route::get('files/pages', 'attachment.AttachmentFile/getAttachmentFilePages');
+    // 上传图片
+    Route::post('files/image', 'attachment.AttachmentFile/image');
+    // 上传视频
+    Route::post('files/video', 'attachment.AttachmentFile/video');
+    // 批量更新附件文件（重命名、移动分类）
+    Route::post('files/batch', 'attachment.AttachmentFile/updateBatchAttachmentFile');
+    // 批量删除附件文件
+    Route::delete('files/batch', 'attachment.AttachmentFile/deleteBatchAttachmentFile');
     
 
 

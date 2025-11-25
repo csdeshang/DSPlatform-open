@@ -4,6 +4,7 @@
 namespace app\deshang\service\distributor;
 
 use app\deshang\exceptions\CommonException;
+use app\deshang\exceptions\StateException;
 use app\deshang\service\BaseDeshangService;
 
 use app\common\dao\user\UserDao;
@@ -300,7 +301,7 @@ class DeshangDistributorOrderService extends BaseDeshangService
         $total_commission_amount = 0;
         foreach ($distributor_order_list as $distributor_order) {
             if ($distributor_order['commission_status'] != DistributorOrderEnum::COMMISSION_STATUS_WAIT) {
-                throw new CommonException('分销商订单状态错误');
+                throw new StateException('分销商订单状态错误');
             }
             // 获取分销订单总佣金
             $total_commission_amount += $distributor_order['commission_amount'];

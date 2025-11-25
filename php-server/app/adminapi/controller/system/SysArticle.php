@@ -13,7 +13,7 @@ class SysArticle extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/article/pages",
+     *     path="/adminapi/system/articles/pages",
      *     summary="获取系统文章分页列表",
      *     tags={"admin-api/system/SysArticle"},
      *     @OA\Parameter(
@@ -27,7 +27,7 @@ class SysArticle extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -47,7 +47,7 @@ class SysArticle extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/article/{id}",
+     *     path="/adminapi/system/articles/{id}",
      *     summary="获取系统文章详情",
      *     tags={"admin-api/system/SysArticle"},
      *     @OA\Parameter(
@@ -61,7 +61,7 @@ class SysArticle extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -80,7 +80,7 @@ class SysArticle extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/article",
+     *     path="/adminapi/system/articles",
      *     summary="创建系统文章",
      *     tags={"admin-api/system/SysArticle"},
      *     @OA\RequestBody(
@@ -103,7 +103,7 @@ class SysArticle extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -134,7 +134,7 @@ class SysArticle extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/article/{id}",
+     *     path="/adminapi/system/articles/{id}",
      *     summary="更新系统文章",
      *     tags={"admin-api/system/SysArticle"},
      *     @OA\Parameter(
@@ -163,7 +163,7 @@ class SysArticle extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -192,7 +192,7 @@ class SysArticle extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/system/article/batch",
+     *     path="/adminapi/system/articles/batch",
      *     summary="批量删除系统文章",
      *     tags={"admin-api/system/SysArticle"},
      *     @OA\RequestBody(
@@ -207,7 +207,7 @@ class SysArticle extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

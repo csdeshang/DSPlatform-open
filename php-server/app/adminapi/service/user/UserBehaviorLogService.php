@@ -64,4 +64,22 @@ class UserBehaviorLogService extends BaseAdminService
         $result = (new UserBehaviorLogDao())->getUserBehaviorLogInfo(['id' => $id]);   
         return $result;
     }
+
+    /**
+     * 删除用户行为日志
+     * @param int $id 日志ID
+     * @return void
+     * @throws CommonException
+     */
+    public function deleteUserBehaviorLog(int $id): void
+    {
+        // 检查日志是否存在
+        $log = (new UserBehaviorLogDao())->getUserBehaviorLogInfo(['id' => $id]);
+        if (empty($log)) {
+            throw new CommonException('日志不存在');
+        }
+        
+        // 删除日志
+        (new UserBehaviorLogDao())->deleteUserBehaviorLog(['id' => $id]);
+    }
 }

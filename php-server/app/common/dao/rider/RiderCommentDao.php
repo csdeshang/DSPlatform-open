@@ -61,15 +61,16 @@ class RiderCommentDao extends BaseDao
      * 软删除骑手评论
      * 
      * @param array $condition 删除条件
-     * @return bool 是否删除成功
+     * @return int 受影响的行数
      */
-    public function softDeleteRiderComment(array $condition): bool
+    public function softDeleteRiderComment(array $condition): int
     {
         $data = [
             'is_deleted' => 1,
             'deleted_at' => time()
         ];
-        return $this->model->where($condition)->update($data) ? true : false;
+        $result = $this->model::update($data, $condition);
+        return $result->getNumRows();
     }
     
     /**
@@ -77,12 +78,12 @@ class RiderCommentDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateRiderComment(array $condition, array $data): bool
+    public function updateRiderComment(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -170,11 +171,12 @@ class RiderCommentDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 评论信息
      */
-    public function getRiderCommentInfo(array $condition, string $field = '*'): array
+    public function getRiderCommentInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**
@@ -182,11 +184,12 @@ class RiderCommentDao extends BaseDao
      * 
      * @param int $id 评论ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 评论信息
      */
-    public function getRiderCommentById(int $id, string $field = '*'): array
+    public function getRiderCommentById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**

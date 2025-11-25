@@ -3,8 +3,6 @@
 
 namespace app\listener\system;
 
-use think\facade\Db;
-
 use app\deshang\core\ThirdPartyLoader;
 
 use app\common\enum\system\SysNoticeEnum;
@@ -106,217 +104,207 @@ class SysNoticeListener
         // 支持的通知渠道
         $supported_channels = $tpl['supported_channels'];
 
-        // 事务处理
-        Db::startTrans();
-        try {
-
-
-            // 如果是业务通知则默认 进行站内信发送  ， 如果是验证码则 没有站内信发送，验证码用于 登录 注册  找回密码
-            if ($tpl['template_type'] == SysNoticeEnum::TEMPLATE_TYPE_BUSINESS && strpos($supported_channels, 'interna') !== false) {
-                // 插入数据库
-                $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_INTERNAL;
-                $base_log_data['receiver'] = '';
-                $base_log_data['title'] = $tpl['title'];
-                $base_log_data['content'] = $this->formatContent($tpl['interna_template'], $template_params);
-                $base_log_data['send_status'] = 1;
-                $log_data[] = $base_log_data;
-            }
-
-            // 邮箱是否开启
-            $email_is_enabled = sysConfig('email:email_is_enabled');
-
-            // 如果支持邮箱发送则进行邮箱发送   是否绑定了邮箱
-            if ($tpl['email_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'email') !== false && !empty($email) && $email_is_enabled == 1) {
-
-                // 发送邮箱
-
-
-                // 插入数据库
-                $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_EMAIL;
-                $base_log_data['receiver'] = $email;
-                $base_log_data['title'] = $tpl['title'];
-                $base_log_data['content'] = $this->formatContent($tpl['email_template'], $template_params);
-                $base_log_data['send_status'] = 2;
-                $log_data[] = $base_log_data;
-            }
-
-
-            // 短信是否开启
-            $sms_config = (new DeshangSysConfigService())->getSysConfigByType('sms');
-
-
-            // 如果支持短信发送则进行短信发送
-            if ($tpl['sms_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'sms') !== false && !empty($mobile) && $sms_config['sms_is_enabled'] == 1) {
-                // 发送短信
-                $send_status = SysNoticeEnum::SEND_STATUS_SENDING;
-
-                //短信数据插入数据库
-                $sms_log_data = [
-                    'user_id' => $receiver_params['user_id'],
-                    'key' => $key,
-                    'sms_provider' => $sms_config['sms_default_provider'],
-                    'sms_template_id' => $tpl['sms_template_id'],
-                    'mobile' => $mobile,
-                    'content' => $this->formatContent($tpl['sms_template'], $template_params),
-                    'code' => isset($template_params['code']) ? $template_params['code'] : '',
-                    'is_verify' => 0,
-                    'send_status' => $send_status,
-                ];
-
-                $sms_log_id = (new SysNoticeSmsLogDao())->createSysNoticeSmsLog($sms_log_data);
-
-                // 发送短信
-                $sms = ThirdPartyLoader::sms();
-                $result = $sms->send($mobile, $tpl['sms_template_id'], $template_params);
 
 
 
-                // 如果发送失败则更新发送状态
-                if ($result === true) {
-                    $send_status = SysNoticeEnum::SEND_STATUS_SUCCESS;
-                } else {
-                    $send_status = SysNoticeEnum::SEND_STATUS_FAILED;
-                }
-
-                // 更新短信发送结果
-                $sms_log_update_data = [
-                    'send_status' => $send_status,
-                    'send_result' => $result,
-                ];
-                (new SysNoticeSmsLogDao())->updateSysNoticeSmsLog([['id', '=', $sms_log_id]], $sms_log_update_data);
-
-
-
-                // 插入数据库
-                $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_SMS;
-                $base_log_data['receiver'] = $mobile;
-                $base_log_data['title'] = '短信通知';
-                $base_log_data['content'] = $this->formatContent($tpl['sms_template'], $template_params);
-                $base_log_data['send_status'] = $send_status;
-                $log_data[] = $base_log_data;
-            }
-
-
-            // 如果支持微信公众号发送则进行微信公众号发送 （公众号模板消息）
-            if ($tpl['wechat_official_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'wechat_official') !== false && !empty($wx_event_openid)) {
-                // 发送微信公众号消息
-                $official_data = $this->buildOfficialData($key, $template_params);
-                $send_status = SysNoticeEnum::SEND_STATUS_FAILED;
-
-
-                $official_result = (new DeshangOfficialEasyService())->init(0)->sendTemplateMessage(
-                    $wx_event_openid,
-                    $tpl['wechat_official_template_id'],
-                    $official_data,
-                    $template_params['h5_page'] ?? '',
-                    // 小程序参数 默认不传
-                    []
-                );
-
-                if (isset($official_result['errcode']) && $official_result['errcode'] == 0) {
-                    $send_status = SysNoticeEnum::SEND_STATUS_SUCCESS;
-                }
-
-
-                // 插入数据库
-                $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_WECHAT_OFFICIAL;
-                $base_log_data['receiver'] = $wx_event_openid;
-                $base_log_data['title'] = '微信公众号通知';
-                $base_log_data['content'] = '微信公众号通知';
-                $base_log_data['send_status'] = $send_status;
-                $base_log_data['send_params'] = json_encode([
-                    'template_id' => $tpl['wechat_official_template_id'],
-                    'openid' => $wx_event_openid,
-                    'data' => $official_data,
-                    'url' => $template_params['h5_page'] ?? '',
-                ]);
-                $base_log_data['send_result'] = json_encode($official_result);
-                $log_data[] = $base_log_data;
-            }
-
-            // 如果支持微信小程序发送则进行微信小程序发送
-            if ($tpl['wechat_mini_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'wechat_mini') !== false && !empty($wx_mini_openid)) {
-                $mini_result = null;
-                $send_status = SysNoticeEnum::SEND_STATUS_FAILED;
-
-                // 先检查用户是否有有效的订阅记录
-                if (isset($receiver_params['user_id']) && $receiver_params['user_id'] > 0) {
-                    // 构建查询条件：用户ID、模板key、订阅类型、已同意、未发送、未过期
-                    $condition = [
-                        ['user_id', '=', $receiver_params['user_id']],
-                        ['template_key', '=', $key],
-                        ['subscribe_type', '=', WechatSubscribeEnum::SUBSCRIBE_TYPE_MINI],
-                        ['subscribe_status', '=', WechatSubscribeEnum::SUBSCRIBE_STATUS_ACCEPT],
-                        ['send_status', '=', WechatSubscribeEnum::SEND_STATUS_PENDING],
-                        ['expire_time', '>', time()], // 未过期
-                    ];
-                    $subscribeRecord = (new WechatSubscribeRecordDao())->getWechatSubscribeRecordInfo($condition);
-
-                    // 如果订阅记录存在，则发送微信小程序订阅消息,小程序订阅消息 需要用户同意订阅后才能发送
-                    if (!empty($subscribeRecord)) {
-                        // 构建数据
-                        $mini_data = $this->buildMiniData($key, $template_params);
-
-                        // 发送微信小程序订阅消息
-                        $mini_result = (new DeshangMiniEasyService())->init(0)->sendSubscribeMessage(
-                            $tpl['wechat_mini_template_id'],
-                            $template_params['h5_page'] ?? '',
-                            $wx_mini_openid,
-                            $mini_data
-                        );
-
-                        // 更新订阅记录状态为已发送
-                        $updateStatus = $mini_result['errcode'] == 0 ? WechatSubscribeEnum::SEND_STATUS_SENT : WechatSubscribeEnum::SEND_STATUS_FAILED;
-                        (new WechatSubscribeRecordDao())->updateWechatSubscribeRecord([
-                            ['id', '=', $subscribeRecord['id']]
-                        ], [
-                            'send_status' => $updateStatus,
-                            'send_time' => time(),
-                            'send_params' => json_encode([
-                                'template_id' => $tpl['wechat_mini_template_id'],
-                                'page' => $template_params['h5_page'] ?? '',
-                                'openid' => $wx_mini_openid,
-                                'data' => isset($mini_data) ? $mini_data : [],
-                            ]),
-                            'send_result' => json_encode($mini_result),
-                            'update_at' => time()
-                        ]);
-
-                        $send_status = $mini_result['errcode'] == 0 ? SysNoticeEnum::SEND_STATUS_SUCCESS : SysNoticeEnum::SEND_STATUS_FAILED;
-                    } else {
-                        // 用户未订阅或订阅已过期
-                        $mini_result = ['errcode' => -1, 'errmsg' => '用户未订阅或订阅已过期，跳过发送'];
-                    }
-                }
-
-                // 插入发送日志
-                $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_WECHAT_MINI;
-                $base_log_data['receiver'] = $wx_mini_openid;
-                $base_log_data['title'] = '微信小程序通知';
-                $base_log_data['content'] = '微信小程序通知';
-                $base_log_data['send_status'] = $send_status;
-                $base_log_data['send_params'] = json_encode([
-                    'template_id' => $tpl['wechat_mini_template_id'],
-                    'page' => $template_params['h5_page'] ?? '',
-                    'openid' => $wx_mini_openid,
-                    'data' => isset($mini_data) ? $mini_data : [],
-                ]);
-                $base_log_data['send_result'] = json_encode($mini_result);
-                $log_data[] = $base_log_data;
-            }
-
-
-
-            // 批量插入数据库
-            (new SysNoticeLogDao())->createSysNoticeLogAll($log_data);
-
-            // 提交事务
-            Db::commit();
-        } catch (\Exception $e) {
-            // 回滚事务
-            Db::rollback();
-            throw new CommonException('获取到的异常' . $e->getMessage());
+        // 如果是业务通知则默认 进行站内信发送  ， 如果是验证码则 没有站内信发送，验证码用于 登录 注册  找回密码
+        if ($tpl['template_type'] == SysNoticeEnum::TEMPLATE_TYPE_BUSINESS && strpos($supported_channels, 'interna') !== false) {
+            // 插入数据库
+            $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_INTERNAL;
+            $base_log_data['receiver'] = '';
+            $base_log_data['title'] = $tpl['title'];
+            $base_log_data['content'] = $this->formatContent($tpl['interna_template'], $template_params);
+            $base_log_data['send_status'] = 1;
+            $log_data[] = $base_log_data;
         }
+
+        // 邮箱是否开启
+        $email_is_enabled = sysConfig('email:email_is_enabled');
+
+        // 如果支持邮箱发送则进行邮箱发送   是否绑定了邮箱
+        if ($tpl['email_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'email') !== false && !empty($email) && $email_is_enabled == 1) {
+
+            // 发送邮箱
+
+
+            // 插入数据库
+            $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_EMAIL;
+            $base_log_data['receiver'] = $email;
+            $base_log_data['title'] = $tpl['title'];
+            $base_log_data['content'] = $this->formatContent($tpl['email_template'], $template_params);
+            $base_log_data['send_status'] = 2;
+            $log_data[] = $base_log_data;
+        }
+
+
+        // 短信是否开启
+        $sms_config = (new DeshangSysConfigService())->getSysConfigByType('sms');
+
+
+        // 如果支持短信发送则进行短信发送
+        if ($tpl['sms_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'sms') !== false && !empty($mobile) && $sms_config['sms_is_enabled'] == 1) {
+            // 发送短信
+            $send_status = SysNoticeEnum::SEND_STATUS_SENDING;
+
+            //短信数据插入数据库
+            $sms_log_data = [
+                'user_id' => $receiver_params['user_id'],
+                'key' => $key,
+                'sms_provider' => $sms_config['sms_default_provider'],
+                'sms_template_id' => $tpl['sms_template_id'],
+                'mobile' => $mobile,
+                'content' => $this->formatContent($tpl['sms_template'], $template_params),
+                'code' => isset($template_params['code']) ? $template_params['code'] : '',
+                'is_verify' => 0,
+                'send_status' => $send_status,
+            ];
+
+            $sms_log_id = (new SysNoticeSmsLogDao())->createSysNoticeSmsLog($sms_log_data);
+
+            // 发送短信
+            $sms = ThirdPartyLoader::sms();
+            $result = $sms->send($mobile, $tpl['sms_template_id'], $template_params);
+
+
+
+            // 如果发送失败则更新发送状态
+            if ($result === true) {
+                $send_status = SysNoticeEnum::SEND_STATUS_SUCCESS;
+            } else {
+                $send_status = SysNoticeEnum::SEND_STATUS_FAILED;
+            }
+
+            // 更新短信发送结果
+            $sms_log_update_data = [
+                'send_status' => $send_status,
+                'send_result' => $result,
+            ];
+            (new SysNoticeSmsLogDao())->updateSysNoticeSmsLog([['id', '=', $sms_log_id]], $sms_log_update_data);
+
+
+
+            // 插入数据库
+            $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_SMS;
+            $base_log_data['receiver'] = $mobile;
+            $base_log_data['title'] = '短信通知';
+            $base_log_data['content'] = $this->formatContent($tpl['sms_template'], $template_params);
+            $base_log_data['send_status'] = $send_status;
+            $log_data[] = $base_log_data;
+        }
+
+
+        // 如果支持微信公众号发送则进行微信公众号发送 （公众号模板消息）
+        if ($tpl['wechat_official_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'wechat_official') !== false && !empty($wx_event_openid)) {
+            // 发送微信公众号消息
+            $official_data = $this->buildOfficialData($key, $template_params);
+            $send_status = SysNoticeEnum::SEND_STATUS_FAILED;
+
+
+            $official_result = (new DeshangOfficialEasyService())->init(0)->sendTemplateMessage(
+                $wx_event_openid,
+                $tpl['wechat_official_template_id'],
+                $official_data,
+                $template_params['h5_page'] ?? '',
+                // 小程序参数 默认不传
+                []
+            );
+
+            if (isset($official_result['errcode']) && $official_result['errcode'] == 0) {
+                $send_status = SysNoticeEnum::SEND_STATUS_SUCCESS;
+            }
+
+
+            // 插入数据库
+            $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_WECHAT_OFFICIAL;
+            $base_log_data['receiver'] = $wx_event_openid;
+            $base_log_data['title'] = '微信公众号通知';
+            $base_log_data['content'] = '微信公众号通知';
+            $base_log_data['send_status'] = $send_status;
+            $base_log_data['send_params'] = json_encode([
+                'template_id' => $tpl['wechat_official_template_id'],
+                'openid' => $wx_event_openid,
+                'data' => $official_data,
+                'url' => $template_params['h5_page'] ?? '',
+            ]);
+            $base_log_data['send_result'] = json_encode($official_result);
+            $log_data[] = $base_log_data;
+        }
+
+        // 如果支持微信小程序发送则进行微信小程序发送
+        if ($tpl['wechat_mini_switch'] == SysNoticeEnum::SWITCH_ON && strpos($supported_channels, 'wechat_mini') !== false && !empty($wx_mini_openid)) {
+            $mini_result = null;
+            $send_status = SysNoticeEnum::SEND_STATUS_FAILED;
+
+            // 先检查用户是否有有效的订阅记录
+            if (isset($receiver_params['user_id']) && $receiver_params['user_id'] > 0) {
+                // 构建查询条件：用户ID、模板key、订阅类型、已同意、未发送、未过期
+                $condition = [
+                    ['user_id', '=', $receiver_params['user_id']],
+                    ['template_key', '=', $key],
+                    ['subscribe_type', '=', WechatSubscribeEnum::SUBSCRIBE_TYPE_MINI],
+                    ['subscribe_status', '=', WechatSubscribeEnum::SUBSCRIBE_STATUS_ACCEPT],
+                    ['send_status', '=', WechatSubscribeEnum::SEND_STATUS_PENDING],
+                    ['expire_time', '>', time()], // 未过期
+                ];
+                $subscribeRecord = (new WechatSubscribeRecordDao())->getWechatSubscribeRecordInfo($condition);
+
+                // 如果订阅记录存在，则发送微信小程序订阅消息,小程序订阅消息 需要用户同意订阅后才能发送
+                if (!empty($subscribeRecord)) {
+                    // 构建数据
+                    $mini_data = $this->buildMiniData($key, $template_params);
+
+                    // 发送微信小程序订阅消息
+                    $mini_result = (new DeshangMiniEasyService())->init(0)->sendSubscribeMessage(
+                        $tpl['wechat_mini_template_id'],
+                        $template_params['h5_page'] ?? '',
+                        $wx_mini_openid,
+                        $mini_data
+                    );
+
+                    // 更新订阅记录状态为已发送
+                    $updateStatus = $mini_result['errcode'] == 0 ? WechatSubscribeEnum::SEND_STATUS_SENT : WechatSubscribeEnum::SEND_STATUS_FAILED;
+                    (new WechatSubscribeRecordDao())->updateWechatSubscribeRecord([
+                        ['id', '=', $subscribeRecord['id']]
+                    ], [
+                        'send_status' => $updateStatus,
+                        'send_time' => time(),
+                        'send_params' => json_encode([
+                            'template_id' => $tpl['wechat_mini_template_id'],
+                            'page' => $template_params['h5_page'] ?? '',
+                            'openid' => $wx_mini_openid,
+                            'data' => isset($mini_data) ? $mini_data : [],
+                        ]),
+                        'send_result' => json_encode($mini_result),
+                        'update_at' => time()
+                    ]);
+
+                    $send_status = $mini_result['errcode'] == 0 ? SysNoticeEnum::SEND_STATUS_SUCCESS : SysNoticeEnum::SEND_STATUS_FAILED;
+                } else {
+                    // 用户未订阅或订阅已过期
+                    $mini_result = ['errcode' => -1, 'errmsg' => '用户未订阅或订阅已过期，跳过发送'];
+                }
+            }
+
+            // 插入发送日志
+            $base_log_data['notice_channel'] = SysNoticeEnum::CHANNEL_WECHAT_MINI;
+            $base_log_data['receiver'] = $wx_mini_openid;
+            $base_log_data['title'] = '微信小程序通知';
+            $base_log_data['content'] = '微信小程序通知';
+            $base_log_data['send_status'] = $send_status;
+            $base_log_data['send_params'] = json_encode([
+                'template_id' => $tpl['wechat_mini_template_id'],
+                'page' => $template_params['h5_page'] ?? '',
+                'openid' => $wx_mini_openid,
+                'data' => isset($mini_data) ? $mini_data : [],
+            ]);
+            $base_log_data['send_result'] = json_encode($mini_result);
+            $log_data[] = $base_log_data;
+        }
+
+
+
+        // 批量插入数据库
+        (new SysNoticeLogDao())->createSysNoticeLogAll($log_data);
     }
 
     // 格式化内容 短信 站内信  邮件 
@@ -385,30 +373,30 @@ class SysNoticeListener
             case strpos($wechat_field, 'thing') === 0:
                 return mb_substr($str_value, 0, 20);
 
-            // character_string.DATA 类型：字符串，可数字、字母或符号组合，32位以内
+                // character_string.DATA 类型：字符串，可数字、字母或符号组合，32位以内
             case strpos($wechat_field, 'character_string') === 0:
                 return mb_substr($str_value, 0, 32);
 
-            // time.DATA 类型：时间，24小时制时间格式
+                // time.DATA 类型：时间，24小时制时间格式
             case strpos($wechat_field, 'time') === 0:
                 if (is_numeric($value) && $value > 1000000000) {
                     return date('H:i:s', $value);
                 }
                 return $str_value;
 
-            // amount.DATA 类型：金额，1个币种符号+10位以内纯数字，可带小数，结尾可带"元"
+                // amount.DATA 类型：金额，1个币种符号+10位以内纯数字，可带小数，结尾可带"元"
             case strpos($wechat_field, 'amount') === 0:
                 return number_format((float)$value, 2, '.', '');
 
-            // phone_number.DATA 类型：电话号码，17位以内，数字、符号
+                // phone_number.DATA 类型：电话号码，17位以内，数字、符号
             case strpos($wechat_field, 'phone_number') === 0:
                 return mb_substr($str_value, 0, 17);
 
-            // car_number.DATA 类型：车牌号码，8位以内
+                // car_number.DATA 类型：车牌号码，8位以内
             case strpos($wechat_field, 'car_number') === 0:
                 return mb_substr($str_value, 0, 8);
 
-            // const.DATA 类型：常量，20位以内字符
+                // const.DATA 类型：常量，20位以内字符
             case strpos($wechat_field, 'const') === 0:
                 return mb_substr($str_value, 0, 20);
 
@@ -434,49 +422,49 @@ class SysNoticeListener
             case strpos($wechat_field, 'thing') === 0:
                 return mb_substr($str_value, 0, 20);
 
-            // number.DATA 类型：数字，32位以内数字，只能数字，可带小数
+                // number.DATA 类型：数字，32位以内数字，只能数字，可带小数
             case strpos($wechat_field, 'number') === 0:
                 return (string)(float)$value;
 
-            // letter.DATA 类型：字母，32位以内字母，只能字母
+                // letter.DATA 类型：字母，32位以内字母，只能字母
             case strpos($wechat_field, 'letter') === 0:
                 return mb_substr($str_value, 0, 32);
 
-            // symbol.DATA 类型：符号，5位以内符号，只能符号
+                // symbol.DATA 类型：符号，5位以内符号，只能符号
             case strpos($wechat_field, 'symbol') === 0:
                 return mb_substr($str_value, 0, 5);
 
-            // character_string.DATA 类型：字符串，32位以内数字、字母或符号
+                // character_string.DATA 类型：字符串，32位以内数字、字母或符号
             case strpos($wechat_field, 'character_string') === 0:
                 return mb_substr($str_value, 0, 32);
 
-            // time.DATA 类型：时间，24小时制时间格式（支持+年月日）
+                // time.DATA 类型：时间，24小时制时间格式（支持+年月日）
             case strpos($wechat_field, 'time') === 0:
                 if (is_numeric($value) && $value > 1000000000) {
                     return date('H:i:s', $value);
                 }
                 return $str_value;
 
-            // date.DATA 类型：日期，年月日格式（支持+24小时制时间）
+                // date.DATA 类型：日期，年月日格式（支持+24小时制时间）
             case strpos($wechat_field, 'date') === 0:
                 if (is_numeric($value) && $value > 1000000000) {
                     return date('Y年m月d日', $value);
                 }
                 return $str_value;
 
-            // amount.DATA 类型：金额，1个币种符号+10位以内纯数字，可带小数，结尾可带"元"
+                // amount.DATA 类型：金额，1个币种符号+10位以内纯数字，可带小数，结尾可带"元"
             case strpos($wechat_field, 'amount') === 0:
                 return number_format((float)$value, 2, '.', '');
 
-            // phone_number.DATA 类型：电话，17位以内，数字、符号
+                // phone_number.DATA 类型：电话，17位以内，数字、符号
             case strpos($wechat_field, 'phone_number') === 0:
                 return mb_substr($str_value, 0, 17);
 
-            // car_number.DATA 类型：车牌，8位以内，第一位与最后一位可为汉字，其余为字母或数字
+                // car_number.DATA 类型：车牌，8位以内，第一位与最后一位可为汉字，其余为字母或数字
             case strpos($wechat_field, 'car_number') === 0:
                 return mb_substr($str_value, 0, 8);
 
-            // name.DATA 类型：姓名，10个以内纯汉字或20个以内纯字母或符号
+                // name.DATA 类型：姓名，10个以内纯汉字或20个以内纯字母或符号
             case strpos($wechat_field, 'name') === 0:
                 // 判断是否为纯汉字
                 if (preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $str_value)) {
@@ -485,7 +473,7 @@ class SysNoticeListener
                     return mb_substr($str_value, 0, 20); // 其他情况限制20个
                 }
 
-            // phrase.DATA 类型：汉字，5个以内汉字，5个以内纯汉字
+                // phrase.DATA 类型：汉字，5个以内汉字，5个以内纯汉字
             case strpos($wechat_field, 'phrase') === 0:
                 return mb_substr($str_value, 0, 5);
 

@@ -51,12 +51,12 @@ class TblStoreDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateStore(array $condition, array $data): bool
+    public function updateStore(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -67,11 +67,11 @@ class TblStoreDao extends BaseDao
      * @param string $order 排序规则，默认按ID降序
      * @return array 店铺列表
      */
-    public function getStoreList(array $condition, string $field = '*', string $order = 'id desc'): array
+    public function getStoreList(array $condition, string $field = '*', string $order = 'id desc' , int $limit = 10): array
     {
         return $this->model->where($condition)
             ->append(['apply_status_desc'])
-            ->field($field)->order($order)->select()->toArray();
+            ->field($field)->order($order)->limit($limit)->select()->toArray();
     }
 
     /**
@@ -126,13 +126,14 @@ class TblStoreDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 店铺信息
      */
-    public function getStoreInfo(array $condition, string $field = '*'): array
+    public function getStoreInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
             ->append(['apply_status_desc'])
-            ->field($field)->findOrEmpty()->toArray();
+            ->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -140,11 +141,12 @@ class TblStoreDao extends BaseDao
      * 
      * @param int $id 店铺ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 店铺信息
      */
-    public function getStoreInfoById(int $id, string $field = '*'): array
+    public function getStoreInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

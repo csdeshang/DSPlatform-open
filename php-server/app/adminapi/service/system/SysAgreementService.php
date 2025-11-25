@@ -3,6 +3,8 @@
 namespace app\adminapi\service\system;
 
 use app\deshang\base\service\BaseAdminService;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 use app\common\dao\system\SysAgreementDao;
 
@@ -24,6 +26,10 @@ class SysAgreementService extends BaseAdminService
 
     public function createSysAgreement($data){
         $result = (new SysAgreementDao())->createSysAgreement($data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_AGREEMENT_TAG);
+        
         return $result;
     }
 
@@ -39,6 +45,10 @@ class SysAgreementService extends BaseAdminService
         $condition = [];
         $condition[] = ['id', '=', $id];
         $result = (new SysAgreementDao())->updateSysAgreement($condition, $data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_AGREEMENT_TAG);
+        
         return $result;
     }
 

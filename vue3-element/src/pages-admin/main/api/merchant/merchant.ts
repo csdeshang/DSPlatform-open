@@ -6,20 +6,20 @@ import request, { API_BASE_URLS } from '@/utils/request'
  * @returns
  */
 export function getMerchantPages(params: Record<string, any>) {
-  return request.get(`${API_BASE_URLS.ADMIN}/merchant/merchant/pages`, { params })
+  return request.get(`${API_BASE_URLS.ADMIN}/merchant/merchants/pages`, { params })
 }
 
 
 export function getMerchantInfo(id: number) {
-  return request.get(`${API_BASE_URLS.ADMIN}/merchant/merchant/${id}`)
+  return request.get(`${API_BASE_URLS.ADMIN}/merchant/merchants/${id}`)
 }
 
 export function createMerchant(params: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/merchant/merchant`, params)
+  return request.post(`${API_BASE_URLS.ADMIN}/merchant/merchants`, params)
 }
 
 export function updateMerchant(params: Record<string, any>) {
-  return request.put(`${API_BASE_URLS.ADMIN}/merchant/merchant/${params.id}`, params)
+  return request.put(`${API_BASE_URLS.ADMIN}/merchant/merchants/${params.id}`, params)
 }
 
 /**
@@ -29,5 +29,5 @@ export function updateMerchant(params: Record<string, any>) {
  * @returns
  */
 export function auditMerchant(id: number, params: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/merchant/merchant/audit/${id}`, params)
+  return request.patch(`${API_BASE_URLS.ADMIN}/merchant/merchants/${id}/audit`, params)
 }

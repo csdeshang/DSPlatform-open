@@ -3,6 +3,7 @@
 namespace app\adminapi\controller\rider\validate;
 
 use app\deshang\base\BaseValidate;
+use app\common\enum\rider\RiderEnum;
 
 class RiderValidate extends BaseValidate
 {
@@ -10,9 +11,9 @@ class RiderValidate extends BaseValidate
         'user_id' => 'require|integer',
         'name' => 'max:32',
         'mobile' => 'mobile|max:20',
-        'status' => 'in:0,1,2',
+        'status' => 'checkRiderStatus',
         'is_enabled' => 'in:0,1',
-        'apply_status' => 'in:0,1,2',
+        'apply_status' => 'checkApplyStatus',
         'audit_remark' => 'max:255',
     ];
 
@@ -22,9 +23,9 @@ class RiderValidate extends BaseValidate
         'name.max' => '骑手姓名不能超过32个字符',
         'mobile.mobile' => '手机号格式不正确',
         'mobile.max' => '手机号不能超过20个字符',
-        'status.in' => '骑手状态只能为0、1、2',
+        'status.checkRiderStatus' => '骑手状态值无效（0:休息 1:接单 2:忙碌）',
         'is_enabled.in' => '启用状态只能为0或1',
-        'apply_status.in' => '申请状态只能为0、1、2',
+        'apply_status.checkApplyStatus' => '申请状态值无效（0:审核中 1:审核通过 2:拒绝）',
         'audit_remark.max' => '审核备注不能超过255个字符',
     ];
 
@@ -32,4 +33,16 @@ class RiderValidate extends BaseValidate
         'create' => ['user_id'],
         'update' => ['name', 'mobile', 'status', 'is_enabled', 'apply_status', 'audit_remark'],
     ];
+
+    // 验证骑手状态
+    public function checkRiderStatus($value, $rule, $data)
+    {
+        return array_key_exists($value, RiderEnum::getRiderStatusDict());
+    }
+
+    // 验证申请状态
+    public function checkApplyStatus($value, $rule, $data)
+    {
+        return array_key_exists($value, RiderEnum::getApplyStatusDict());
+    }
 } 

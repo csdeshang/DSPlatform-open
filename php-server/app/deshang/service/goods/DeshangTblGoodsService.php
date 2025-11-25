@@ -456,15 +456,36 @@ class DeshangTblGoodsService extends BaseDeshangService
             'goods_sort' => $data['goods_sort'],
 
             // 运费相关字段[针对Mall类型店铺 快递费设置]
-            'mall_express_type' => $data['mall_express_type'],
-            'mall_express_tpl_id' => $data['mall_express_tpl_id'],
-            'mall_express_fee' => $data['mall_express_fee'],
+            'mall_express_type' => isset($data['mall_express_type']) ? $data['mall_express_type'] : 0,
+            'mall_express_tpl_id' => isset($data['mall_express_tpl_id']) ? $data['mall_express_tpl_id'] : 0,
+            'mall_express_fee' => isset($data['mall_express_fee']) ? $data['mall_express_fee'] : 0,
 
 
             //商品参数
             'goods_parameters' => json_encode($data['goods_parameters']),
             'sys_status' => $goods_need_audit == 0 ? 1 : 0,
         );
+
+        // 计算商品最低价格 和 总库存
+        $minPrice = 0;
+        $stock_num = 0;
+        if ($data['spec_type'] == 'single') {
+            // 单规格商品
+            $minPrice = floatval($data['single']['sku_price']);
+            $stock_num = intval($data['single']['sku_stock']);
+        } else if ($data['spec_type'] == 'multiple') {
+            // 多规格商品，找出最低价格
+            foreach ($data['goods_sku_list'] as $sku) {
+                $price = floatval($sku['sku_price']);
+                if ($minPrice == 0 || $price < $minPrice) {
+                    $minPrice = $price;
+                }
+                $stock_num += intval($sku['sku_stock']);
+            }
+        }
+        // 设置商品最低价格和总库存
+        $tbl_goods_data['goods_minprice'] = $minPrice;
+        $tbl_goods_data['stock_num'] = $stock_num;
 
 
 

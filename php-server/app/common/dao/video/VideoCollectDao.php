@@ -78,11 +78,12 @@ class VideoCollectDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 收藏信息
      */
-    public function getVideoCollectInfo(array $condition, string $field = '*'): array
+    public function getVideoCollectInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

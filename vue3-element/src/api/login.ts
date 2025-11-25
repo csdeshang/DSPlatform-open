@@ -22,11 +22,11 @@ export function loginNormal(params: Record<string, any>) {
 export function refreshToken(params: Record<string, any>) {
 
     if (systemType === 'admin') {
-        return request.get(`${API_BASE_URLS.ADMIN}/refresh_token`, { params })
+        return request.get(`${API_BASE_URLS.ADMIN}/refresh-token`, { params })
     } else if (systemType === 'store') {
-        return request.get(`${API_BASE_URLS.USER}/refresh_token`, {params})
+        return request.get(`${API_BASE_URLS.USER}/refresh-token`, {params})
     } else if (systemType === 'merchant') {
-        return request.get(`${API_BASE_URLS.USER}/refresh_token`, {params})
+        return request.get(`${API_BASE_URLS.USER}/refresh-token`, {params})
     }
     return Promise.reject('refreshToken 系统类型错误')
 }

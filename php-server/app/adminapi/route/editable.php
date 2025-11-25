@@ -19,15 +19,16 @@ Route::group('editable', function () {
     
 
     // 可编辑页面列表
-    Route::get('editable/pages', 'editable.EditablePage/getEditablePages');
+    // editables/pages (2段) 必须在 editables/:id (2段) 前面
+    Route::get('editables/pages', 'editable.EditablePage/getEditablePages');
     // 创建可编辑页面
-    Route::post('editable', 'editable.EditablePage/createEditablePage');
+    Route::post('editables', 'editable.EditablePage/createEditablePage');
     // 获取可编辑页面信息
-    Route::get('editable/:id', 'editable.EditablePage/getEditablePageInfo');
+    Route::get('editables/:id', 'editable.EditablePage/getEditablePageInfo');
     // 更新可编辑页面
-    Route::put('editable/:id', 'editable.EditablePage/updateEditablePage');
+    Route::put('editables/:id', 'editable.EditablePage/updateEditablePage');
     // 删除可编辑页面
-    Route::delete('editable/:id', 'editable.EditablePage/deleteEditablePage');
+    Route::delete('editables/:id', 'editable.EditablePage/deleteEditablePage');
 
 
 

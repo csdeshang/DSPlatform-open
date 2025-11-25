@@ -22,7 +22,7 @@ class AdminMenu extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -50,7 +50,7 @@ class AdminMenu extends BaseAdminController
      *         description="操作成功",
      *         @OA\JsonContent(
 
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array",
      *                 @OA\Items(type="object",
@@ -89,7 +89,7 @@ class AdminMenu extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -134,7 +134,7 @@ class AdminMenu extends BaseAdminController
      *         response=200,
      *         description="菜单创建成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -197,7 +197,7 @@ class AdminMenu extends BaseAdminController
      *         response=200,
      *         description="菜单更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -243,7 +243,7 @@ class AdminMenu extends BaseAdminController
      *         response=200,
      *         description="菜单删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

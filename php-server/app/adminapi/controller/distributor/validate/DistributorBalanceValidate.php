@@ -8,7 +8,7 @@ class DistributorBalanceValidate extends BaseValidate
 {
     protected $rule = [
         'change_mode' => 'require|in:1,2', // 1:增加 2:减少
-        'change_amount' => 'require|float|gt:0|lt:1000000',
+        'change_amount' => 'require|float|gt:0|elt:10000000',
         'distributor_user_id' => 'require|integer|gt:0'
     ];
 
@@ -18,7 +18,7 @@ class DistributorBalanceValidate extends BaseValidate
         'change_amount.require' => '变更金额不能为空',
         'change_amount.float' => '变更金额必须为数字',
         'change_amount.gt' => '变更金额必须大于0',
-        'change_amount.lt' => '变更金额不能超过1,000,000',
+        'change_amount.elt' => '变更金额不能超过10,000,000',
         'distributor_user_id.require' => '分销商ID不能为空',
         'distributor_user_id.integer' => '分销商ID必须为整数',
         'distributor_user_id.gt' => '分销商ID必须大于0'

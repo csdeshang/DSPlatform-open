@@ -4,6 +4,8 @@ namespace app\adminapi\service\system;
 
 
 use app\deshang\base\service\BaseAdminService;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 use app\common\dao\system\SysArticleDao;
 
@@ -54,7 +56,12 @@ class SysArticleService extends BaseAdminService
     public function createSysArticle(array $data)
     {
         //添加
-        return (new SysArticleDao())->createSysArticle($data);
+        $result = (new SysArticleDao())->createSysArticle($data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_ARTICLE_TAG);
+        
+        return $result;
     }
 
     /**
@@ -66,8 +73,12 @@ class SysArticleService extends BaseAdminService
         $condition = [];
         $condition[] = ['id', '=', $id];
 
-
-        return (new SysArticleDao())->updateSysArticle($condition, $data);
+        $result = (new SysArticleDao())->updateSysArticle($condition, $data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_ARTICLE_TAG);
+        
+        return $result;
     }
 
     /**
@@ -77,6 +88,11 @@ class SysArticleService extends BaseAdminService
     {
         $condition = [];
         $condition[] = ['id', 'in', $ids];
-        return (new SysArticleDao())->deleteSysArticle($condition);
+        $result = (new SysArticleDao())->deleteSysArticle($condition);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_ARTICLE_TAG);
+        
+        return $result;
     }
 }

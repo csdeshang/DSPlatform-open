@@ -42,6 +42,40 @@ class SysErrorLogsService extends BaseAdminService
             $condition[] = ['code', 'like', '%' . $data['code'] . '%'];
         }
         
+        // 包含异常类名搜索（支持多选）
+        if (!empty($data['include_exception_class'])) {
+            // 如果是数组，使用 IN；如果是字符串，转换为数组
+            $exceptionClasses = is_array($data['include_exception_class']) 
+                ? $data['include_exception_class'] 
+                : [$data['include_exception_class']];
+            
+            // 过滤空值
+            $exceptionClasses = array_filter($exceptionClasses, function($value) {
+                return !empty($value);
+            });
+            
+            if (!empty($exceptionClasses)) {
+                $condition[] = ['exception_class', 'in', $exceptionClasses];
+            }
+        }
+        
+        // 排除异常类名搜索（支持多选）
+        if (!empty($data['exclude_exception_class'])) {
+            // 如果是数组，使用 NOT IN；如果是字符串，转换为数组
+            $excludeClasses = is_array($data['exclude_exception_class']) 
+                ? $data['exclude_exception_class'] 
+                : [$data['exclude_exception_class']];
+            
+            // 过滤空值
+            $excludeClasses = array_filter($excludeClasses, function($value) {
+                return !empty($value);
+            });
+            
+            if (!empty($excludeClasses)) {
+                $condition[] = ['exception_class', 'not in', $excludeClasses];
+            }
+        }
+        
         // 请求耗时区间搜索
         if (isset($data['duration_min']) && $data['duration_min'] !== '') {
             $condition[] = ['duration', '>=', $data['duration_min']];

@@ -9,8 +9,9 @@ class UserPointsValidate extends BaseValidate
     
     protected $rule = [
         'change_mode' => 'require|in:1,2', // 1:增加 2:减少
-        'change_num' => 'require|float|gt:0|lt:100000',
-        'user_id' => 'require|integer|gt:0'
+        'change_num' => 'require|float|gt:0|lt:10000000',
+        'user_id' => 'require|integer|gt:0',
+        'id' => 'require|integer|gt:0'
     ];
 
     protected $message = [
@@ -19,14 +20,18 @@ class UserPointsValidate extends BaseValidate
         'change_num.require' => '变更数量不能为空',
         'change_num.float' => '变更数量必须为数字',
         'change_num.gt' => '变更数量必须大于0',
-        'change_num.lt' => '变更数量不能超过100,000',
+        'change_num.lt' => '变更数量不能超过10,000,000',
         'user_id.require' => '会员ID不能为空',
         'user_id.integer' => '会员ID必须为整数',
-        'user_id.gt' => '会员ID必须大于0'
+        'user_id.gt' => '会员ID必须大于0',
+        'id.require' => '日志ID不能为空',
+        'id.integer' => '日志ID必须为整数',
+        'id.gt' => '日志ID必须大于0'
     ];
 
     protected $scene = [
-        'change' => ['change_mode', 'change_num', 'user_id']
+        'modify' => ['change_mode', 'change_num', 'user_id'],
+        'info' => ['id']
     ];
 
 }

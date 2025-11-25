@@ -22,7 +22,7 @@ class SysPrinterProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -62,12 +62,12 @@ class SysPrinterProvider extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/printer-provider/info",
+     *     path="/adminapi/system/printer-provider/{provider}",
      *     summary="获取打印机服务商配置信息",
      *     tags={"admin-api/system/SysPrinterProvider"},
      *     @OA\Parameter(
      *         name="provider",
-     *         in="query",
+     *         in="path",
      *         required=true,
      *         description="打印机服务商标识",
      *         @OA\Schema(type="string", example="feie")
@@ -76,7 +76,7 @@ class SysPrinterProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -92,9 +92,9 @@ class SysPrinterProvider extends BaseAdminController
      * )
      */
     // 获取打印机服务商配置信息
-    public function getPrinterProviderInfo()
+    public function getPrinterProviderInfo($provider)
     {
-        $printer_provider = input('param.provider');
+        $printer_provider = $provider;
         if (empty($printer_provider)) {
             return ds_json_error('打印机服务商参数不能为空');
         }
@@ -135,16 +135,21 @@ class SysPrinterProvider extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/printer-provider/update",
+     * @OA\Put(
+     *     path="/adminapi/system/printer-provider/{provider}",
      *     summary="更新打印机服务商配置信息",
      *     tags={"admin-api/system/SysPrinterProvider"},
+     *     @OA\Parameter(
+     *         name="provider",
+     *         in="path",
+     *         required=true,
+     *         description="打印机服务商标识",
+     *         @OA\Schema(type="string", example="feie")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="打印机服务商配置信息",
      *         @OA\JsonContent(
-     *             required={"provider"},
-     *             @OA\Property(property="provider", type="string", example="feie", description="打印机服务商标识"),
      *             @OA\Property(
      *                 property="config",
      *                 type="object",
@@ -163,7 +168,7 @@ class SysPrinterProvider extends BaseAdminController
      *         response=200,
      *         description="配置更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="配置更新成功")
      *         )
      *     ),
@@ -178,9 +183,9 @@ class SysPrinterProvider extends BaseAdminController
      * )
      */
     // 更新打印机服务商配置信息
-    public function updatePrinterProviderConfig()
+    public function updatePrinterProviderConfig($provider)
     {
-        $printer_provider = input('param.provider');
+        $printer_provider = $provider;
         if (empty($printer_provider)) {
             return ds_json_error('打印机服务商参数不能为空');
         }

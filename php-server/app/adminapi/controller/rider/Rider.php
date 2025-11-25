@@ -16,7 +16,7 @@ class Rider extends BaseAdminController
    
     /**
      * @OA\Get(
-     *     path="/adminapi/rider/pages",
+     *     path="/adminapi/rider/riders/pages",
      *     summary="获取骑手分页列表",
      *     tags={"admin-api/rider/Rider"},
      *     @OA\Parameter(
@@ -30,7 +30,7 @@ class Rider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -51,7 +51,7 @@ class Rider extends BaseAdminController
    
     /**
      * @OA\Get(
-     *     path="/adminapi/rider/info/{id}",
+     *     path="/adminapi/rider/riders/{id}",
      *     summary="获取骑手详情",
      *     tags={"admin-api/rider/Rider"},
      *     @OA\Parameter(
@@ -65,7 +65,7 @@ class Rider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -81,7 +81,7 @@ class Rider extends BaseAdminController
   
     /**
      * @OA\Post(
-     *     path="/adminapi/rider/create",
+     *     path="/adminapi/rider/riders",
      *     summary="创建骑手",
      *     tags={"admin-api/rider/Rider"},
      *     @OA\RequestBody(
@@ -96,7 +96,7 @@ class Rider extends BaseAdminController
      *         response=200,
      *         description="添加成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="添加成功")
      *         )
      *     )
@@ -139,7 +139,7 @@ class Rider extends BaseAdminController
  
     /**
      * @OA\Put(
-     *     path="/adminapi/rider/update/{id}",
+     *     path="/adminapi/rider/riders/{id}",
      *     summary="更新骑手信息",
      *     tags={"admin-api/rider/Rider"},
      *     @OA\Parameter(
@@ -165,7 +165,7 @@ class Rider extends BaseAdminController
      *         response=200,
      *         description="修改成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="修改成功")
      *         )
      *     )

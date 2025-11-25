@@ -8,7 +8,8 @@ use app\common\dao\system\SysConfigDao;
 
 use app\deshang\exceptions\CommonException;
 
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 
 // 系统配置
@@ -65,8 +66,8 @@ class SysConfigService extends BaseAdminService
         $result = (new SysConfigDao())->updateSysConfig($condition, ['config_value' => $data['config_value']]);
 
         // 清除缓存
-        $cacheKey = sprintf(CacheUtil::SYS_CONFIG_KEY, $data['config_type']);
-        CacheUtil::delete($cacheKey);
+        $cacheKey = sprintf(CacheKeyManager::SYS_CONFIG_KEY, $data['config_type']);
+        KvManager::cache()->delete($cacheKey);
 
         return $result;
     }
@@ -84,8 +85,8 @@ class SysConfigService extends BaseAdminService
 
 
         // 清除缓存
-        $cacheKey = sprintf(CacheUtil::SYS_CONFIG_KEY, $config_type);
-        CacheUtil::delete($cacheKey);
+        $cacheKey = sprintf(CacheKeyManager::SYS_CONFIG_KEY, $config_type);
+        KvManager::cache()->delete($cacheKey);
 
 
         return true;

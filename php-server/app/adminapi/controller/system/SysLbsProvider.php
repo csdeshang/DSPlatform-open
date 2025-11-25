@@ -21,7 +21,7 @@ class SysLbsProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -62,12 +62,12 @@ class SysLbsProvider extends BaseAdminController
     }
     /**
      * @OA\Get(
-     *     path="/adminapi/system/lbs-provider/info",
+     *     path="/adminapi/system/lbs-provider/{provider}",
      *     summary="获取地图服务提供商配置信息",
      *     tags={"admin-api/system/SysLbsProvider"},
      *     @OA\Parameter(
      *         name="provider",
-     *         in="query",
+     *         in="path",
      *         required=true,
      *         description="地图服务提供商标识",
      *         @OA\Schema(type="string", example="amap")
@@ -76,7 +76,7 @@ class SysLbsProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -92,9 +92,9 @@ class SysLbsProvider extends BaseAdminController
      * )
      */
     // 获取地图服务提供商配置信息
-    public function getLbsProviderInfo()
+    public function getLbsProviderInfo($provider)
     {
-        $lbs_provider = input('param.provider');
+        $lbs_provider = $provider;
         if (empty($lbs_provider)) {
             return ds_json_error('地图服务提供商参数不能为空');
         }
@@ -135,16 +135,21 @@ class SysLbsProvider extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/lbs-provider/update",
+     * @OA\Put(
+     *     path="/adminapi/system/lbs-provider/{provider}",
      *     summary="更新地图服务提供商配置信息",
      *     tags={"admin-api/system/SysLbsProvider"},
+     *     @OA\Parameter(
+     *         name="provider",
+     *         in="path",
+     *         required=true,
+     *         description="地图服务提供商标识",
+     *         @OA\Schema(type="string", example="amap")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="地图服务提供商配置信息",
      *         @OA\JsonContent(
-     *             required={"provider"},
-     *             @OA\Property(property="provider", type="string", example="amap", description="地图服务提供商标识"),
      *             @OA\Property(
      *                 property="config",
      *                 type="object",
@@ -160,7 +165,7 @@ class SysLbsProvider extends BaseAdminController
      *         response=200,
      *         description="配置更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="配置更新成功")
      *         )
      *     ),
@@ -175,9 +180,9 @@ class SysLbsProvider extends BaseAdminController
      * )
      */
     // 更新地图服务提供商配置信息
-    public function updateLbsProviderConfig()
+    public function updateLbsProviderConfig($provider)
     {
-        $lbs_provider = input('param.provider');
+        $lbs_provider = $provider;
         if (empty($lbs_provider)) {
             return ds_json_error('地图服务提供商参数不能为空');
         }

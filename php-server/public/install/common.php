@@ -293,9 +293,11 @@ function installDatabase($config)
         // 执行数据库脚本
         $sqlFiles = [
             './db/deshang.sql',
+            './db/kms.sql',
             './db/video.sql',
             './db/initarea.sql',
             './db/points-goods.sql',
+            './db/demo-data.sql',
 
             // 可以添加其他数据库脚本
         ];

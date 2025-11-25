@@ -13,14 +13,14 @@ class SysArticleCategory extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/article-category/tree",
+     *     path="/adminapi/system/article-categories/tree",
      *     summary="获取系统文章分类树形结构",
      *     tags={"admin-api/system/SysArticleCategory"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -41,7 +41,7 @@ class SysArticleCategory extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/article-category/{id}",
+     *     path="/adminapi/system/article-categories/{id}",
      *     summary="获取系统文章分类详情",
      *     tags={"admin-api/system/SysArticleCategory"},
      *     @OA\Parameter(
@@ -55,7 +55,7 @@ class SysArticleCategory extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -73,7 +73,7 @@ class SysArticleCategory extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/article-category",
+     *     path="/adminapi/system/article-categories",
      *     summary="创建系统文章分类",
      *     tags={"admin-api/system/SysArticleCategory"},
      *     @OA\RequestBody(
@@ -93,7 +93,7 @@ class SysArticleCategory extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -120,7 +120,7 @@ class SysArticleCategory extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/article-category/{id}",
+     *     path="/adminapi/system/article-categories/{id}",
      *     summary="更新系统文章分类",
      *     tags={"admin-api/system/SysArticleCategory"},
      *     @OA\Parameter(
@@ -146,7 +146,7 @@ class SysArticleCategory extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -172,7 +172,7 @@ class SysArticleCategory extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/system/article-category/{id}",
+     *     path="/adminapi/system/article-categories/{id}",
      *     summary="删除系统文章分类",
      *     tags={"admin-api/system/SysArticleCategory"},
      *     @OA\Parameter(
@@ -186,7 +186,7 @@ class SysArticleCategory extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

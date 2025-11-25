@@ -6,7 +6,8 @@ namespace app\adminapi\service\goods;
 use app\deshang\base\service\BaseAdminService;
 use app\deshang\exceptions\CommonException;
 use app\common\dao\goods\TblGoodsBrandDao;
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 
 // 商品品牌 多平台通用
@@ -87,7 +88,7 @@ class TblGoodsBrandService extends BaseAdminService
         $result = (new TblGoodsBrandDao())->updateGoodsBrand($condition, $data);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::GOODS_BRAND_TAG);
+        KvManager::cache()->clear(CacheKeyManager::GOODS_BRAND_TAG);
 
         return $result;
     }
@@ -106,7 +107,7 @@ class TblGoodsBrandService extends BaseAdminService
         $result =  (new TblGoodsBrandDao())->deleteGoodsBrand([['id', '=', $id]]);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::GOODS_BRAND_TAG);
+        KvManager::cache()->clear(CacheKeyManager::GOODS_BRAND_TAG);
 
         return $result;
     }

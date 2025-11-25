@@ -14,6 +14,8 @@ class UserBehaviorLogValidate extends BaseValidate
         'behavior_status' => 'checkBehaviorStatus',
         'risk_level' => 'checkRiskLevel',
         'ip_address' => 'max:50',
+        // 通用验证
+        'id' => 'require|integer|gt:0',
     ];
 
     protected $message = [
@@ -25,7 +27,7 @@ class UserBehaviorLogValidate extends BaseValidate
         'ip_address.max' => 'IP地址长度不能超过50个字符',
         'id.require' => 'ID不能为空',
         'id.integer' => 'ID必须为整数',
-        'id.min' => 'ID必须大于0',
+        'id.gt' => 'ID必须大于0',
     ];
 
     protected $scene = [
@@ -33,6 +35,8 @@ class UserBehaviorLogValidate extends BaseValidate
         'pages' => ['username', 'behavior_type', 'behavior_status', 'risk_level', 'ip_address'],
         // 获取详情
         'info' => ['id'],
+        // 删除
+        'delete' => ['id'],
     ];
 
     // 验证行为类型

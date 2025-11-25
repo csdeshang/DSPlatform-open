@@ -46,8 +46,16 @@ const useUserInfoStore = defineStore('userInfo', {
             setToken(res.data.access_token, 'access_token')
             setToken(res.data.refresh_token, 'refresh_token')
             if (res.data.userinfo.manage_store_list && res.data.userinfo.manage_store_list.length > 0) {
+              // 筛选申请正常且可用的店铺
+              const availableStore = res.data.userinfo.manage_store_list.find(
+                (store: any) => store.apply_status === 1 && store.is_enabled === 1
+              )
+              
+              // 如果找到符合条件的店铺，使用该店铺；否则使用第一个店铺
+              const defaultStore = availableStore || res.data.userinfo.manage_store_list[0]
+              
               // 设置默认店铺id
-              storage.set('manage_store_id', res.data.userinfo.manage_store_list[0].id, 7 * 24 * 60 * 60)
+              storage.set('manage_store_id', defaultStore.id, 7 * 24 * 60 * 60)
             }
 
             this.access_token = res.data.access_token

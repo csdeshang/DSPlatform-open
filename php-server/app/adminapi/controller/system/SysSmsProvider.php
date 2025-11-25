@@ -25,7 +25,7 @@ class SysSmsProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -66,12 +66,12 @@ class SysSmsProvider extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/sms-provider/info",
+     *     path="/adminapi/system/sms-provider/{provider}",
      *     summary="获取短信服务商配置信息",
      *     tags={"admin-api/system/SysSmsProvider"},
      *     @OA\Parameter(
      *         name="provider",
-     *         in="query",
+     *         in="path",
      *         required=true,
      *         description="短信服务商标识",
      *         @OA\Schema(type="string", example="aliyun_sms")
@@ -80,7 +80,7 @@ class SysSmsProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -96,9 +96,9 @@ class SysSmsProvider extends BaseAdminController
      * )
      */
     // 获取短信服务商配置信息
-    public function getSmsProviderInfo()
+    public function getSmsProviderInfo($provider)
     {
-        $sms_provider = input('param.provider');
+        $sms_provider = $provider;
         if (empty($sms_provider)) {
             return ds_json_error('短信服务商参数不能为空');
         }
@@ -139,16 +139,22 @@ class SysSmsProvider extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/sms-provider/update",
+     * @OA\Put(
+     *     path="/adminapi/system/sms-provider/{provider}",
      *     summary="更新短信服务商配置信息",
      *     tags={"admin-api/system/SysSmsProvider"},
+     *     @OA\Parameter(
+     *         name="provider",
+     *         in="path",
+     *         required=true,
+     *         description="短信服务商标识",
+     *         @OA\Schema(type="string", example="aliyun_sms")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="短信服务商配置信息",
      *         @OA\JsonContent(
-     *             required={"provider"},
-     *             @OA\Property(property="provider", type="string", example="aliyun_sms", description="短信服务商标识"),
+     *             required={},
      *             @OA\Property(
      *                 property="config",
      *                 type="object",
@@ -165,7 +171,7 @@ class SysSmsProvider extends BaseAdminController
      *         response=200,
      *         description="配置更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="配置更新成功")
      *         )
      *     ),
@@ -180,9 +186,9 @@ class SysSmsProvider extends BaseAdminController
      * )
      */
     // 更新短信服务商配置信息
-    public function updateSmsProviderConfig()
+    public function updateSmsProviderConfig($provider)
     {
-        $sms_provider = input('param.provider');
+        $sms_provider = $provider;
         if (empty($sms_provider)) {
             return ds_json_error('短信服务商参数不能为空');
         }
@@ -264,7 +270,7 @@ class SysSmsProvider extends BaseAdminController
      *         response=200,
      *         description="测试发送成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="测试发送成功")
      *         )
      *     ),

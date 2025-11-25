@@ -23,6 +23,7 @@ class TblStoreValidate extends BaseValidate
         'seo_title' => 'max:100', // SEO标题，最大长度100
         'seo_keywords' => 'max:255', // SEO关键词，最大长度255
         'seo_description' => 'max:500', // SEO描述，最大长度500
+        'category_id' => 'integer|min:0', // 店铺分类ID，整数，最小值0
         'apply_status' => 'require|checkApplyStatus', // 申请状态，必须是0,1,2中的一个
         'audit_remark' => 'max:500', // 审核备注，最大长度500
     ];
@@ -54,6 +55,8 @@ class TblStoreValidate extends BaseValidate
         'seo_title.max' => 'SEO标题不能超过100个字符',
         'seo_keywords.max' => 'SEO关键词不能超过255个字符',
         'seo_description.max' => 'SEO描述不能超过500个字符',
+        'category_id.integer' => '店铺分类ID必须是整数',
+        'category_id.min' => '店铺分类ID不能小于0',
         'apply_status.require' => '申请状态不能为空',
         'apply_status.checkApplyStatus' => '申请状态值无效（0:待审核 1:审核通过 2:审核拒绝）',
         'audit_remark.max' => '审核备注不能超过500个字符',
@@ -61,7 +64,7 @@ class TblStoreValidate extends BaseValidate
 
     // 定义场景
     protected $scene = [
-        'update' => ['id', 'store_name', 'store_business_status', 'service_fee_rate', 'is_enabled', 'is_recommend', 'sort', 'store_introduction', 'contact_name', 'contact_phone', 'address', 'seo_title', 'seo_keywords', 'seo_description', 'apply_status', 'audit_remark'],
+        'update' => ['id', 'store_name', 'store_business_status', 'service_fee_rate', 'is_enabled', 'is_recommend', 'sort', 'store_introduction', 'contact_name', 'contact_phone', 'address', 'seo_title', 'seo_keywords', 'seo_description', 'category_id', 'apply_status', 'audit_remark'],
         'audit' => ['id', 'apply_status', 'audit_remark'],
     ];
 

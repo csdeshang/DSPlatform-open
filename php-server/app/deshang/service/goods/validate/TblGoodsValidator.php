@@ -3,13 +3,14 @@
 namespace app\deshang\service\goods\validate;
 
 use app\deshang\base\BaseValidate;
+use app\common\enum\goods\TblGoodsEnum;
 
 class TblGoodsValidator extends BaseValidate
 {
     protected $rule = [
         'goods_name' => 'require|length:2,128',
         'goods_advword' => 'length:0,150',
-        'goods_status' => 'in:0,1',
+        'goods_status' => 'checkGoodsStatus',
         'brand_id' => 'integer|egt:0',
         'store_goods_cid' => 'integer|egt:0',
         'stock_num' => 'integer|egt:0',
@@ -27,7 +28,7 @@ class TblGoodsValidator extends BaseValidate
         'goods_name.require' => '商品名称不能为空',
         'goods_name.length' => '商品名称长度必须在2到128个字符之间',
         'goods_advword.length' => '商品广告词长度不能超过150个字符',
-        'goods_status.in' => '商品状态值不正确',
+        'goods_status.checkGoodsStatus' => '商品状态值无效（0:下架 1:上架）',
         'brand_id.integer' => '品牌ID必须是整数',
         'brand_id.egt' => '品牌ID不能小于0',
         'store_goods_cid.integer' => '店铺商品分类ID必须是整数',
@@ -74,5 +75,11 @@ class TblGoodsValidator extends BaseValidate
             }
         }
         return true;
+    }
+
+    // 验证商品状态
+    public function checkGoodsStatus($value, $rule, $data)
+    {
+        return array_key_exists($value, TblGoodsEnum::getGoodsStatusDict());
     }
 }

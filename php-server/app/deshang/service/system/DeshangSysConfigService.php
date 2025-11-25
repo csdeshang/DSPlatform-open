@@ -8,7 +8,8 @@ use app\deshang\service\BaseDeshangService;
 
 use app\common\dao\system\SysConfigDao;
 
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 
 
@@ -51,10 +52,10 @@ class DeshangSysConfigService extends BaseDeshangService
         list($type, $key) = explode(':', $key, 2);
 
         // 生成缓存key
-        $cacheKey = sprintf(CacheUtil::SYS_CONFIG_KEY, $type);
+        $cacheKey = sprintf(CacheKeyManager::SYS_CONFIG_KEY, $type);
 
         // 从缓存获取
-        $allConfigs = $is_cache ? CacheUtil::get($cacheKey) : null;
+        $allConfigs = $is_cache ? KvManager::cache()->get($cacheKey) : null;
 
         if (empty($allConfigs)) {
             // 缓存不存在或禁用缓存，从数据库获取
@@ -70,7 +71,7 @@ class DeshangSysConfigService extends BaseDeshangService
 
             // 存入缓存
             if ($is_cache) {
-                CacheUtil::set($cacheKey, $allConfigs, 3600); // 缓存1小时
+                KvManager::cache()->set($cacheKey, $allConfigs, 3600); // 缓存1小时
             }
         }
 
@@ -135,10 +136,10 @@ class DeshangSysConfigService extends BaseDeshangService
         }
 
         // 生成缓存key
-        $cacheKey = sprintf(CacheUtil::SYS_CONFIG_KEY, $type);
+        $cacheKey = sprintf(CacheKeyManager::SYS_CONFIG_KEY, $type);
 
         // 从缓存获取
-        $allConfigs = $is_cache ? CacheUtil::get($cacheKey) : null;
+        $allConfigs = $is_cache ? KvManager::cache()->get($cacheKey) : null;
 
         if (empty($allConfigs)) {
             // 缓存不存在或禁用缓存，从数据库获取
@@ -154,7 +155,7 @@ class DeshangSysConfigService extends BaseDeshangService
 
             // 存入缓存
             if ($is_cache) {
-                CacheUtil::set($cacheKey, $allConfigs, 3600); // 缓存1小时
+                KvManager::cache()->set($cacheKey, $allConfigs, 3600); // 缓存1小时
             }
         }
 

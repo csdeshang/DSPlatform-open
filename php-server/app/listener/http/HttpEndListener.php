@@ -34,8 +34,8 @@ class HttpEndListener
         }
 
 
-        // 所有访问日志
-        if (env('app_debug', false) && $root != 'adminapi') {
+        // 所有访问日志（排除管理端，管理端使用管理员操作日志）
+        if ($root != 'adminapi') {
             $this->handleSysAccesslogs($response);
         }
     }
@@ -43,12 +43,16 @@ class HttpEndListener
 
     private function handleSysAccesslogs($response)
     {
+        // 检查访问日志开关配置
+        if (sysConfig('system:access_log_enabled') != '1') {
+            return;
+        }
 
         $request = request();
         $code = isset($response->getData('code')['code']) ? $response->getData('code')['code'] : 0;
 
         // 排除访问方法
-        $exclude_method = array('GET');
+        $exclude_method = array('GET','OPTIONS');
         if(in_array($request->method(),$exclude_method)){
             return;
         }
@@ -118,11 +122,16 @@ class HttpEndListener
     // 管理员操作日志
     private function handleAdminlogs($response)
     {
+        // 检查管理员操作日志开关配置
+        if (sysConfig('system:admin_log_enabled') != '1') {
+            return;
+        }
+
         $request = request();
         $code = isset($response->getData('code')['code']) ? $response->getData('code')['code'] : 0;
 
         // 排除访问方法
-        $exclude_method = array('GET');
+        $exclude_method = array('GET','OPTIONS');
         if(in_array($request->method(),$exclude_method)){
             return;
         }

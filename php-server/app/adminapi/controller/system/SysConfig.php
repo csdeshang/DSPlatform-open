@@ -15,7 +15,7 @@ class SysConfig extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/config/getSysConfigList",
+     *     path="/adminapi/system/configs/list",
      *     summary="获取系统配置列表",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\Parameter(
@@ -29,7 +29,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -49,7 +49,7 @@ class SysConfig extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/config/info/{config_key}",
+     *     path="/adminapi/system/configs/items/{config_key}",
      *     summary="获取单个配置信息",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\Parameter(
@@ -63,7 +63,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -77,17 +77,23 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/updateSysConfigInfo",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/items/{config_key}",
      *     summary="更新单个配置",
      *     tags={"admin-api/system/SysConfig"},
+     *     @OA\Parameter(
+     *         name="config_key",
+     *         in="path",
+     *         required=true,
+     *         description="配置键",
+     *         @OA\Schema(type="string")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="配置信息",
      *         @OA\JsonContent(
-     *             required={"config_type", "config_key", "config_value"},
+     *             required={"config_type", "config_value"},
      *             @OA\Property(property="config_type", type="string", example="website"),
-     *             @OA\Property(property="config_key", type="string", example="site_name"),
      *             @OA\Property(property="config_value", type="string", example="我的网站")
      *         )
      *     ),
@@ -95,17 +101,17 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
      * )
      */
-    public function updateSysConfigInfo()
+    public function updateSysConfigInfo($config_key)
     {
         $data = array(
             'config_type' => input('param.config_type'),
-            'config_key' => input('param.config_key'),
+            'config_key' => $config_key,
             'config_value' => input('param.config_value'),
         );
         (new SysConfigService)->updateSysConfigInfo($data);
@@ -113,8 +119,8 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editWebsite",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/website",
      *     summary="编辑网站配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -134,7 +140,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -174,8 +180,8 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editLoginConfig",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/login",
      *     summary="编辑登录配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -192,7 +198,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -212,8 +218,8 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editGrowthRules",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/growth-rules",
      *     summary="编辑成长值规则配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -238,7 +244,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -268,8 +274,8 @@ class SysConfig extends BaseAdminController
 
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editPointsRules",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/points-rules",
      *     summary="编辑积分规则配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -294,7 +300,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -323,8 +329,8 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editGoodsRules",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/goods-rules",
      *     summary="编辑商品规则配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -339,7 +345,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -358,8 +364,8 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editOrderAutoConfig",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/order-auto",
      *     summary="编辑订单自动处理配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -378,7 +384,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -401,8 +407,8 @@ class SysConfig extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editUserWithdrawalRules",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/withdrawal-rules",
      *     summary="编辑用户提现规则配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -417,7 +423,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -436,8 +442,8 @@ class SysConfig extends BaseAdminController
 
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editDistributorConfig",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/distributor",
      *     summary="编辑分销配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -457,7 +463,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -490,8 +496,8 @@ class SysConfig extends BaseAdminController
 
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/config/editEmailConfig",
+     * @OA\Put(
+     *     path="/adminapi/system/configs/email",
      *     summary="编辑邮件配置",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -510,7 +516,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -533,7 +539,7 @@ class SysConfig extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/config/testEmailSend",
+     *     path="/adminapi/system/configs/email/test",
      *     summary="发送测试邮件",
      *     tags={"admin-api/system/SysConfig"},
      *     @OA\RequestBody(
@@ -554,7 +560,7 @@ class SysConfig extends BaseAdminController
      *         response=200,
      *         description="邮件发送成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="邮件发送成功")
      *         )
      *     ),

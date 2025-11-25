@@ -12,7 +12,7 @@ class SysArea extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/area/list",
+     *     path="/adminapi/system/areas/list",
      *     tags={"admin-api/system/SysArea"},
      *     summary="获取地区列表",
      *     @OA\Parameter(
@@ -32,7 +32,7 @@ class SysArea extends BaseAdminController
      *         response=200,
      *         description="成功获取地区列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -51,7 +51,7 @@ class SysArea extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/area/options",
+     *     path="/adminapi/system/areas/options",
      *     tags={"admin-api/system/SysArea"},
      *     summary="获取地区选项",
      *     @OA\Parameter(
@@ -65,7 +65,7 @@ class SysArea extends BaseAdminController
      *         response=200,
      *         description="成功获取地区选项",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -84,7 +84,7 @@ class SysArea extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/area/{id}",
+     *     path="/adminapi/system/areas/{id}",
      *     tags={"admin-api/system/SysArea"},
      *     summary="获取地区信息",
      *     @OA\Parameter(
@@ -97,7 +97,7 @@ class SysArea extends BaseAdminController
      *         response=200,
      *         description="成功获取地区信息",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -124,7 +124,7 @@ class SysArea extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/area",
+     *     path="/adminapi/system/areas",
      *     tags={"admin-api/system/SysArea"},
      *     summary="创建新地区",
      *     @OA\RequestBody(
@@ -172,7 +172,7 @@ class SysArea extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/area/{id}",
+     *     path="/adminapi/system/areas/{id}",
      *     tags={"admin-api/system/SysArea"},
      *     summary="更新地区信息",
      *     @OA\Parameter(
@@ -198,7 +198,7 @@ class SysArea extends BaseAdminController
      *         response=200,
      *         description="成功更新地区信息",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -226,7 +226,7 @@ class SysArea extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/system/area/{id}",
+     *     path="/adminapi/system/areas/{id}",
      *     tags={"admin-api/system/SysArea"},
      *     summary="删除地区",
      *     @OA\Parameter(
@@ -239,7 +239,7 @@ class SysArea extends BaseAdminController
      *         response=200,
      *         description="成功删除地区",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

@@ -13,7 +13,7 @@ class TblGoods extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-goods/pages",
+     *     path="/adminapi/tbl-goods/goods/pages",
      *     summary="获取商品分页列表",
      *     tags={"admin-api/tblGoods/TblGoods"},
      *     @OA\Parameter(
@@ -55,7 +55,7 @@ class TblGoods extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -80,7 +80,7 @@ class TblGoods extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-goods/info/{id}",
+     *     path="/adminapi/tbl-goods/goods/{id}",
      *     summary="获取商品详情",
      *     tags={"admin-api/tblGoods/TblGoods"},
      *     @OA\Parameter(
@@ -94,7 +94,7 @@ class TblGoods extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -112,8 +112,8 @@ class TblGoods extends BaseAdminController
     }
 
     /**
-     * @OA\Put(
-     *     path="/adminapi/tbl-goods/update-sys-status/{id}",
+     * @OA\Patch(
+     *     path="/adminapi/tbl-goods/goods/{id}/sys-status",
      *     summary="更新商品系统状态",
      *     tags={"admin-api/tblGoods/TblGoods"},
      *     @OA\Parameter(
@@ -121,7 +121,7 @@ class TblGoods extends BaseAdminController
      *         in="path",
      *         required=true,
      *         description="商品ID",
-     *         @OA\Schema(type="integer")
+     *         @OA\Schema(type="integer", example=1)
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -136,7 +136,7 @@ class TblGoods extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -154,8 +154,8 @@ class TblGoods extends BaseAdminController
     }
 
     /**
-     * @OA\Put(
-     *     path="/adminapi/tbl-goods/update-sys-recommend/{id}",
+     * @OA\Patch(
+     *     path="/adminapi/tbl-goods/goods/{id}/sys-recommend",
      *     summary="更新商品系统推荐状态",
      *     tags={"admin-api/tblGoods/TblGoods"},
      *     @OA\Parameter(
@@ -163,7 +163,7 @@ class TblGoods extends BaseAdminController
      *         in="path",
      *         required=true,
      *         description="商品ID",
-     *         @OA\Schema(type="integer")
+     *         @OA\Schema(type="integer", example=1)
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -177,7 +177,7 @@ class TblGoods extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

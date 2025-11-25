@@ -42,7 +42,7 @@
             <div v-if="!getImageContent(0).image" class="h-[260px] leading-[260px]">
               宽度750
             </div>
-            <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(0).image)"
+            <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(0).image)"
               v-if="getImageContent(0).image"></el-image>
           </div>
         </div>
@@ -55,7 +55,7 @@
                 class="h-[260px] leading-[260px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度375
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
           </div>
@@ -65,7 +65,7 @@
                 class="h-[260px] leading-[260px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度375
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
           </div>
@@ -79,7 +79,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度250
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
           </div>
@@ -89,7 +89,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度250
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
           </div>
@@ -99,7 +99,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度250
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
@@ -113,7 +113,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度187
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
           </div>
@@ -123,7 +123,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度187
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
           </div>
@@ -133,7 +133,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度187
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
@@ -143,7 +143,7 @@
                 class="h-[158px] leading-[158px] box text-[#999] bg-[#f7f7f7] text-center">
                 宽度187
               </div>
-              <el-image fit="cover" class="w-full" :src="formatFileUrl(getImageContent(3).image)"
+              <el-image fit="cover" class="w-full" :src="formatImageUrl(getImageContent(3).image)"
                 v-if="getImageContent(3).image"></el-image>
             </div>
           </div>
@@ -154,20 +154,20 @@
           <div @click="activeIndex = 0" class="w-1/2 bg-[#f7f7f7] box-1 h-[260px] text-[#999] text-center"
             :class="{ active: activeIndex === 0 }">
             <div v-if="!getImageContent(0).image">宽度375</div>
-            <el-image class="w-full h-[260px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+            <el-image class="w-full h-[260px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
               v-if="getImageContent(0).image"></el-image>
           </div>
           <div class="w-1/2">
             <div @click="activeIndex = 1" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
             <div @click="activeIndex = 2" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
@@ -178,26 +178,26 @@
           <div @click="activeIndex = 0" class="w-1/2 bg-[#f7f7f7] box-1 h-[260px] text-[#999] text-center"
             :class="{ active: activeIndex === 0 }">
             <div v-if="!getImageContent(0).image">宽度375</div>
-            <el-image class="w-full h-[260px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+            <el-image class="w-full h-[260px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
               v-if="getImageContent(0).image"></el-image>
           </div>
           <div class="w-1/2">
             <div @click="activeIndex = 1" class="w-full bg-[#f7f7f7] box-2 h-[86px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度375</div>
-              <el-image class="w-full h-[86px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[86px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
             <div @click="activeIndex = 2" class="w-full bg-[#f7f7f7] box-2 h-[86px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度375</div>
-              <el-image class="w-full h-[86px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[86px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
             <div @click="activeIndex = 3" class="w-full bg-[#f7f7f7] box-2 h-[86px] text-[#999] text-center"
               :class="{ active: activeIndex === 3 }">
               <div v-if="!getImageContent(3).image">宽度375</div>
-              <el-image class="w-full h-[86px]" fit="cover" :src="formatFileUrl(getImageContent(3).image)"
+              <el-image class="w-full h-[86px]" fit="cover" :src="formatImageUrl(getImageContent(3).image)"
                 v-if="getImageContent(3).image"></el-image>
             </div>
           </div>
@@ -209,20 +209,20 @@
             <div @click="activeIndex = 0" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 0 }">
               <div v-if="!getImageContent(0).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
             <div @click="activeIndex = 1" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
           </div>
           <div @click="activeIndex = 2" class="w-1/2 bg-[#f7f7f7] box-1 h-[260px] text-[#999] text-center"
             :class="{ active: activeIndex === 2 }">
             <div v-if="!getImageContent(2).image">宽度375</div>
-            <el-image class="w-full h-[260px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+            <el-image class="w-full h-[260px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
               v-if="getImageContent(2).image"></el-image>
           </div>
         </div>
@@ -233,26 +233,26 @@
             <div @click="activeIndex = 0" class="w-full bg-[#f7f7f7] box-2 h-[86px] text-[#999] text-center"
               :class="{ active: activeIndex === 0 }">
               <div v-if="!getImageContent(0).image">宽度375</div>
-              <el-image class="w-full h-[86px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image class="w-full h-[86px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
             <div @click="activeIndex = 1" class="w-full bg-[#f7f7f7] box-2 h-[86px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度375</div>
-              <el-image class="w-full h-[86px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[86px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
             <div @click="activeIndex = 2" class="w-full bg-[#f7f7f7] box-2 h-[86px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度375</div>
-              <el-image class="w-full h-[86px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[86px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
           <div @click="activeIndex = 3" class="w-1/2 bg-[#f7f7f7] box-1 h-[260px] text-[#999] text-center"
             :class="{ active: activeIndex === 3 }">
             <div v-if="!getImageContent(3).image">宽度375</div>
-            <el-image class="w-full h-[260px]" fit="cover" :src="formatFileUrl(getImageContent(3).image)"
+            <el-image class="w-full h-[260px]" fit="cover" :src="formatImageUrl(getImageContent(3).image)"
               v-if="getImageContent(3).image"></el-image>
           </div>
         </div>
@@ -263,7 +263,7 @@
             <div @click="activeIndex = 0" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 0 }">
               <div v-if="!getImageContent(0).image">宽度750</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
           </div>
@@ -271,13 +271,13 @@
             <div @click="activeIndex = 1" class="w-1/2 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
             <div @click="activeIndex = 2" class="w-1/2 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
@@ -289,7 +289,7 @@
             <div @click="activeIndex = 0" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 0 }">
               <div v-if="!getImageContent(0).image">宽度750</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
           </div>
@@ -297,19 +297,19 @@
             <div @click="activeIndex = 1" class="w-1/3 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度250</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
             <div @click="activeIndex = 2" class="w-1/3 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度250</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
             <div @click="activeIndex = 3" class="w-1/3 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 3 }">
               <div v-if="!getImageContent(3).image">宽度250</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(3).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(3).image)"
                 v-if="getImageContent(3).image"></el-image>
             </div>
           </div>
@@ -321,13 +321,13 @@
             <div @click="activeIndex = 0" class="w-1/2 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 0 }">
               <div v-if="!getImageContent(0).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
             <div @click="activeIndex = 1" class="w-1/2 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度375</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
           </div>
@@ -335,7 +335,7 @@
             <div @click="activeIndex = 2" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度750</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
@@ -347,19 +347,19 @@
             <div @click="activeIndex = 0" class="w-1/3 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 0 }">
               <div v-if="!getImageContent(0).image">宽度250</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(0).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(0).image)"
                 v-if="getImageContent(0).image"></el-image>
             </div>
             <div @click="activeIndex = 1" class="w-1/3 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 1 }">
               <div v-if="!getImageContent(1).image">宽度250</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(1).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(1).image)"
                 v-if="getImageContent(1).image"></el-image>
             </div>
             <div @click="activeIndex = 2" class="w-1/3 bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 2 }">
               <div v-if="!getImageContent(2).image">宽度250</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(2).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(2).image)"
                 v-if="getImageContent(2).image"></el-image>
             </div>
           </div>
@@ -367,7 +367,7 @@
             <div @click="activeIndex = 3" class="w-full bg-[#f7f7f7] box-2 h-[130px] text-[#999] text-center"
               :class="{ active: activeIndex === 3 }">
               <div v-if="!getImageContent(3).image">宽度750</div>
-              <el-image class="w-full h-[130px]" fit="cover" :src="formatFileUrl(getImageContent(3).image)"
+              <el-image class="w-full h-[130px]" fit="cover" :src="formatImageUrl(getImageContent(3).image)"
                 v-if="getImageContent(3).image"></el-image>
             </div>
           </div>
@@ -401,7 +401,7 @@ import BaseStyles from './base-styles.vue';
 import useEditableStore from '@/stores/modules/editable';
 import PickerImage from '@/components/attachment/picker-image.vue'
 import UniappLink from './editors/uniapp-link/index.vue'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl } from '@/utils/image'
 
 // 获取状态管理
 const store = useEditableStore();

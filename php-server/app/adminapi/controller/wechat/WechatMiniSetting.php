@@ -14,14 +14,14 @@ class WechatMiniSetting extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/wechat/mini-setting/info",
+     *     path="/adminapi/wechat/mini/settings",
      *     summary="获取微信小程序设置",
      *     tags={"admin-api/wechat/WechatMiniSetting"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -38,8 +38,8 @@ class WechatMiniSetting extends BaseAdminController
 
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/wechat/mini-setting/update",
+     * @OA\Put(
+     *     path="/adminapi/wechat/mini/settings",
      *     summary="更新微信小程序设置",
      *     tags={"admin-api/wechat/WechatMiniSetting"},
      *     @OA\RequestBody(
@@ -55,7 +55,7 @@ class WechatMiniSetting extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

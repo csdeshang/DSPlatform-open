@@ -4,6 +4,8 @@
 namespace app\adminapi\service\system;
 
 use app\deshang\base\service\BaseAdminService;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 use app\deshang\exceptions\CommonException;
 
@@ -68,6 +70,10 @@ class SysExpressService extends BaseAdminService
     {
 
         $result = $this->dao->createExpress($data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_EXPRESS_TAG);
+        
         return $result;
     }
 
@@ -77,6 +83,10 @@ class SysExpressService extends BaseAdminService
         $condition = [];
         $condition[] = ['id', '=', $data['id']];
         $result = $this->dao->updateExpress($condition, $data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_EXPRESS_TAG);
+        
         return $result;
     }
 
@@ -88,6 +98,9 @@ class SysExpressService extends BaseAdminService
         $condition = [];
         $condition[] = ['id', '=', $id];
         $result = $this->dao->deleteExpress($condition);
+
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_EXPRESS_TAG);
 
         return $result;
 

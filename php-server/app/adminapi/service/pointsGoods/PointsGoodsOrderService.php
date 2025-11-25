@@ -9,6 +9,8 @@ use app\deshang\exceptions\CommonException;
 use app\deshang\service\pointsGoods\DeshangPointsGoodsOrderService;
 use app\deshang\utils\SearchHelper;
 
+use think\facade\Db;
+
 class PointsGoodsOrderService extends BaseAdminService
 {
     /**
@@ -134,7 +136,17 @@ class PointsGoodsOrderService extends BaseAdminService
         }
 
         // 使用通用服务处理取消订单
-        return (new DeshangPointsGoodsOrderService())->cancelPointsGoodsOrder($order, 'admin', $this->user_id);
+        Db::startTrans();
+        try {
+            $result = (new DeshangPointsGoodsOrderService())->cancelPointsGoodsOrder($order, 'admin', $this->user_id);
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            // 直接抛出原异常，保持异常类型（SystemException、PermissionException等）
+            throw $e;
+        }
+
+        return $result;
     }
 
     /**
@@ -150,9 +162,18 @@ class PointsGoodsOrderService extends BaseAdminService
         if (empty($order)) {
             throw new CommonException('订单不存在');
         }
-
-        // 使用通用服务处理发货
-        return (new DeshangPointsGoodsOrderService())->shipPointsGoodsOrder($order, 'admin', $this->user_id, $data);
+        Db::startTrans();
+        try {
+            // 使用通用服务处理发货
+            $result = (new DeshangPointsGoodsOrderService())->shipPointsGoodsOrder($order, 'admin', $this->user_id, $data);
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            // 直接抛出原异常，保持异常类型（SystemException、PermissionException等）
+            throw $e;
+        }
+        
+        return $result;
     }
 
     /**
@@ -168,8 +189,18 @@ class PointsGoodsOrderService extends BaseAdminService
             throw new CommonException('订单不存在');
         }
 
-        // 使用通用服务处理确认收货
-        return (new DeshangPointsGoodsOrderService())->confirmPointsGoodsOrder($order, 'admin', $this->user_id);
+        Db::startTrans();
+        try {
+            // 使用通用服务处理确认收货
+            $result = (new DeshangPointsGoodsOrderService())->confirmPointsGoodsOrder($order, 'admin', $this->user_id);
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            // 直接抛出原异常，保持异常类型（SystemException、PermissionException等）
+            throw $e;
+        }
+
+        return $result;
     }
 
     /**

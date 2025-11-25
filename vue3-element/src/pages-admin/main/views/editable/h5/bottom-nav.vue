@@ -29,7 +29,7 @@
                             width: '80px',
                             transition: 'all 0.3s'
                         }" @mouseenter="hoverIndex = index" @mouseleave="hoverIndex = -1">
-                        <el-image :src="hoverIndex === index ? formatFileUrl(item.activeIcon) : formatFileUrl(item.inactiveIcon)"
+                        <el-image :src="hoverIndex === index ? formatImageUrl(item.activeIcon, ThumbnailPresets.small) : formatImageUrl(item.inactiveIcon, ThumbnailPresets.small)"
                             class="w-[40px] h-[40px] mb-2"
                             v-if="navConfig.theme.displayMode === 'image' || navConfig.theme.displayMode === 'all'" />
                         <div v-if="navConfig.theme.displayMode === 'text' || navConfig.theme.displayMode === 'all'"
@@ -133,7 +133,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import PickerImage from '@/components/attachment/picker-image.vue'
 import UniappLink from './h5-components/editors/uniapp-link/index.vue'

@@ -51,12 +51,12 @@ class TechnicianDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateTechnician(array $condition, array $data): bool
+    public function updateTechnician(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -120,13 +120,14 @@ class TechnicianDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 师傅信息
      */
-    public function getTechnicianInfo(array $condition, string $field = '*'): array
+    public function getTechnicianInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
             ->append(['technician_status_desc', 'gender_desc', 'apply_status_desc'])
-            ->field($field)->findOrEmpty()->toArray();
+            ->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
 
@@ -162,11 +163,12 @@ class TechnicianDao extends BaseDao
      * 
      * @param int $id 师傅ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 师傅信息
      */
-    public function getTechnicianInfoById(int $id, string $field = '*'): array
+    public function getTechnicianInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

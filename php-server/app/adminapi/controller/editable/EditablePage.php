@@ -19,7 +19,7 @@ class EditablePage extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/editable/page/pages",
+     *     path="/adminapi/editable/editables/pages",
      *     summary="获取可编辑页面列表",
      *     tags={"admin-api/editable/EditablePage"},
      *     @OA\Parameter(
@@ -40,7 +40,7 @@ class EditablePage extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -63,7 +63,7 @@ class EditablePage extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/editable/page/info/{id}",
+     *     path="/adminapi/editable/editables/{id}",
      *     summary="获取单个可编辑页面信息",
      *     tags={"admin-api/editable/EditablePage"},
      *     @OA\Parameter(
@@ -77,7 +77,7 @@ class EditablePage extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -94,7 +94,7 @@ class EditablePage extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/editable/page/create",
+     *     path="/adminapi/editable/editables",
      *     summary="创建可编辑页面",
      *     tags={"admin-api/editable/EditablePage"},
      *     @OA\RequestBody(
@@ -111,7 +111,7 @@ class EditablePage extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -138,7 +138,7 @@ class EditablePage extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/editable/page/update/{id}",
+     *     path="/adminapi/editable/editables/{id}",
      *     summary="更新可编辑页面",
      *     tags={"admin-api/editable/EditablePage"},
      *     @OA\Parameter(
@@ -160,7 +160,7 @@ class EditablePage extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -179,7 +179,7 @@ class EditablePage extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/editable/page/delete/{id}",
+     *     path="/adminapi/editable/editables/{id}",
      *     summary="删除可编辑页面",
      *     tags={"admin-api/editable/EditablePage"},
      *     @OA\Parameter(
@@ -193,7 +193,7 @@ class EditablePage extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

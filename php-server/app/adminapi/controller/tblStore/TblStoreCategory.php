@@ -7,17 +7,12 @@ use app\adminapi\service\store\TblStoreCategoryService;
 
 /**
  * @OA\Tag(name="admin-api/tblStore/TblStoreCategory", description="店铺分类管理相关接口")
- * @OA\PathItem(path="/adminapi/tbl-store/category")
- * @OA\PathItem(path="/adminapi/tbl-store/category/tree")
- * @OA\PathItem(path="/adminapi/tbl-store/category/{id}")
- * @OA\PathItem(path="/adminapi/tbl-store/category")
- * @OA\PathItem(path="/adminapi/tbl-store/category/{id}")
  */
 class TblStoreCategory extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/category/tree",
+     *     path="/adminapi/tbl-store/categories/tree",
      *     tags={"admin-api/tblStore/TblStoreCategory"},
      *     summary="获取店铺分类树组结构",
      *     @OA\Parameter(
@@ -30,7 +25,7 @@ class TblStoreCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取商品分类树组结构",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -54,7 +49,7 @@ class TblStoreCategory extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/category/{id}",
+     *     path="/adminapi/tbl-store/categories/{id}",
      *     tags={"admin-api/tblStore/TblStoreCategory"},
      *     summary="获取店铺分类详情",
      *     @OA\Parameter(
@@ -67,7 +62,7 @@ class TblStoreCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取店铺分类详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -89,7 +84,7 @@ class TblStoreCategory extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/tbl-store/category",
+     *     path="/adminapi/tbl-store/categories",
      *     tags={"admin-api/tblStore/TblStoreCategory"},
      *     summary="添加店铺分类",
      *     @OA\RequestBody(
@@ -139,7 +134,7 @@ class TblStoreCategory extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/tbl-store/category/{id}",
+     *     path="/adminapi/tbl-store/categories/{id}",
      *     tags={"admin-api/tblStore/TblStoreCategory"},
      *     summary="编辑店铺分类",
      *     @OA\Parameter(
@@ -163,7 +158,7 @@ class TblStoreCategory extends BaseAdminController
      *         response=200,
      *         description="成功编辑商品分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -190,7 +185,7 @@ class TblStoreCategory extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/tbl-store/category/{id}",
+     *     path="/adminapi/tbl-store/categories/{id}",
      *     tags={"admin-api/tblStore/TblStoreCategory"},
      *     summary="删除店铺分类",
      *     @OA\Parameter(
@@ -203,7 +198,7 @@ class TblStoreCategory extends BaseAdminController
      *         response=200,
      *         description="成功删除店铺分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

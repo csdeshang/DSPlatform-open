@@ -23,7 +23,7 @@ class SysExpressProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -63,12 +63,12 @@ class SysExpressProvider extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/express-provider/info",
+     *     path="/adminapi/system/express-provider/{provider}",
      *     summary="获取快递查询服务商配置信息",
      *     tags={"admin-api/system/SysExpressProvider"},
      *     @OA\Parameter(
      *         name="provider",
-     *         in="query",
+     *         in="path",
      *         required=true,
      *         description="快递查询服务商标识",
      *         @OA\Schema(type="string", example="kuaidiniao")
@@ -77,7 +77,7 @@ class SysExpressProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -93,9 +93,9 @@ class SysExpressProvider extends BaseAdminController
      * )
      */
     // 获取快递查询服务商配置信息
-    public function getExpressProviderInfo()
+    public function getExpressProviderInfo($provider)
     {
-        $express_provider = input('param.provider');
+        $express_provider = $provider;
         if (empty($express_provider)) {
             return ds_json_error('快递查询服务商参数不能为空');
         }
@@ -136,16 +136,21 @@ class SysExpressProvider extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/express-provider/update",
+     * @OA\Put(
+     *     path="/adminapi/system/express-provider/{provider}",
      *     summary="更新快递查询服务商配置信息",
      *     tags={"admin-api/system/SysExpressProvider"},
+     *     @OA\Parameter(
+     *         name="provider",
+     *         in="path",
+     *         required=true,
+     *         description="快递查询服务商标识",
+     *         @OA\Schema(type="string", example="kuaidiniao")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="快递查询服务商配置信息",
      *         @OA\JsonContent(
-     *             required={"provider"},
-     *             @OA\Property(property="provider", type="string", example="kuaidiniao", description="快递查询服务商标识"),
      *             @OA\Property(
      *                 property="config",
      *                 type="object",
@@ -162,7 +167,7 @@ class SysExpressProvider extends BaseAdminController
      *         response=200,
      *         description="配置更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="配置更新成功")
      *         )
      *     ),
@@ -177,9 +182,9 @@ class SysExpressProvider extends BaseAdminController
      * )
      */
     // 更新快递查询服务商配置信息
-    public function updateExpressProviderConfig()
+    public function updateExpressProviderConfig($provider)
     {
-        $express_provider = input('param.provider');
+        $express_provider = $provider;
         if (empty($express_provider)) {
             return ds_json_error('快递查询服务商参数不能为空');
         }
@@ -243,7 +248,7 @@ class SysExpressProvider extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/express-provider/query",
+     *     path="/adminapi/system/express-provider/test",
      *     summary="测试快递查询配置",
      *     tags={"admin-api/system/SysExpressProvider"},
      *     @OA\RequestBody(
@@ -261,7 +266,7 @@ class SysExpressProvider extends BaseAdminController
      *         response=200,
      *         description="查询成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="查询成功"),
      *             @OA\Property(property="data", type="object")
      *         )

@@ -4,6 +4,7 @@ namespace app\deshang\service\order;
 
 use app\deshang\service\BaseDeshangService;
 use app\deshang\exceptions\CommonException;
+use app\deshang\exceptions\StateException;
 
 
 
@@ -28,7 +29,7 @@ class DeshangTblOrderDeliveryService  extends BaseDeshangService
     {
 
         if ($order_info['order_status'] != TblOrderEnum::ORDER_STATUS_PAID) {
-            throw new CommonException('订单状态错误,不是已付款状态');
+            throw new StateException('订单状态错误,不是已付款状态');
         }
 
         // 判断是否存在订单交付

@@ -13,15 +13,16 @@ Route::group('admin', function () {
     Route::get('current/info', 'admin.CurrentAdmin/getCurrentAdminInfo');
     Route::get('current/menus', 'admin.CurrentAdmin/getCurrentAdminMenus');
     // 当前管理员 修改密码
-    Route::post('current/edit-password', 'admin.CurrentAdmin/editCurrentAdminPassword');
+    Route::put('current/password', 'admin.CurrentAdmin/editCurrentAdminPassword');
 
 
     // 管理员管理
-    Route::get('admin/pages', 'admin.Admin/getAdminPages');
-    Route::get('admin/:id', 'admin.Admin/getAdminInfo');
-    Route::post('admin', 'admin.Admin/createAdmin');
-    Route::put('admin/:id', 'admin.Admin/updateAdmin');
-    Route::delete('admin/:id', 'admin.Admin/deleteAdmin');
+    // admins/pages (2段) 必须在 admins/:id (2段) 前面 否则 GET /admins/pages 会被 admins/:id 匹配
+    Route::get('admins/pages', 'admin.Admin/getAdminPages');
+    Route::get('admins/:id', 'admin.Admin/getAdminInfo');
+    Route::post('admins', 'admin.Admin/createAdmin');
+    Route::put('admins/:id', 'admin.Admin/updateAdmin');
+    Route::delete('admins/:id', 'admin.Admin/deleteAdmin');
 
 
     // 管理员日志

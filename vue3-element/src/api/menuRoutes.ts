@@ -48,16 +48,16 @@ export function getCurrentUserInfo() {
 export function editCurrentUserPassword(data: Record<string, any>) {
     if(systemType === 'admin'){
         // 修改管理员密码
-        return request.post(`${API_BASE_URLS.ADMIN}/admin/current/edit-password`, data)
+        return request.put(`${API_BASE_URLS.ADMIN}/admin/current/password`, data)
     }else{
         // 修改用户密码
-        return request.post(`${API_BASE_URLS.USER}/user/user/edit-password`, data)
+        return request.put(`${API_BASE_URLS.USER}/user/user/password`, data)
     }
 }
 
 
 export function getEnumData(params: Record<string, any>) {
-    return request.get(`${API_BASE_URLS.USER}/enum/data`, { params })
+    return request.get(`${API_BASE_URLS.USER}/enums/data`, { params })
 }
 
 

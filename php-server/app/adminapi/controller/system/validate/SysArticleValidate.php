@@ -8,9 +8,9 @@ class SysArticleValidate extends BaseValidate
 {
     // 定义验证规则
     protected $rule = [
-        'cid' => 'require|integer|>=:0', // 分类ID，必须是整数，且大于等于0
+        'cid' => 'require|integer|egt:0', // 分类ID，必须是整数，且大于等于0
         'title' => 'require|max:32', // 标题，必填，最大长度32
-        'sort' => 'integer|>=:0', // 排序，必须是整数，且大于等于0
+        'sort' => 'integer|egt:0', // 排序，必须是整数，且大于等于0
         'is_show' => 'boolean', // 是否显示，必须是布尔值
         'ids' => 'require|array|isAllNumbers', // ids 必须是数组且只能包含数字
     ];
@@ -19,11 +19,11 @@ class SysArticleValidate extends BaseValidate
     protected $message = [
         'cid.require' => '分类ID不能为空',
         'cid.integer' => '分类ID必须是整数',
-        'cid.>=:0' => '分类ID必须大于等于0',
+        'cid.egt' => '分类ID必须大于等于0',
         'title.require' => '标题不能为空',
         'title.max' => '标题不能超过32个字符',
         'sort.integer' => '排序必须是整数',
-        'sort.>=:0' => '排序必须大于等于0',
+        'sort.egt' => '排序必须大于等于0',
         'is_show.boolean' => '是否显示必须是布尔值',
         'ids.require' => 'ID列表不能为空',
         'ids.array' => 'ID列表必须是数组',

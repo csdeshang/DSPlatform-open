@@ -10,21 +10,22 @@ const store_id = storage.get('store_id')
 // 获取商户支付配置  后台的默认ID为0
 export function getPaymentConfigByMerchant() {
     if (store_id) {
-        return request.get(`${API_BASE_URLS.STORE}/trade/payment-config/merchant`)
+        return request.get(`${API_BASE_URLS.STORE}/trade/payment-configs/merchant`)
     } else {
-        return request.get(`${API_BASE_URLS.ADMIN}/trade/payment-config/merchant`)
+        return request.get(`${API_BASE_URLS.ADMIN}/trade/payment-configs/merchant`)
     }
 }
 
 export function getPaymentConfigInfo(id: number) {
-    return request.get(`${API_BASE_URLS.ADMIN}/trade/payment-config/${id}`)
+    return request.get(`${API_BASE_URLS.ADMIN}/trade/payment-configs/${id}`)
 }
 
 export function createPaymentConfig(params: Record<string, any>) {
-    return request.post(`${API_BASE_URLS.ADMIN}/trade/payment-config`, params )
+    return request.post(`${API_BASE_URLS.ADMIN}/trade/payment-configs`, params )
 }
 
 export function updatePaymentConfig(params: Record<string, any>) {
-    return request.put(`${API_BASE_URLS.ADMIN}/trade/payment-config/${params.id}`,  params )
+    const { id, ...restParams } = params
+    return request.put(`${API_BASE_URLS.ADMIN}/trade/payment-configs/${id}`, restParams)
 }
 

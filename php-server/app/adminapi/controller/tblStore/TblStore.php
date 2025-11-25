@@ -15,7 +15,7 @@ class TblStore extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/pages",
+     *     path="/adminapi/tbl-store/stores/pages",
      *     summary="获取店铺分页列表",
      *     tags={"admin-api/tblStore/TblStore"},
      *     @OA\Parameter(
@@ -57,7 +57,7 @@ class TblStore extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -78,7 +78,7 @@ class TblStore extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/list",
+     *     path="/adminapi/tbl-store/stores/list",
      *     summary="获取店铺列表",
      *     tags={"admin-api/tblStore/TblStore"},
      *     @OA\Parameter(
@@ -92,7 +92,7 @@ class TblStore extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -109,7 +109,7 @@ class TblStore extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-store/info/{id}",
+     *     path="/adminapi/tbl-store/stores/{id}",
      *     summary="获取店铺详情",
      *     tags={"admin-api/tblStore/TblStore"},
      *     @OA\Parameter(
@@ -123,7 +123,7 @@ class TblStore extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -138,7 +138,7 @@ class TblStore extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/tbl-store/create",
+     *     path="/adminapi/tbl-store/stores",
      *     summary="创建店铺（已禁用）",
      *     tags={"admin-api/tblStore/TblStore"},
      *     @OA\Response(
@@ -157,7 +157,7 @@ class TblStore extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/tbl-store/update/{id}",
+     *     path="/adminapi/tbl-store/stores/{id}",
      *     summary="更新店铺信息",
      *     tags={"admin-api/tblStore/TblStore"},
      *     @OA\Parameter(
@@ -176,6 +176,7 @@ class TblStore extends BaseAdminController
      *             @OA\Property(property="service_fee_rate", type="number", example=0.05),
      *             @OA\Property(property="is_enabled", type="integer", example=1),
      *             @OA\Property(property="is_recommend", type="integer", example=0),
+     *             @OA\Property(property="category_id", type="integer", example=1, description="店铺分类ID"),
      *             @OA\Property(property="apply_status", type="string", example="approved")
      *         )
      *     ),
@@ -183,7 +184,7 @@ class TblStore extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -205,6 +206,7 @@ class TblStore extends BaseAdminController
             'seo_title' => input('param.seo_title'),
             'seo_keywords' => input('param.seo_keywords'),
             'seo_description' => input('param.seo_description'),
+            'category_id' => input('param.category_id'),
 
             'apply_status' => input('param.apply_status'),
             'audit_remark' => input('param.audit_remark'),
@@ -217,16 +219,22 @@ class TblStore extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/tbl-store/audit",
+     * @OA\Patch(
+     *     path="/adminapi/tbl-store/stores/{id}/audit",
      *     summary="店铺申请审核",
      *     tags={"admin-api/tblStore/TblStore"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="店铺ID",
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="审核信息",
      *         @OA\JsonContent(
-     *              required={"id", "apply_status"},
-     *              @OA\Property(property="id", type="integer", example=1, description="店铺ID"),
+     *              required={"apply_status"},
      *              @OA\Property(property="apply_status", type="integer", example=1, description="审核状态（1:通过 2:拒绝）"),
      *              @OA\Property(property="audit_remark", type="string", example="审核通过", description="审核备注（拒绝时必填）")
      *         )
@@ -235,16 +243,16 @@ class TblStore extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *              @OA\Property(property="code", type="integer", example=200),
+     *              @OA\Property(property="code", type="integer", example=10000),
      *              @OA\Property(property="msg", type="string", example="操作成功"),
      *              @OA\Property(property="data", type="object")
      *         )
      *     )
      * )
      */
-    public function auditTblStore(){
+    public function auditTblStore($id){
         $data = array(
-            'id' => input('param.id'),
+            'id' => (int)$id,
             'apply_status' => input('param.apply_status'),
             'audit_remark' => input('param.audit_remark'),
         );

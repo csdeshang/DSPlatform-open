@@ -9,7 +9,7 @@
             </el-form-item>
 
             <el-form-item label="模板描述">
-                <el-input v-model="formData.description" type="textarea" rows="2" disabled />
+                <el-input v-model="formData.description" type="textarea" :rows="2" disabled />
             </el-form-item>
 
             <el-form-item label="通知渠道">
@@ -26,7 +26,7 @@
             <template v-if="channelsList.includes('interna')">
                 <el-divider content-position="left">站内通知配置</el-divider>
                 <el-form-item label="站内通知模板" prop="interna_template">
-                    <el-input v-model="formData.interna_template" type="textarea" rows="3" />
+                    <el-input v-model="formData.interna_template" type="textarea" :rows="3" />
                 </el-form-item>
             </template>
 
@@ -37,7 +37,7 @@
                     <el-switch v-model="formData.email_switch" :active-value="1" :inactive-value="0" />
                 </el-form-item>
                 <el-form-item label="邮件模板" prop="email_template" v-if="formData.email_switch">
-                    <el-input v-model="formData.email_template" type="textarea" rows="3" />
+                    <el-input v-model="formData.email_template" type="textarea" :rows="3" />
                 </el-form-item>
             </template>
 
@@ -52,7 +52,7 @@
                         <el-input v-model="formData.sms_template_id" placeholder="请输入短信服务商提供的模板ID" />
                     </el-form-item>
                     <el-form-item label="短信模板" prop="sms_template">
-                        <el-input v-model="formData.sms_template" type="textarea" rows="3" />
+                        <el-input v-model="formData.sms_template" type="textarea" :rows="3" />
                     </el-form-item>
                 </template>
             </template>

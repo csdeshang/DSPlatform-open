@@ -14,7 +14,7 @@ class MerchantBalance extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/merchant/balance-log/pages",
+     *     path="/adminapi/merchant/balance-logs/pages",
      *     summary="获取商户余额变动日志分页列表",
      *     tags={"admin-api/merchant/MerchantBalance"},
      *     @OA\Parameter(
@@ -56,7 +56,7 @@ class MerchantBalance extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -79,16 +79,22 @@ class MerchantBalance extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/merchant/balance/modifyMerchantBalance",
+     * @OA\Put(
+     *     path="/adminapi/merchant/merchants/{id}/balance",
      *     summary="修改商户余额",
      *     tags={"admin-api/merchant/MerchantBalance"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="商户ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="修改余额信息",
      *         @OA\JsonContent(
-     *             required={"merchant_id", "change_mode", "change_amount"},
-     *             @OA\Property(property="merchant_id", type="integer", example=1, description="商户ID"),
+     *             required={"change_mode", "change_amount"},
      *             @OA\Property(property="change_mode", type="integer", example=1, description="变动模式（1:增加 2:减少）"),
      *             @OA\Property(property="change_amount", type="number", format="decimal", example=100.00, description="变动金额")
      *         )
@@ -97,15 +103,15 @@ class MerchantBalance extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
      * )
      */
-    public function modifyMerchantBalance(){
+    public function modifyMerchantBalance($id){
         $data = array(
-            'merchant_id' => input('param.merchant_id'),
+            'merchant_id' => $id,
             'change_mode' => input('param.change_mode'),
             'change_amount' => number_format(input('param.change_amount'), 2, '.', ''),
         );

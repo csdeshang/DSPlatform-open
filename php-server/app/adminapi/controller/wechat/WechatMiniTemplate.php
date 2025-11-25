@@ -12,14 +12,14 @@ class WechatMiniTemplate extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/wechat/mini/template/list",
+     *     path="/adminapi/wechat/mini/templates/list",
      *     summary="获取微信小程序模板列表",
      *     tags={"admin-api/wechat/WechatMiniTemplate"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array")
      *         )
@@ -34,7 +34,7 @@ class WechatMiniTemplate extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/wechat/mini/template/sync",
+     *     path="/adminapi/wechat/mini/templates/sync",
      *     summary="同步微信小程序模板",
      *     tags={"admin-api/wechat/WechatMiniTemplate"},
      *     @OA\RequestBody(
@@ -48,7 +48,7 @@ class WechatMiniTemplate extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -68,31 +68,31 @@ class WechatMiniTemplate extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/wechat/mini/template/delete",
+     * @OA\Delete(
+     *     path="/adminapi/wechat/mini/templates/{key}",
      *     summary="删除微信小程序模板配置",
      *     tags={"admin-api/wechat/WechatMiniTemplate"},
-     *     @OA\RequestBody(
+     *     @OA\Parameter(
+     *         name="key",
+     *         in="path",
      *         required=true,
-     *         description="删除参数",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="keys", type="array", @OA\Items(type="string"), description="模板keys数组")
-     *         )
+     *         description="模板key",
+     *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     )
      * )
      */
-    public function deleteWechatMiniTemplate()
+    public function deleteWechatMiniTemplate($key = '')
     {
-        $key = input('param.key', '');
+        $key = $key ?: input('param.key', '');
 
         $data = ['key' => $key];
         $this->validate($data, 'app\adminapi\controller\wechat\validate\WechatMiniTemplateValidate.delete');

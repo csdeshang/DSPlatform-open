@@ -3,6 +3,7 @@
 namespace app\adminapi\controller\merchant\validate;
 
 use app\deshang\base\BaseValidate;
+use app\common\enum\merchant\MerchantEnum;
 
 class MerchantValidate extends BaseValidate
 {
@@ -18,7 +19,7 @@ class MerchantValidate extends BaseValidate
         'sort' => 'integer|between:0,9999', // 排序，必须是0到9999之间的整数
         'is_allow_payment' => 'in:0,1', // 是否允许支付，必须是0或1
         'allowed_store_count' => 'integer|egt:0', // 允许店铺数量，必须是大于等于0的整数
-        'apply_status' => 'in:0,1,2,3', // 申请状态，必须是0,1,2,3其中之一
+        'apply_status' => 'checkApplyStatus', // 申请状态，使用枚举验证
         'audit_remark' => 'max:255|chsDash', // 审核备注，最大长度255，可包含汉字、字母、数字、下划线和破折号
     ];
 
@@ -44,7 +45,7 @@ class MerchantValidate extends BaseValidate
         'is_allow_payment.in' => '是否允许支付必须是0或1',
         'allowed_store_count.integer' => '允许店铺数量必须是整数',
         'allowed_store_count.egt' => '允许店铺数量必须大于等于0',
-        'apply_status.in' => '申请状态必须是0,1,2,3其中之一',
+        'apply_status.checkApplyStatus' => '申请状态值无效（0:待审核 1:审核通过 2:审核拒绝）',
         'audit_remark.max' => '审核备注不能超过255个字符',
         'audit_remark.chsDash' => '审核备注只能包含汉字、字母、数字、下划线和破折号',
     ];
@@ -58,5 +59,12 @@ class MerchantValidate extends BaseValidate
         'audit' => ['id', 'apply_status', 'audit_remark'], // 审核场景
     ];
 
-
+    // 验证申请状态
+    public function checkApplyStatus($value, $rule, $data)
+    {
+        if (empty($value)) {
+            return true; // 空值允许
+        }
+        return array_key_exists($value, MerchantEnum::getApplyStatusDict());
+    }
 }

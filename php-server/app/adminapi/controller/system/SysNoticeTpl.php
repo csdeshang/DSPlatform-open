@@ -15,7 +15,7 @@ class SysNoticeTpl extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/notice-tpl/list",
+     *     path="/adminapi/system/notice-tpls/list",
      *     summary="获取消息通知模板列表",
      *     tags={"admin-api/system/SysNoticeTpl"},
      *     @OA\Parameter(
@@ -29,7 +29,7 @@ class SysNoticeTpl extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -48,7 +48,7 @@ class SysNoticeTpl extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/notice-tpl/{id}",
+     *     path="/adminapi/system/notice-tpls/{id}",
      *     summary="获取消息通知模板详情",
      *     tags={"admin-api/system/SysNoticeTpl"},
      *     @OA\Parameter(
@@ -62,7 +62,7 @@ class SysNoticeTpl extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -79,7 +79,7 @@ class SysNoticeTpl extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/notice-tpl/{id}",
+     *     path="/adminapi/system/notice-tpls/{id}",
      *     summary="更新消息通知模板",
      *     tags={"admin-api/system/SysNoticeTpl"},
      *     @OA\Parameter(
@@ -109,7 +109,7 @@ class SysNoticeTpl extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -140,7 +140,7 @@ class SysNoticeTpl extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/notice-tpl/test",
+     *     path="/adminapi/system/notice-tpls/test",
      *     summary="测试消息通知模板",
      *     tags={"admin-api/system/SysNoticeTpl"},
      *     @OA\RequestBody(
@@ -157,7 +157,7 @@ class SysNoticeTpl extends BaseAdminController
      *         response=200,
      *         description="测试发送成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="测试发送成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -199,16 +199,22 @@ class SysNoticeTpl extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/notice-tpl/toggle-field",
+     * @OA\Patch(
+     *     path="/adminapi/system/notice-tpls/{id}/toggle-field",
      *     summary="切换消息通知模板字段状态",
      *     tags={"admin-api/system/SysNoticeTpl"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="通知模板ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="切换数据",
      *         @OA\JsonContent(
-     *             required={"id", "field"},
-     *             @OA\Property(property="id", type="integer", example=1, description="通知模板ID"),
+     *             required={"field"},
      *             @OA\Property(property="field", type="string", example="email_switch", description="字段名")
      *         )
      *     ),
@@ -216,16 +222,16 @@ class SysNoticeTpl extends BaseAdminController
      *         response=200,
      *         description="切换成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="切换成功")
      *         )
      *     )
      * )
      */
-    public function toggleSysNoticeTplField()
+    public function toggleSysNoticeTplField($id)
     {
         $data = [
-            'id' => input('param.id'),
+            'id' => (int) $id,
             'field' => input('param.field')
         ];
 

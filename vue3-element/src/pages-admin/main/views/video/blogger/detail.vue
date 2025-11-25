@@ -86,7 +86,7 @@
                                         </el-col>
                                         <el-col :span="12">
                                             <el-form-item label="头像">
-                                                <el-avatar v-if="bloggerInfo.avatar" :src="bloggerInfo.avatar" :size="50" />
+                                                <el-avatar v-if="bloggerInfo.avatar" :src="formatImageUrl(bloggerInfo.avatar, ThumbnailPresets.small, 'avatar')" :size="50" />
                                                 <span v-else>未设置</span>
                                             </el-form-item>
                                         </el-col>
@@ -291,6 +291,7 @@
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { getBloggerInfo, updateBlogger } from '@/pages-admin/main/api/video/blogger'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 
 // 定义博主信息接口

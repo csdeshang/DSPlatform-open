@@ -123,7 +123,7 @@ const setDialogData = async (row: any = null) => {
         popTitle.value = `编辑地图服务商 - ${row.name}`;
 
         // 获取服务商详细信息
-        const { data } = await getLbsProviderInfo({ provider: row.provider });
+        const { data } = await getLbsProviderInfo(row.provider);
 
         // 更新表单数据
         if (data) {

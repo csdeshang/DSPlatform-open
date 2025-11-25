@@ -10,31 +10,33 @@ use app\adminapi\middleware\AdminAuthorizeLog;
 Route::group('wechat', function () {
 
     // 微信公众号消息模板列表
-    Route::get('official/template/list', 'wechat.WechatOfficialTemplate/getWechatOfficialTemplateList');
-    Route::post('official/template/sync', 'wechat.WechatOfficialTemplate/syncWechatOfficialTemplate');
-    Route::post('official/template/delete', 'wechat.WechatOfficialTemplate/deleteWechatOfficialTemplate');
+    Route::get('official/templates/list', 'wechat.WechatOfficialTemplate/getWechatOfficialTemplateList');
+    Route::post('official/templates/sync', 'wechat.WechatOfficialTemplate/syncWechatOfficialTemplate');
+    // official/templates/:key (3段) 必须在 official/templates/list (3段) 后面，但实际不会冲突因为HTTP方法不同
+    Route::delete('official/templates/:key', 'wechat.WechatOfficialTemplate/deleteWechatOfficialTemplate');
 
     // 微信公众号设置
-    Route::get('official/setting', 'wechat.WechatOfficialSetting/getWechatOfficialSetting');
-    Route::put('official/setting', 'wechat.WechatOfficialSetting/updateWechatOfficialSetting');
+    Route::get('official/settings', 'wechat.WechatOfficialSetting/getWechatOfficialSetting');
+    Route::put('official/settings', 'wechat.WechatOfficialSetting/updateWechatOfficialSetting');
 
     // 微信公众号菜单
-    Route::get('official/menu', 'wechat.WechatOfficialMenu/getWechatOfficialMenu');
-    Route::post('official/menu/update', 'wechat.WechatOfficialMenu/updateWechatOfficialMenu');
-    Route::post('official/menu/publish', 'wechat.WechatOfficialMenu/publishWechatOfficialMenu');
+    Route::post('official/menus/publish', 'wechat.WechatOfficialMenu/publishWechatOfficialMenu');
+    Route::get('official/menus', 'wechat.WechatOfficialMenu/getWechatOfficialMenu');
+    Route::put('official/menus', 'wechat.WechatOfficialMenu/updateWechatOfficialMenu');
 
     // ============ 微信小程序模板管理 ============
     
     // 获取sys_notice_tpl表中支持微信小程序的模板列表
-    Route::get('mini/template/list', 'wechat.WechatMiniTemplate/getWechatMiniTemplateList');
-    Route::post('mini/template/sync', 'wechat.WechatMiniTemplate/syncWechatMiniTemplate');
-    Route::post('mini/template/delete', 'wechat.WechatMiniTemplate/deleteWechatMiniTemplate');
+    Route::get('mini/templates/list', 'wechat.WechatMiniTemplate/getWechatMiniTemplateList');
+    Route::post('mini/templates/sync', 'wechat.WechatMiniTemplate/syncWechatMiniTemplate');
+    // mini/templates/:key (3段) 必须在 mini/templates/list (3段) 后面，但实际不会冲突因为HTTP方法不同
+    Route::delete('mini/templates/:key', 'wechat.WechatMiniTemplate/deleteWechatMiniTemplate');
     
 
 
     // 微信小程序设置
-    Route::get('mini/setting', 'wechat.WechatMiniSetting/getWechatMiniSetting');
-    Route::put('mini/setting', 'wechat.WechatMiniSetting/updateWechatMiniSetting');
+    Route::get('mini/settings', 'wechat.WechatMiniSetting/getWechatMiniSetting');
+    Route::put('mini/settings', 'wechat.WechatMiniSetting/updateWechatMiniSetting');
 
 })->middleware([
     AdminAuthorizeToken::class,

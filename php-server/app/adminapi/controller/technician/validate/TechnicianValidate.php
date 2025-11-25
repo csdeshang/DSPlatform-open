@@ -106,6 +106,9 @@ class TechnicianValidate extends BaseValidate
      */
     public function checkApplyStatus($value, $rule, $data)
     {
+        if (empty($value)) {
+            return true; // 空值允许
+        }
         return array_key_exists($value, TechnicianEnum::getApplyStatusDict());
     }
 
@@ -118,6 +121,9 @@ class TechnicianValidate extends BaseValidate
      */
     public function checkTechnicianStatus($value, $rule, $data)
     {
+        if (empty($value)) {
+            return true; // 空值允许
+        }
         return array_key_exists($value, TechnicianEnum::getTechnicianStatusDict());
     }
 }

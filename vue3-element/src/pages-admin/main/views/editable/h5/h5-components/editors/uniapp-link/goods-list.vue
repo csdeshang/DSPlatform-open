@@ -37,7 +37,6 @@
 import { ref, reactive, onMounted, watch } from 'vue'
 import { getTblGoodsPages } from '@/pages-admin/main/api/tbl-goods/tblGoods'
 import { usePagination } from '@/hooks/usePagination'
-import { formatFileUrl } from '@/utils/util'
 
 // 定义组件名称
 defineOptions({

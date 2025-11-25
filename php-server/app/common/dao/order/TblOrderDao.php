@@ -36,14 +36,14 @@ class TblOrderDao extends BaseDao
     {
         // 通过订单商品表关联查询，检查是否有已支付的订单
         $result = $this->model->alias('o')
-                              ->join('tbl_order_goods og', 'o.id = og.order_id')
-                              ->where('o.user_id', $user_id)
-                              ->where('og.goods_id', $goods_id)
-                              ->whereIn('o.order_status', [TblOrderEnum::ORDER_STATUS_PAID, TblOrderEnum::ORDER_STATUS_ACCEPTED, TblOrderEnum::ORDER_STATUS_CONFIRMED, TblOrderEnum::ORDER_STATUS_COMPLETED])
-                              ->where('o.is_deleted', 0)
-                              ->field('o.*, og.goods_id, og.goods_name')
-                              ->findOrEmpty()
-                              ->toArray();
+            ->join('tbl_order_goods og', 'o.id = og.order_id')
+            ->where('o.user_id', $user_id)
+            ->where('og.goods_id', $goods_id)
+            ->whereIn('o.order_status', [TblOrderEnum::ORDER_STATUS_PAID, TblOrderEnum::ORDER_STATUS_ACCEPTED, TblOrderEnum::ORDER_STATUS_CONFIRMED, TblOrderEnum::ORDER_STATUS_COMPLETED])
+            ->where('o.is_deleted', 0)
+            ->field('o.*, og.goods_id, og.goods_name')
+            ->findOrEmpty()
+            ->toArray();
         return $result;
     }
 
@@ -76,12 +76,12 @@ class TblOrderDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateOrder(array $condition, array $data): bool
+    public function updateOrder(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -142,7 +142,7 @@ class TblOrderDao extends BaseDao
                     // },
                 ]
             )
-            ->append(['order_status_desc', 'delivery_method_desc', 'order_amount'])
+            ->append(['order_status_desc', 'delivery_method_desc'])
             ->field($field)
             ->order($order);
         return $this->getPaginate($result);
@@ -155,11 +155,12 @@ class TblOrderDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 订单信息
      */
-    public function getOrderInfo(array $condition, string $field = '*'): array
+    public function getOrderInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -169,7 +170,7 @@ class TblOrderDao extends BaseDao
      * @param string $field 查询字段，默认为所有字段
      * @return array 订单信息
      */
-    public function getWithRelOrderInfo(array $condition, string $field = '*'): array
+    public function getWithRelOrderInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
             ->with(
@@ -205,6 +206,7 @@ class TblOrderDao extends BaseDao
             )
             ->append(['order_status_desc', 'delivery_method_desc'])
             ->field($field)
+            ->lock($lock)
             ->findOrEmpty()
             ->toArray();
     }
@@ -217,9 +219,9 @@ class TblOrderDao extends BaseDao
      * @param string $field 查询字段，默认为所有字段
      * @return array 订单信息
      */
-    public function getOrderInfoById(int $id, string $field = '*'): array
+    public function getOrderInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -257,8 +259,8 @@ class TblOrderDao extends BaseDao
     {
         return $this->model->where($condition)->sum($column);
     }
-    
-        /**
+
+    /**
      * 自增
      * 
      * @param array $condition 查询条件
@@ -284,5 +286,4 @@ class TblOrderDao extends BaseDao
     {
         return $this->model->where($condition)->setDec($field, $step);
     }
-
 }

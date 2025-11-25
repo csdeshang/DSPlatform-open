@@ -51,12 +51,12 @@ class SysNoticeTplDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateSysNoticeTpl(array $condition, array $data): bool
+    public function updateSysNoticeTpl(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**

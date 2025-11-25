@@ -4,6 +4,8 @@
 namespace app\adminapi\service\system;
 
 use app\deshang\base\service\BaseAdminService;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 use app\deshang\exceptions\CommonException;
 
@@ -83,6 +85,8 @@ class SysAreaService extends BaseAdminService
             $this->updateSysAreaDeep($area_id, $parent['deep'] + 1);
         }
 
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_AREA_TAG);
 
         return $area_id;
     }
@@ -108,6 +112,9 @@ class SysAreaService extends BaseAdminService
             $this->updateSysAreaDeep($data['id'], $parent['deep'] + 1);
         }
 
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_AREA_TAG);
+
         return $result;
     }
 
@@ -126,6 +133,10 @@ class SysAreaService extends BaseAdminService
         if ($result === false) {
             throw new CommonException('删除失败');
         }
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_AREA_TAG);
+        
         return true;
     }
 

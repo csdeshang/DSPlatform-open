@@ -16,14 +16,14 @@ class DistributorLevel extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/distributor/level/list",
+     *     path="/adminapi/distributor/levels/list",
      *     summary="获取分销商等级列表",
      *     tags={"admin-api/distributor/DistributorLevel"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -38,7 +38,7 @@ class DistributorLevel extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/distributor/level/{id}",
+     *     path="/adminapi/distributor/levels/{id}",
      *     summary="获取分销商等级详情",
      *     tags={"admin-api/distributor/DistributorLevel"},
      *     @OA\Parameter(
@@ -52,7 +52,7 @@ class DistributorLevel extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -68,7 +68,7 @@ class DistributorLevel extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/distributor/level",
+     *     path="/adminapi/distributor/levels",
      *     summary="创建分销商等级",
      *     tags={"admin-api/distributor/DistributorLevel"},
      *     @OA\RequestBody(
@@ -100,7 +100,7 @@ class DistributorLevel extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *              @OA\Property(property="code", type="integer", example=200),
+     *              @OA\Property(property="code", type="integer", example=10000),
      *              @OA\Property(property="msg", type="string", example="操作成功"),
      *              @OA\Property(property="data", type="object")
      *         )
@@ -138,7 +138,7 @@ class DistributorLevel extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/distributor/level/{id}",
+     *     path="/adminapi/distributor/levels/{id}",
      *     summary="更新分销商等级",
      *     tags={"admin-api/distributor/DistributorLevel"},
      *     @OA\Parameter(
@@ -177,7 +177,7 @@ class DistributorLevel extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -215,7 +215,7 @@ class DistributorLevel extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/distributor/level/{id}",
+     *     path="/adminapi/distributor/levels/{id}",
      *     summary="删除分销商等级",
      *     tags={"admin-api/distributor/DistributorLevel"},
      *     @OA\Parameter(
@@ -229,7 +229,7 @@ class DistributorLevel extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

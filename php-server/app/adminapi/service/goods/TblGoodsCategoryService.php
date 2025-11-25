@@ -6,7 +6,8 @@ namespace app\adminapi\service\goods;
 use app\deshang\base\service\BaseAdminService;
 use app\deshang\exceptions\CommonException;
 use app\common\dao\goods\TblGoodsCategoryDao;
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 
 // 商品分类 多平台通用
@@ -87,7 +88,7 @@ class TblGoodsCategoryService extends BaseAdminService
         $result = (new TblGoodsCategoryDao())->updateGoodsCategory($condition, $data);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::GOODS_CATEGORY_TAG);
+        KvManager::cache()->clear(CacheKeyManager::GOODS_CATEGORY_TAG);
 
         return $result;
     }
@@ -107,7 +108,7 @@ class TblGoodsCategoryService extends BaseAdminService
         $result = (new TblGoodsCategoryDao())->deleteGoodsCategory([['id', '=', $id]]);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::GOODS_CATEGORY_TAG);
+        KvManager::cache()->clear(CacheKeyManager::GOODS_CATEGORY_TAG);
 
         return $result;
     }

@@ -7,7 +7,7 @@ class RiderBalance extends BaseValidate
 {
     protected $rule = [
         'change_mode' => 'require|in:1,2', // 1:充值 2:扣款
-        'change_amount' => 'require|float|gt:0|lt:1000000',
+        'change_amount' => 'require|float|gt:0|elt:10000000',
         'rider_id' => 'require|integer|gt:0'
     ];
 
@@ -17,7 +17,7 @@ class RiderBalance extends BaseValidate
         'change_amount.require' => '变更金额不能为空',
         'change_amount.float' => '变更金额必须为数字',
         'change_amount.gt' => '变更金额必须大于0',
-        'change_amount.lt' => '变更金额不能超过1,000,000',
+        'change_amount.elt' => '变更金额不能超过10,000,000',
         'rider_id.require' => '骑手ID不能为空',
         'rider_id.integer' => '骑手ID必须为整数',
         'rider_id.gt' => '骑手ID必须大于0'

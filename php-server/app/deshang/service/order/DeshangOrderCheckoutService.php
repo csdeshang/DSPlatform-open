@@ -28,6 +28,8 @@ use app\deshang\service\rider\DeshangRiderFeeRuleService;
 use app\deshang\service\store\DeshangTblStoreCouponService;
 use app\deshang\service\order\DeshangMallExpressService;
 
+use app\deshang\queue\core\QueueProducer;
+
 // 下单服务
 class DeshangOrderCheckoutService  extends BaseDeshangService
 {
@@ -68,7 +70,7 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
             $store_id = $item['store_id'];
             if (!isset($groupedItems[$store_id])) {
                 $groupedItems[$store_id] = [
-                    'store_info' => (new TblStoreDao())->getStoreInfoById($store_id,'id,platform,store_logo,store_name,store_business_status,service_fee_rate,contact_name,contact_phone,merchant_id,address,store_longitude,store_latitude,store_introduction,avg_describe_score,avg_logistics_score,avg_service_score,sales_num,collect_num,is_enabled,apply_status,is_recommend,area_info,area_id,category_id'), // 查询店铺信息
+                    'store_info' => (new TblStoreDao())->getStoreInfoById($store_id, 'id,platform,store_logo,store_name,store_business_status,service_fee_rate,contact_name,contact_phone,merchant_id,address,store_longitude,store_latitude,store_introduction,avg_describe_score,avg_logistics_score,avg_service_score,sales_num,collect_num,is_enabled,apply_status,is_recommend,area_info,area_id,category_id'), // 查询店铺信息
                     'goods_list' => [],
                     // 原价  购物车SKU 的价格之和
                     'original_amount' => 0,
@@ -142,12 +144,12 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
                     // 商城 运费
                     $mallExpressService = new DeshangMallExpressService();
                     $expressResult = $mallExpressService->calculateMallExpressFee(
-                        $store['store_info'], 
-                        $store['goods_list'], 
+                        $store['store_info'],
+                        $store['goods_list'],
                         $address
                     );
                     $shipping_amount = $expressResult['shipping_amount'];
-                    
+
                     // 保存运费计算详情到订单交付信息中
                     $order_delivery_info['mall_express'] = $expressResult;
                     break;
@@ -159,11 +161,11 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
                     // 上门服务
                     // 插入表的数据
                     $order_delivery_info['insert_data']['delivery_method'] = TblOrderEnum::DELIVERY_TECHNICIAN;
-                    
+
 
                     // 如果选择了师傅
                     $technician_id = $data['technician_id'] ?? 0;
-                    
+
                     if ($technician_id > 0) {
                         // 获取师傅信息
                         $technician_info = (new TechnicianDao())->getTechnicianInfo([['id', '=', $technician_id]]);
@@ -177,7 +179,7 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
                             throw new CommonException('师傅已禁用');
                         }
                         if ($technician_info['apply_status'] != TechnicianEnum::APPLY_STATUS_APPROVED) {
-                            throw new CommonException('师傅审核未通过');    
+                            throw new CommonException('师傅审核未通过');
                         }
                         $order_delivery_info['house']['technician_info'] = $technician_info;
 
@@ -185,8 +187,7 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
                         $order_delivery_info['insert_data']['technician_id'] = $technician_info['id'];
                         // 待师傅确认
                         $order_delivery_info['insert_data']['delivery_status'] = TblOrderDeliveryEnum::DELIVERY_STATUS_COURIER_ACCEPTANCE;
-
-                    }else{
+                    } else {
                         // 没有选择师傅
                         $order_delivery_info['insert_data']['technician_id'] = 0;
                         // 待店铺确认
@@ -282,12 +283,12 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
 
 
             // 单个店铺的 总价  字段与order order_goods表一致
-            $groupedItems[$store_id]['original_amount'] = $original_amount;
-            $groupedItems[$store_id]['goods_amount'] = $goods_amount;
-            $groupedItems[$store_id]['shipping_amount'] = $shipping_amount;
-            $groupedItems[$store_id]['discount_amount'] = $discount_amount;
-            $groupedItems[$store_id]['order_amount'] = $order_amount;
-            $groupedItems[$store_id]['pay_amount'] = $pay_amount;
+            $groupedItems[$store_id]['original_amount'] = ds_commerce_money($original_amount, 2);
+            $groupedItems[$store_id]['goods_amount'] = ds_commerce_money($goods_amount, 2);
+            $groupedItems[$store_id]['shipping_amount'] = ds_commerce_money($shipping_amount, 2);
+            $groupedItems[$store_id]['discount_amount'] = ds_commerce_money($discount_amount, 2);
+            $groupedItems[$store_id]['order_amount'] = ds_commerce_money($order_amount, 2);
+            $groupedItems[$store_id]['pay_amount'] = ds_commerce_money($pay_amount, 2);
             $groupedItems[$store_id]['order_delivery_info'] = $order_delivery_info;
             $groupedItems[$store_id]['available_store_coupons'] = $available_store_coupons;
 
@@ -494,14 +495,14 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
 
                 // 商品状态 为下架 或者sys_status不为1的时候，
                 if ($item['goods']['goods_status'] != TblGoodsEnum::STATUS_SHELVED) {
-                    throw new CommonException('商品状态为下架');
+                    throw new CommonException($item['goods']['goods_name'] . '商品状态为下架');
                 }
                 if ($item['goods']['sys_status'] != TblGoodsEnum::SYS_STATUS_NORMAL) {
-                    throw new CommonException('商品状态为系统审核未通过');
+                    throw new CommonException($item['goods']['goods_name'] . '商品状态为系统审核未通过');
                 }
                 // 是否有足够库存
                 if ($item['goodsSku']['sku_stock'] < $item['quantity']) {
-                    throw new CommonException('商品库存不足');
+                    throw new CommonException($item['goods']['goods_name'] . '商品库存不足');
                 }
 
 
@@ -553,12 +554,14 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
             );
             (new TblOrderLogDao())->createOrderLog($order_log_data);
 
-            // 触发订单生成事件
+            // 触发订单生成事件 [PHP事件为同步执行，没有线程池]
             event('OrderGenerateListener', [
                 'order_goods_list' => $order_goods_list,
                 'store_info' => $store['store_info'],
                 'user_info' => $user,
             ]);
+
+
         }
 
 

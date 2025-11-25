@@ -5,6 +5,8 @@ namespace app\adminapi\service\system;
 
 use app\deshang\base\service\BaseAdminService;
 use app\deshang\exceptions\CommonException;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 use app\common\dao\system\SysArticleCategoryDao;
 
@@ -64,7 +66,12 @@ class SysArticleCategoryService extends BaseAdminService
             }
         }
         //添加
-        return (new SysArticleCategoryDao())->createSysArticleCategory($data);
+        $result = (new SysArticleCategoryDao())->createSysArticleCategory($data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_ARTICLE_CATEGORY_TAG);
+        
+        return $result;
     }
 
     /**
@@ -85,7 +92,12 @@ class SysArticleCategoryService extends BaseAdminService
         $condition = [];
         $condition[] = ['id', '=', $id];
 
-        return (new SysArticleCategoryDao())->updateSysArticleCategory($condition, $data);
+        $result = (new SysArticleCategoryDao())->updateSysArticleCategory($condition, $data);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_ARTICLE_CATEGORY_TAG);
+        
+        return $result;
     }
 
     /**
@@ -100,6 +112,11 @@ class SysArticleCategoryService extends BaseAdminService
             throw new CommonException('该分类有下级分类，无法删除');
         }
 
-        return (new SysArticleCategoryDao())->deleteSysArticleCategory([['id', '=', $id]]);
+        $result = (new SysArticleCategoryDao())->deleteSysArticleCategory([['id', '=', $id]]);
+        
+        // 清理缓存
+        KvManager::cache()->clear(CacheKeyManager::SYS_ARTICLE_CATEGORY_TAG);
+        
+        return $result;
     }
 }

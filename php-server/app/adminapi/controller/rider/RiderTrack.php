@@ -12,7 +12,7 @@ class RiderTrack extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/rider/track/pages",
+     *     path="/adminapi/rider/tracks/pages",
      *     summary="获取骑手轨迹分页列表",
      *     tags={"admin-api/rider/RiderTrack"},
      *     @OA\Parameter(
@@ -47,7 +47,7 @@ class RiderTrack extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -71,7 +71,7 @@ class RiderTrack extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/rider/track/{id}",
+     *     path="/adminapi/rider/tracks/{id}",
      *     summary="获取骑手轨迹详情",
      *     tags={"admin-api/rider/RiderTrack"},
      *     @OA\Parameter(
@@ -85,7 +85,7 @@ class RiderTrack extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -103,7 +103,7 @@ class RiderTrack extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/rider/track/{id}",
+     *     path="/adminapi/rider/tracks/{id}",
      *     summary="删除骑手轨迹记录",
      *     tags={"admin-api/rider/RiderTrack"},
      *     @OA\Parameter(
@@ -117,7 +117,7 @@ class RiderTrack extends BaseAdminController
      *         response=200,
      *         description="删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="删除成功")
      *         )
      *     )
@@ -133,32 +133,38 @@ class RiderTrack extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/rider/track/clear",
+     * @OA\Delete(
+     *     path="/adminapi/rider/tracks/{rider_id}/all",
      *     summary="清空骑手轨迹记录",
      *     tags={"admin-api/rider/RiderTrack"},
-     *     @OA\RequestBody(
+     *     @OA\Parameter(
+     *         name="rider_id",
+     *         in="path",
      *         required=true,
-     *         description="清空条件",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="rider_id", type="integer", example=1, description="骑手ID"),
-     *             @OA\Property(property="days", type="integer", example=30, description="保留天数")
-     *         )
+     *         description="骑手ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="days",
+     *         in="query",
+     *         required=false,
+     *         description="保留天数",
+     *         @OA\Schema(type="integer", example=30)
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="清空成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="清空成功")
      *         )
      *     )
      * )
      */
-    public function clearRiderTrack()
+    public function clearRiderTrack($rider_id)
     {
         $data = [
-            'rider_id' => input('param.rider_id'),
+            'rider_id' => $rider_id,
             'days' => input('param.days', 30),
         ];
 

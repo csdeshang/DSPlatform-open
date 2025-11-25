@@ -14,14 +14,14 @@ class TradePaymentConfig extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/trade/payment-config/merchant",
+     *     path="/adminapi/trade/payment-configs/merchant",
      *     summary="获取商户支付配置列表",
      *     tags={"admin-api/trade/TradePaymentConfig"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -37,7 +37,7 @@ class TradePaymentConfig extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/trade/payment-config/info/{id}",
+     *     path="/adminapi/trade/payment-configs/{id}",
      *     summary="获取单条支付配置",
      *     tags={"admin-api/trade/TradePaymentConfig"},
      *     @OA\Parameter(
@@ -51,7 +51,7 @@ class TradePaymentConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -66,7 +66,7 @@ class TradePaymentConfig extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/trade/payment-config/create",
+     *     path="/adminapi/trade/payment-configs",
      *     summary="创建支付配置",
      *     tags={"admin-api/trade/TradePaymentConfig"},
      *     @OA\RequestBody(
@@ -85,7 +85,7 @@ class TradePaymentConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -106,7 +106,7 @@ class TradePaymentConfig extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/trade/payment-config/update/{id}",
+     *     path="/adminapi/trade/payment-configs/{id}",
      *     summary="更新支付配置",
      *     tags={"admin-api/trade/TradePaymentConfig"},
      *     @OA\Parameter(
@@ -131,7 +131,7 @@ class TradePaymentConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -153,7 +153,7 @@ class TradePaymentConfig extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/trade/payment-config/delete/{id}",
+     *     path="/adminapi/trade/payment-configs/{id}",
      *     summary="删除支付配置",
      *     tags={"admin-api/trade/TradePaymentConfig"},
      *     @OA\Parameter(
@@ -167,7 +167,7 @@ class TradePaymentConfig extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

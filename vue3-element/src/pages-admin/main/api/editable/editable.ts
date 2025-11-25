@@ -8,7 +8,7 @@ import request, { API_BASE_URLS } from '@/utils/request';
  * @returns
  */
 export function getEditablePages(params: Record<string, any>) {
-    return request.get(`${API_BASE_URLS.ADMIN}/editable/editable/pages`, { params })
+    return request.get(`${API_BASE_URLS.ADMIN}/editable/editables/pages`, { params })
 }
 
 /**
@@ -17,7 +17,7 @@ export function getEditablePages(params: Record<string, any>) {
  * @returns
  */
 export function createEditablePage(params: Record<string, any>) {
-    return request.post(`${API_BASE_URLS.ADMIN}/editable/editable`, params)
+    return request.post(`${API_BASE_URLS.ADMIN}/editable/editables`, params)
 }
 
 /**
@@ -26,7 +26,7 @@ export function createEditablePage(params: Record<string, any>) {
  * @returns
  */
 export function updateEditablePage(params: Record<string, any>) {
-    return request.put(`${API_BASE_URLS.ADMIN}/editable/editable/${params.id}`, params)
+    return request.put(`${API_BASE_URLS.ADMIN}/editable/editables/${params.id}`, params)
 }
 
 
@@ -36,7 +36,7 @@ export function updateEditablePage(params: Record<string, any>) {
  * @returns
  */
 export function getEditablePageInfo(id: string) {
-    return request.get(`${API_BASE_URLS.ADMIN}/editable/editable/${id}`)
+    return request.get(`${API_BASE_URLS.ADMIN}/editable/editables/${id}`)
 }
 
 
@@ -46,7 +46,7 @@ export function getEditablePageInfo(id: string) {
  * @returns
  */
 export function deleteEditablePage(id: string) {
-    return request.delete(`${API_BASE_URLS.ADMIN}/editable/editable/${id}`)
+    return request.delete(`${API_BASE_URLS.ADMIN}/editable/editables/${id}`)
 }
 
 

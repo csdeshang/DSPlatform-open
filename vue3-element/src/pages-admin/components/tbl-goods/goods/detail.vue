@@ -12,7 +12,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formatFileUrl(goodsDetail.cover_image)" />
+                            <el-avatar :size="80" :src="formatImageUrl(goodsDetail.cover_image, ThumbnailPresets.medium, 'goods')" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -266,7 +266,7 @@ import { computed, reactive, ref } from 'vue';
 import { getTblGoodsInfo, updateTblGoods } from '@/pages-admin/main/api/tbl-goods/tblGoods'
 import DetailOrderGoods from './detail-order-goods.vue'
 import DetailDistributorOrder from './detail-distributor-order.vue'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 const tabSelected = ref('base')
 

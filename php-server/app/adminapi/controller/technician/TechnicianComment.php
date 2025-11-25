@@ -12,7 +12,7 @@ class TechnicianComment extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/technician/comment/pages",
+     *     path="/adminapi/technician/comments/pages",
      *     summary="获取师傅评论分页列表",
      *     tags={"admin-api/technician/TechnicianComment"},
      *     @OA\Parameter(
@@ -61,7 +61,7 @@ class TechnicianComment extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -84,16 +84,22 @@ class TechnicianComment extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/technician/comment/toggle-field",
+     * @OA\Patch(
+     *     path="/adminapi/technician/comments/{id}/toggle-field",
      *     summary="切换师傅评论字段状态",
      *     tags={"admin-api/technician/TechnicianComment"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="评论ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="切换数据",
      *         @OA\JsonContent(
-     *             required={"id", "field"},
-     *             @OA\Property(property="id", type="integer", example=1, description="评论ID"),
+     *             required={"field"},
      *             @OA\Property(property="field", type="string", example="is_show", description="字段名")
      *         )
      *     ),
@@ -101,16 +107,16 @@ class TechnicianComment extends BaseAdminController
      *         response=200,
      *         description="切换成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="切换成功")
      *         )
      *     )
      * )
      */
-    public function toggleTechnicianCommentField()
+    public function toggleTechnicianCommentField($id)
     {
         $data = [
-            'id' => input('param.id'),
+            'id' => (int)$id,
             'field' => input('param.field')
         ];
 

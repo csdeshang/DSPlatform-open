@@ -13,7 +13,7 @@ class TblOrderRefund extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/refund/pages",
+     *     path="/adminapi/tbl-order/refunds/pages",
      *     summary="获取订单退款分页列表",
      *     tags={"admin-api/tblOrder/TblOrderRefund"},
      *     @OA\Parameter(
@@ -104,7 +104,7 @@ class TblOrderRefund extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -135,7 +135,7 @@ class TblOrderRefund extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/refund/list",
+     *     path="/adminapi/tbl-order/refunds/list",
      *     summary="获取订单退款列表",
      *     tags={"admin-api/tblOrder/TblOrderRefund"},
      *     @OA\Parameter(
@@ -149,7 +149,7 @@ class TblOrderRefund extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -167,7 +167,7 @@ class TblOrderRefund extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/refund/info/{id}",
+     *     path="/adminapi/tbl-order/refunds/{id}",
      *     summary="获取订单退款详情",
      *     tags={"admin-api/tblOrder/TblOrderRefund"},
      *     @OA\Parameter(
@@ -181,7 +181,7 @@ class TblOrderRefund extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -196,7 +196,7 @@ class TblOrderRefund extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/tbl-order/refund/retry/{id}",
+     *     path="/adminapi/tbl-order/refunds/{id}/retry",
      *     summary="重新发起退款",
      *     tags={"admin-api/tblOrder/TblOrderRefund"},
      *     @OA\Parameter(
@@ -210,7 +210,7 @@ class TblOrderRefund extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     ),
@@ -236,7 +236,7 @@ class TblOrderRefund extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/refund/log/list/{id}",
+     *     path="/adminapi/tbl-order/refunds/{id}/logs",
      *     summary="获取订单退款日志列表",
      *     tags={"admin-api/tblOrder/TblOrderRefund"},
      *     @OA\Parameter(
@@ -250,7 +250,7 @@ class TblOrderRefund extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )

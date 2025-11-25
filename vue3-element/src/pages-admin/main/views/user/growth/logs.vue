@@ -19,6 +19,9 @@
                     <el-option v-for="item in change_mode_options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="关联ID">
+                <el-input v-model="searchParams.related_id" placeholder="请输入关联ID" clearable />
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="resetPage">查询</el-button>
                 <el-button @click="resetSearchParams">重置</el-button>
@@ -38,7 +41,7 @@
             </el-table-column>
             <el-table-column prop="change_type_desc" label="变动类型" width="80" />
             <el-table-column prop="before_num" label="变动前成长值" width="100" />
-            <el-table-column prop="change_mode" label="变动方式" width="100" />
+            <el-table-column prop="change_mode_desc" label="变动方式" width="100" />
             <el-table-column prop="change_num" label="变动成长值" width="80" />
             <el-table-column prop="after_num" label="变动后成长值" width="80" />
             <el-table-column prop="change_desc" label="变动原因" />
@@ -82,6 +85,7 @@ const searchParams = reactive({
     username: '',
     change_type: '',
     change_mode: '',
+    related_id: '',
 })
 
 const {

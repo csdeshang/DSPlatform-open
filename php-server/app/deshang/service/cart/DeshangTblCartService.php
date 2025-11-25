@@ -11,6 +11,8 @@ use app\common\dao\cart\TblCartDao;
 use app\common\dao\goods\TblGoodsDao;
 use app\common\dao\goods\TblGoodsSkuDao;
 use app\common\dao\store\TblStoreDao;
+use app\common\enum\cart\TblCartEnum;
+use app\common\enum\goods\TblGoodsEnum;
 
 use app\deshang\service\goods\DeshangTblGoodsPromotionService;
 
@@ -27,10 +29,6 @@ class DeshangTblCartService  extends BaseDeshangService
     // 添加商品到购物车
     public function addTblCart(array $data)
     {
-        // 调用验证器进行验证
-        $this->validate($data, 'app\deshang\service\cart\validate\TblCartValidator.add');
-
-
         // 检查商品是否存在
         $goods = (new TblGoodsDao())->getGoodsInfoById($data['goods_id']);
 
@@ -121,16 +119,23 @@ class DeshangTblCartService  extends BaseDeshangService
         // 查询当前用户的购物车商品，并预加载相关的商品和SKU信息
         $cartItems = $this->dao->getWithRelCartList($condition);
 
-        // 商品被删除或SKU被删除 当前购物车则自动清除
+        // 检查购物车商品状态并处理
         foreach ($cartItems as $key => $item) {
             if (!isset($item['goodsSku']) || !isset($item['goods'])) {
-                // 删除购物车商品
+                // 商品或SKU被删除，自动清除
                 $condition = [];
                 $condition[] = ['sku_id', '=', $item['sku_id']];
                 $condition[] = ['user_id', '=', $user_id];
                 $this->deleteTblCart($condition);
                 unset($cartItems[$key]);
             } else {
+                // 检查商品状态
+                $statusInfo = $this->checkCartItemStatus($item);
+                
+                // 添加状态信息到购物车项
+                $cartItems[$key]['cart_status'] = $statusInfo['status'];
+                $cartItems[$key]['status_message'] = $statusInfo['message'];
+                
                 // 获取促销活动价格 (数据库存储的数据无效)
                 $promotion = (new DeshangTblGoodsPromotionService())->getTblGoodsPromotionPrice($item['goodsSku'], $item['quantity'], $user_id, $item['promotion_platform'], $item['promotion_type']);
                 $cartItems[$key]['promotion_platform'] = $promotion['promotion_platform'];
@@ -172,8 +177,6 @@ class DeshangTblCartService  extends BaseDeshangService
     // 更新购物车商品数量
     public function updateTblCart($data)
     {
-        $this->validate($data, 'app\deshang\service\cart\validate\TblCartValidator.update');
-
         if (empty($data['cart_id']) || empty($data['quantity'])) {
             throw new CommonException('购物车ID和数量不能为空');
         }
@@ -229,8 +232,6 @@ class DeshangTblCartService  extends BaseDeshangService
     // 删除购物车商品
     public function deleteTblCart($data)
     {
-        $this->validate($data, 'app\deshang\service\cart\validate\TblCartValidator.delete');
-
         $condition = [];
         $condition[] = ['id', 'in', $data['cart_ids']];
         $condition[] = ['user_id', '=', $data['user_id']];
@@ -259,5 +260,58 @@ class DeshangTblCartService  extends BaseDeshangService
         $condition[] = ['user_id', '=', $userId];
         $totalQuantity = $this->dao->getCartCount($condition);
         return $totalQuantity;
+    }
+
+    /**
+     * 检查购物车商品状态
+     * @param array $item 购物车商品项
+     * @return array ['status' => int, 'message' => string]
+     */
+    private function checkCartItemStatus($item)
+    {
+        $goods = $item['goods'];
+        $sku = $item['goodsSku'];
+        
+        // 检查商品状态
+        if ($goods['goods_status'] != TblGoodsEnum::STATUS_SHELVED) {
+            return [
+                'status' => TblCartEnum::CART_STATUS_DISCONTINUED,
+                'message' => TblCartEnum::getCartStatusMessage(TblCartEnum::CART_STATUS_DISCONTINUED)
+            ];
+        }
+        
+        if ($goods['sys_status'] != TblGoodsEnum::SYS_STATUS_NORMAL) {
+            return [
+                'status' => TblCartEnum::CART_STATUS_UNAUDITED,
+                'message' => TblCartEnum::getCartStatusMessage(TblCartEnum::CART_STATUS_UNAUDITED)
+            ];
+        }
+        
+        if ($goods['is_deleted'] == 1) {
+            return [
+                'status' => TblCartEnum::CART_STATUS_DELETED,
+                'message' => TblCartEnum::getCartStatusMessage(TblCartEnum::CART_STATUS_DELETED)
+            ];
+        }
+        
+        // 检查库存
+        if ($sku['sku_stock'] < $item['quantity']) {
+            return [
+                'status' => TblCartEnum::CART_STATUS_OUT_OF_STOCK,
+                'message' => TblCartEnum::getCartStatusMessage(TblCartEnum::CART_STATUS_OUT_OF_STOCK, ['stock' => $sku['sku_stock']])
+            ];
+        }
+        
+        if ($goods['stock_num'] <= 0) {
+            return [
+                'status' => TblCartEnum::CART_STATUS_OUT_OF_STOCK,
+                'message' => '商品库存不足'
+            ];
+        }
+        
+        return [
+            'status' => TblCartEnum::CART_STATUS_NORMAL,
+            'message' => ''
+        ];
     }
 }

@@ -167,6 +167,10 @@ class DeshangEnumService extends BaseDeshangService
             'points_goods_order_log' => [
                 'order_status' => ['app\common\enum\pointsGoods\PointsGoodsOrderEnum', 'getOrderStatusDict'],
             ],
+            //系统错误日志表
+            'sys_error_logs' => [
+                'exception_class' => ['app\common\enum\system\SysErrorLogsEnum', 'getExceptionClassDict'],
+            ]
             
 
             

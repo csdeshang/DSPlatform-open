@@ -12,7 +12,7 @@ class VideoCategory extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/video/category/tree",
+     *     path="/adminapi/video/categories/tree",
      *     tags={"admin-api/video/VideoCategory"},
      *     summary="获取视频分类树组结构",
      *     @OA\Parameter(
@@ -26,7 +26,7 @@ class VideoCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取视频分类树组结构",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -50,7 +50,7 @@ class VideoCategory extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/video/category/{id}",
+     *     path="/adminapi/video/categories/{id}",
      *     tags={"admin-api/video/VideoCategory"},
      *     summary="获取视频分类详情",
      *     @OA\Parameter(
@@ -63,7 +63,7 @@ class VideoCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取视频分类详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -85,7 +85,7 @@ class VideoCategory extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/video/category",
+     *     path="/adminapi/video/categories",
      *     tags={"admin-api/video/VideoCategory"},
      *     summary="添加视频分类",
      *     @OA\RequestBody(
@@ -130,7 +130,7 @@ class VideoCategory extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/video/category/{id}",
+     *     path="/adminapi/video/categories/{id}",
      *     tags={"admin-api/video/VideoCategory"},
      *     summary="编辑视频分类",
      *     @OA\Parameter(
@@ -154,7 +154,7 @@ class VideoCategory extends BaseAdminController
      *         response=200,
      *         description="成功编辑视频分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -181,7 +181,7 @@ class VideoCategory extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/video/category/{id}",
+     *     path="/adminapi/video/categories/{id}",
      *     tags={"admin-api/video/VideoCategory"},
      *     summary="删除视频分类",
      *     @OA\Parameter(
@@ -194,7 +194,7 @@ class VideoCategory extends BaseAdminController
      *         response=200,
      *         description="成功删除视频分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -212,15 +212,21 @@ class VideoCategory extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/video/category/toggle-field",
+     * @OA\Patch(
+     *     path="/adminapi/video/categories/{id}/toggle-field",
      *     tags={"admin-api/video/VideoCategory"},
      *     summary="切换视频分类字段状态",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="分类ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"id", "field"},
-     *             @OA\Property(property="id", type="integer", example=1, description="分类ID"),
+     *             required={"field"},
      *             @OA\Property(property="field", type="string", example="is_show", description="字段名")
      *         )
      *     ),
@@ -228,16 +234,16 @@ class VideoCategory extends BaseAdminController
      *         response=200,
      *         description="切换成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="切换成功")
      *         )
      *     )
      * )
      */
-    public function toggleVideoCategoryField()
+    public function toggleVideoCategoryField($id)
     {
         $data = [
-            'id' => input('param.id'),
+            'id' => (int)$id,
             'field' => input('param.field')
         ];
 

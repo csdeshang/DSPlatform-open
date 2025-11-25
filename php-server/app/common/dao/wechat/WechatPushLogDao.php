@@ -38,11 +38,15 @@ class WechatPushLogDao extends BaseDao
     
     /**
      * 更新推送日志记录
+     * 
+     * @param array $condition 更新条件
+     * @param array $data 更新数据
+     * @return int 受影响的行数
      */
-    public function updateWechatPushLog(array $condition, array $data): bool
+    public function updateWechatPushLog(array $condition, array $data): int
     {
-        $this->model::update($data, $condition);
-        return true;
+        $result = $this->model::update($data, $condition);
+        return $result->getNumRows();
     }
 
     /**

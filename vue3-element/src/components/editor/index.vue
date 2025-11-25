@@ -110,7 +110,9 @@ const handleAttachmentSelect = (data: Record<string, any>) => {
     if (!insertFn) return
 
     data.forEach((item: Record<string, any>) => {
-        insertFn(formatFileUrl(item.path), item.name, formatFileUrl(item.path))
+        // 编辑器中插入的图片和视频都使用原图
+        const url = formatFileUrl(item.path)
+        insertFn(url, item.name, url)
     })
 }
 

@@ -72,7 +72,7 @@ class DeshangUserService extends BaseDeshangService
         if (isset($data['inviter_id']) && intval($data['inviter_id']) > 0) {
             // 邀请人是否存在
             $inviter_info = (new UserDao())->getUserInfoById($data['inviter_id']);
-            if(!empty($inviter_info)){
+            if (!empty($inviter_info)) {
                 $user_info['inviter_id'] = intval($data['inviter_id']);
             }
         }
@@ -88,12 +88,20 @@ class DeshangUserService extends BaseDeshangService
         $user_id = (new UserDao())->createUser($user_info);
 
 
-        if ($user_id > 0) {            
+        if ($user_id > 0) {
             // 用户注册事件
-            event('UserRegisterListener',['user_id'=>$user_id]);
+            event(
+                'UserRegisterListener',
+                [
+                    'user_id' => $user_id
+                ]
+            );
             // 邀请获取积分
-            if(isset($data['inviter_id']) && intval($data['inviter_id']) > 0){
-                event('UserInviteListener',['inviter_id'=>$data['inviter_id']]);
+            if (isset($data['inviter_id']) && intval($data['inviter_id']) > 0) {
+                event('UserInviteListener', [
+                    'inviter_id' => $data['inviter_id'],
+                    'user_id' => $user_id  // 被邀请人ID
+                ]);
             }
         }
 
@@ -102,13 +110,13 @@ class DeshangUserService extends BaseDeshangService
 
 
     // 更新用户信息(主要用于基本信息的修改，积分、余额、成长值、余额等通过Dao层修改)
-    public function updateUser(int $id,array $data)
+    public function updateUser(int $id, array $data)
     {
 
         // 过滤不能修改的字段 
         $unmodifiableFields = ['username', 'growth', 'points', 'points_in', 'points_out', 'balance', 'balance_in', 'balance_out', 'distributor_balance', 'distributor_balance_in', 'distributor_balance_out'];
         foreach ($unmodifiableFields as $field) {
-            if (array_key_exists($field,$data)) {
+            if (array_key_exists($field, $data)) {
                 throw new CommonException($field . '不能直接进行修改');
             }
         }
@@ -117,16 +125,16 @@ class DeshangUserService extends BaseDeshangService
 
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = create_password($data['password']);
-            
+
             // 修改密码后，使该用户的所有Token失效 (用户禁用 刷新Token去验证)
             (new TokenCache())->invalidateToken('user', $id);
-        }else{
+        } else {
             unset($data['password']);
         }
 
         if (isset($data['pay_password']) && !empty($data['pay_password'])) {
             $data['pay_password'] = create_password($data['pay_password']);
-        }else{
+        } else {
             unset($data['pay_password']);
         }
 
@@ -140,21 +148,22 @@ class DeshangUserService extends BaseDeshangService
 
 
     // 获取用户信息和其他角色信息
-    public function getUserInfoWithRoles($id){
-        $user_info = (new UserDao())->getUserInfoById($id,'*');
+    public function getUserInfoWithRoles($id)
+    {
+        $user_info = (new UserDao())->getUserInfoById($id, '*');
         unset($user_info['password']);
         unset($user_info['pay_password']);
 
 
 
         // 获取商户信息
-        $user_info['merchant'] = (new MerchantDao)->getMerchantInfo([['user_id','=',$user_info['id']]],'*');
+        $user_info['merchant'] = (new MerchantDao)->getMerchantInfo([['user_id', '=', $user_info['id']]], '*');
 
         // 获取骑手信息
-        $user_info['rider'] = (new RiderDao)->getRiderInfo([['user_id','=',$user_info['id']]],'*');
+        $user_info['rider'] = (new RiderDao)->getRiderInfo([['user_id', '=', $user_info['id']]], '*');
 
         // 获取师傅信息
-        $user_info['technician'] = (new TechnicianDao)->getTechnicianInfo([['user_id','=',$user_info['id']]],'*');
+        $user_info['technician'] = (new TechnicianDao)->getTechnicianInfo([['user_id', '=', $user_info['id']]], '*');
 
         // 获取博主信息
         $user_info['blogger'] = $this->getBloggerInfo($user_info);
@@ -163,13 +172,13 @@ class DeshangUserService extends BaseDeshangService
         // 获取可管理的店铺列表
         $manage_store_list = array();
         // 获取商户下的店铺
-        if(isset($user_info['merchant']['id'])){
-            $manage_store_list = (new TblStoreDao)->getStoreList([['merchant_id','=',$user_info['merchant']['id']]],'id,platform,merchant_id,store_name,apply_status');
+        if (isset($user_info['merchant']['id'])) {
+            $manage_store_list = (new TblStoreDao)->getStoreList([['merchant_id', '=', $user_info['merchant']['id']]], 'id,platform,merchant_id,store_name,apply_status,is_enabled', 'id desc', 100);
         }
         // 获取用户授权的店铺
-        $store_ids = (new TblStoreAuthUserDao)->getStoreAuthUserColumn([['user_id','=',$user_info['id']]],'store_id');
-        if(!empty($store_ids)){
-            $manage_store_list = array_merge($manage_store_list, (new TblStoreDao)->getStoreList([['id','in',$store_ids]],'id,platform,merchant_id,store_name,apply_status'));
+        $store_ids = (new TblStoreAuthUserDao)->getStoreAuthUserColumn([['user_id', '=', $user_info['id']]], 'store_id');
+        if (!empty($store_ids)) {
+            $manage_store_list = array_merge($manage_store_list, (new TblStoreDao)->getStoreList([['id', 'in', $store_ids]], 'id,platform,merchant_id,store_name,apply_status,is_enabled', 'id desc', 100));
         }
         $user_info['manage_store_list'] = $manage_store_list;
 
@@ -181,7 +190,8 @@ class DeshangUserService extends BaseDeshangService
 
 
     // 根据用户id 获取用户信息
-    public function getUserInfoById($id){
+    public function getUserInfoById($id)
+    {
         $result = (new UserDao())->getUserInfoById($id);
         return $result;
     }
@@ -189,7 +199,8 @@ class DeshangUserService extends BaseDeshangService
 
 
     // 获取用户交易记录分页
-    public function getUserTradePayLogPages($data){
+    public function getUserTradePayLogPages($data)
+    {
         $condition = [];
         $condition[] = ['user_id', '=', $data['user_id']];
         $result = (new TradePayLogDao())->getTradePayLogPages($condition);
@@ -198,26 +209,24 @@ class DeshangUserService extends BaseDeshangService
 
 
     // 获取博主信息(如果不是博主 自动注册成博主，如需博主审核功能，单独开发)
-    public function getBloggerInfo($user_info){
-        $blogger_info = (new BloggerDao())->getBloggerInfo([['user_id','=',$user_info['id']]],'*');
+    public function getBloggerInfo($user_info)
+    {
+        $blogger_info = (new BloggerDao())->getBloggerInfo([['user_id', '=', $user_info['id']]], '*');
 
 
 
         // 自动创建博主
-        if(empty($blogger_info)){
+        if (empty($blogger_info)) {
             $blogger_id = (new BloggerDao())->createBlogger([
                 'user_id' => $user_info['id'],
                 'blogger_name' => $user_info['nickname'],
                 'verification_status' => BloggerEnum::VERIFICATION_STATUS_WAIT,
             ]);
 
-            $blogger_info = (new BloggerDao())->getBloggerInfo([['id','=',$blogger_id]],'*');
+            $blogger_info = (new BloggerDao())->getBloggerInfo([['id', '=', $blogger_id]], '*');
         }
 
 
         return $blogger_info;
     }
-
-
-
 }

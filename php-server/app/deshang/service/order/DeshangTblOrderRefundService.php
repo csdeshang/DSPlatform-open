@@ -4,6 +4,8 @@ namespace app\deshang\service\order;
 
 
 use app\deshang\exceptions\CommonException;
+use app\deshang\exceptions\PermissionException;
+use app\deshang\exceptions\StateException;
 
 use app\deshang\service\BaseDeshangService;
 
@@ -156,7 +158,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
     {
         // 订单状态 已付款 未发货 才能取消订单退款
         if ($order_info['order_status'] != TblOrderEnum::ORDER_STATUS_PAID) {
-            throw new CommonException('订单状态错误');
+            throw new StateException('订单状态错误');
         }
 
 
@@ -247,12 +249,12 @@ class DeshangTblOrderRefundService extends BaseDeshangService
             $user_available_actions = (new DeshangTblOrderService())->getUserAvailableActions($order_info);
 
             if (!in_array('refund', $user_available_actions)) {
-                throw new CommonException('用户没有退款权限');
+                throw new PermissionException('用户没有退款权限');
             }
         } else if ($role == 'store') {
             $store_available_actions = (new DeshangTblOrderService())->getStoreAvailableActions($order_info);
             if (!in_array('refund', $store_available_actions)) {
-                throw new CommonException('店铺没有退款权限');
+                throw new PermissionException('店铺没有退款权限');
             }
         } else {
             throw new CommonException('非法操作');
@@ -365,7 +367,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
         if ($role == 'user') {
             $user_available_actions = $this->getUserRefundActions($refund_info);
             if (!in_array('edit_refund', $user_available_actions)) {
-                throw new CommonException('用户没有修改退款权限');
+                throw new PermissionException('用户没有修改退款权限');
             }
         } else {
             throw new CommonException('非法操作');
@@ -418,8 +420,11 @@ class DeshangTblOrderRefundService extends BaseDeshangService
 
     /**
      * 店铺同意退款(只处理订单的退款状态，金额的退款由 processRefund 方法处理)
+     * 退款金额使用用户申请的金额，卖家不能修改
      * 
-     * @param array $data 退款数据
+     * @param array $refund_info 退款信息
+     * @param array $data 退款数据（包含 agree_reason）
+     * @param int $user_id 用户ID
      * @return bool 操作结果
      */
     public function storeAgreeRefund(array $refund_info, array $data, int $user_id): bool
@@ -428,24 +433,26 @@ class DeshangTblOrderRefundService extends BaseDeshangService
         if ($role == 'store') {
             $store_available_actions = $this->getStoreRefundActions($refund_info);
             if (!in_array('agree_refund', $store_available_actions)) {
-                throw new CommonException('店铺没有同意退款权限');
+                throw new PermissionException('店铺没有同意退款权限');
             }
         } else {
             throw new CommonException('非法操作');
         }
 
+        // 获取同意备注（可选）
+        $agree_reason = $data['agree_reason'] ?? '';
 
-
-        // 验证退款金额是否大于订单金额
-        if ($data['refund_amount'] > $refund_info['apply_amount']) {
-            throw new CommonException('当前退款金额大于申请金额');
+        // 构建日志消息
+        $log_message = '店铺同意退款';
+        if (!empty($agree_reason)) {
+            $log_message .= '，备注：' . $agree_reason;
         }
 
         // 记录退款日志
         $logData = [
             'refund_id' => $refund_info['id'],
             'refund_status' => TblOrderRefundEnum::STATUS_STORE_AGREED,
-            'message' => '店铺同意退款' . ($data['refund_amount'] != $refund_info['apply_amount'] ? '，退款金额：' . $data['refund_amount'] . '元' : ''),
+            'message' => $log_message,
             'create_role' => 'store',
             'create_uid' => $user_id,
         ];
@@ -457,6 +464,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
             // 如果是仅退款类型，直接进入退款处理流程
             'refund_status' => $refund_info['refund_type'] == TblOrderRefundEnum::TYPE_ONLY_REFUND ? TblOrderRefundEnum::STATUS_REFUND_PROCESSING : TblOrderRefundEnum::STATUS_STORE_AGREED,
             'agree_time' => time(),
+            'agree_reason' => $agree_reason,
         ];
         (new TblOrderRefundDao())->updateOrderRefund(['id' => $refund_info['id']], $refund_data);
 
@@ -491,7 +499,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
         if ($role == 'store') {
             $store_available_actions = $this->getStoreRefundActions($refund_info);
             if (!in_array('reject_refund', $store_available_actions)) {
-                throw new CommonException('当前退款状态不允许拒绝退款');
+                throw new StateException('当前退款状态不允许拒绝退款');
             }
         } else {
             throw new CommonException('非法操作');
@@ -536,7 +544,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
         if ($role == 'user') {
             $user_available_actions = $this->getUserRefundActions($refund_info);
             if (!in_array('return_goods', $user_available_actions)) {
-                throw new CommonException('当前退款状态不允许退货');
+                throw new StateException('当前退款状态不允许退货');
             }
         } else {
             throw new CommonException('非法操作');
@@ -579,7 +587,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
         if ($role == 'store') {
             $store_available_actions = $this->getStoreRefundActions($refund_info);
             if (!in_array('receive_goods', $store_available_actions)) {
-                throw new CommonException('当前退款状态不允许确认收货');
+                throw new StateException('当前退款状态不允许确认收货');
             }
         } else {
             throw new CommonException('非法操作');
@@ -635,7 +643,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
             TblOrderRefundEnum::STATUS_REFUND_PROCESSING,
             TblOrderRefundEnum::STATUS_REFUND_FAILED,
         ])) {
-            throw new CommonException('当前退款状态不允许此操作');
+            throw new StateException('当前退款状态不允许此操作');
         }
 
         // 验证当前退款的订单状态，未完成则先自动完成，因如果余额退款，商户需要扣除退款金额，否则失败
@@ -643,7 +651,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
 
         // 如果订单状态不是  已完成或已取消状态 则不可处理退款(一般退款同意后 会先完成，因为出现部分退款，需要先完成订单，再退款)
         if ($order_info['order_status'] != TblOrderEnum::ORDER_STATUS_COMPLETED && $order_info['order_status'] != TblOrderEnum::ORDER_STATUS_CANCELLED) {
-            throw new CommonException('当前订单状态不允许处理退款');
+            throw new StateException('当前订单状态不允许处理退款');
         }
 
 
@@ -905,7 +913,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
             TblOrderRefundEnum::STATUS_CLOSED,
             TblOrderRefundEnum::STATUS_CANCELED
         ])) {
-            throw new CommonException('当前退款状态不允许此操作');
+            throw new StateException('当前退款状态不允许此操作');
         }
         // 更新退款状态
         $refund_data = [
@@ -941,7 +949,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
         if ($role == 'user') {
             $user_available_actions = $this->getUserRefundActions($refund_info);
             if (!in_array('cancel_refund', $user_available_actions)) {
-                throw new CommonException('当前退款状态不允许取消退款');
+                throw new StateException('当前退款状态不允许取消退款');
             }
         } else {
             throw new CommonException('非法操作');

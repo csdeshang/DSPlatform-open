@@ -21,7 +21,7 @@ class AttachmentFile extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/attachment/file/pages",
+     *     path="/adminapi/attachment/files/pages",
      *     summary="获取附件文件分页",
      *     tags={"admin-api/attachment/AttachmentFile"},
      *     @OA\Parameter(
@@ -42,7 +42,7 @@ class AttachmentFile extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array",
      *                 @OA\Items(type="object",
@@ -73,7 +73,7 @@ class AttachmentFile extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/attachment/file/image",
+     *     path="/adminapi/attachment/files/image",
      *     summary="上传图片",
      *     tags={"admin-api/attachment/AttachmentFile"},
      *     @OA\RequestBody(
@@ -89,7 +89,7 @@ class AttachmentFile extends BaseAdminController
      *         response=200,
      *         description="图片上传成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="url", type="string", example="http://example.com/image.jpg")
@@ -114,7 +114,7 @@ class AttachmentFile extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/attachment/file/video",
+     *     path="/adminapi/attachment/files/video",
      *     summary="上传视频",
      *     tags={"admin-api/attachment/AttachmentFile"},
      *     @OA\RequestBody(
@@ -130,7 +130,7 @@ class AttachmentFile extends BaseAdminController
      *         response=200,
      *         description="视频上传成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="上传成功"),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="url", type="string", example="http://example.com/video.mp4")
@@ -159,8 +159,8 @@ class AttachmentFile extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/attachment/file/update-batch",
-     *     summary="批量编辑图片",
+     *     path="/adminapi/attachment/files/batch",
+     *     summary="批量更新附件文件",
      *     tags={"admin-api/attachment/AttachmentFile"},
      *     @OA\RequestBody(
      *         required=true,
@@ -176,7 +176,7 @@ class AttachmentFile extends BaseAdminController
      *         response=200,
      *         description="图片更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -200,8 +200,8 @@ class AttachmentFile extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/attachment/file/del-batch",
+     * @OA\Delete(
+     *     path="/adminapi/attachment/files/batch",
      *     summary="批量删除附件文件",
      *     tags={"admin-api/attachment/AttachmentFile"},
      *     @OA\RequestBody(
@@ -216,7 +216,7 @@ class AttachmentFile extends BaseAdminController
      *         response=200,
      *         description="文件删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

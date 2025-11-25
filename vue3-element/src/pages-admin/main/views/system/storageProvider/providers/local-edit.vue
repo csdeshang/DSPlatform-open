@@ -107,7 +107,7 @@ const setDialogData = async (row: any = null) => {
         popTitle.value = `编辑短信服务商 - ${row.name}`;
 
         // 获取服务商详细信息
-        const { data } = await getStorageProviderInfo({ provider: row.provider });
+        const { data } = await getStorageProviderInfo(row.provider);
 
         // 更新表单数据
         if (data) {

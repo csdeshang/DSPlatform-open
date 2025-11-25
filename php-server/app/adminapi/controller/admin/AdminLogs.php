@@ -12,7 +12,7 @@ class AdminLogs extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/admin-logs/pages",
+     *     path="/adminapi/admin/logs/pages",
      *     tags={"admin-api/admin/AdminLogs"},
      *     summary="获取管理员日志分页列表",
      *     @OA\Parameter(
@@ -52,7 +52,7 @@ class AdminLogs extends BaseAdminController
      *         response=200,
      *         description="成功获取管理员日志分页列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -77,7 +77,7 @@ class AdminLogs extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/admin-logs/{id}",
+     *     path="/adminapi/admin/logs/{id}",
      *     tags={"admin-api/admin/AdminLogs"},
      *     summary="获取管理员日志详情",
      *     @OA\Parameter(
@@ -90,7 +90,7 @@ class AdminLogs extends BaseAdminController
      *         response=200,
      *         description="成功获取管理员日志详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

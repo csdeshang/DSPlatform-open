@@ -7,7 +7,7 @@ import request, { API_BASE_URLS } from '@/utils/request';
 
 // 创建外卖店铺
 export function createFoodStore(params: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/food/store/createStore`, params )
+  return request.post(`${API_BASE_URLS.ADMIN}/food/stores`, params )
 }
 
 

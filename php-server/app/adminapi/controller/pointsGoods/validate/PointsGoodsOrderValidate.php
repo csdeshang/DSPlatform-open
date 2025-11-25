@@ -77,6 +77,9 @@ class PointsGoodsOrderValidate extends BaseValidate
 
     public function checkOrderStatus($value, $rule, $data)
     {
+        if (empty($value)) {
+            return true; // 空值允许
+        }
         return array_key_exists($value, PointsGoodsOrderEnum::getOrderStatusDict());
     }
 }

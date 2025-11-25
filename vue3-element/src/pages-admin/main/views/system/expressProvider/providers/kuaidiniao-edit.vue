@@ -160,7 +160,7 @@ const setDialogData = async (row: any = null) => {
         popTitle.value = `编辑快递查询服务商 - ${row.name}`;
 
         // 获取服务商详细信息
-        const { data } = await getExpressProviderInfo({ provider: row.provider });
+        const { data } = await getExpressProviderInfo(row.provider);
 
         // 更新表单数据
         if (data) {

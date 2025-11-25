@@ -14,7 +14,7 @@ class PointsGoodsEvaluate extends BaseAdminController
      * 获取积分商品评价分页列表
      * 
      * @OA\Get(
-     *     path="/adminapi/points-goods/evaluate/pages",
+     *     path="/adminapi/points-goods/evaluates/pages",
      *     tags={"admin-api/points-goods/PointsGoodsEvaluate"},
      *     summary="获取积分商品评价分页列表",
      *     @OA\Parameter(
@@ -58,7 +58,7 @@ class PointsGoodsEvaluate extends BaseAdminController
      *         response=200,
      *         description="成功获取积分商品评价分页列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -85,14 +85,20 @@ class PointsGoodsEvaluate extends BaseAdminController
     /**
      * 切换积分商品评价字段状态
      * 
-     * @OA\Put(
-     *     path="/adminapi/points-goods/evaluate/toggle",
+     * @OA\Patch(
+     *     path="/adminapi/points-goods/evaluates/{id}/toggle-field",
      *     tags={"admin-api/points-goods/PointsGoodsEvaluate"},
      *     summary="切换积分商品评价字段状态",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="评价ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="id", type="integer", example=1, description="评价ID"),
      *             @OA\Property(property="field", type="string", example="is_show", description="字段名 is_show:显示状态 is_anonymous:匿名状态"),
      *         )
      *     ),
@@ -100,17 +106,17 @@ class PointsGoodsEvaluate extends BaseAdminController
      *         response=200,
      *         description="成功切换积分商品评价字段状态",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     )
      * )
      */
-    public function togglePointsGoodsEvaluateField()
+    public function togglePointsGoodsEvaluateField($id)
     {
         $data = array(
-            'id' => input('param.id'),
+            'id' => (int)$id,
             'field' => input('param.field'),
         );
 
@@ -123,14 +129,20 @@ class PointsGoodsEvaluate extends BaseAdminController
     /**
      * 商家回复积分商品评价
      * 
-     * @OA\Put(
-     *     path="/adminapi/points-goods/evaluate/reply",
+     * @OA\Post(
+     *     path="/adminapi/points-goods/evaluates/{id}/reply",
      *     tags={"admin-api/points-goods/PointsGoodsEvaluate"},
      *     summary="商家回复积分商品评价",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="评价ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="id", type="integer", example=1, description="评价ID"),
      *             @OA\Property(property="reply_content", type="string", example="感谢您的评价", description="回复内容"),
      *         )
      *     ),
@@ -138,17 +150,17 @@ class PointsGoodsEvaluate extends BaseAdminController
      *         response=200,
      *         description="成功回复积分商品评价",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
      *     )
      * )
      */
-    public function replyPointsGoodsEvaluate()
+    public function replyPointsGoodsEvaluate($id)
     {
         $data = array(
-            'id' => input('param.id'),
+            'id' => (int)$id,
             'reply_content' => input('param.reply_content'),
         );
 

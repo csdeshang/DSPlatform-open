@@ -50,16 +50,16 @@ class PointsGoodsEvaluateDao extends BaseDao
      * 软删除积分商品评价
      * 
      * @param array $condition 删除条件
-     * @return bool 是否删除成功
+     * @return int 受影响的行数
      */
-    public function softDeletePointsGoodsEvaluate(array $condition): bool
+    public function softDeletePointsGoodsEvaluate(array $condition): int
     {
         $data = [
             'is_deleted' => 1,
             'deleted_at' => time(),
         ];
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -67,12 +67,12 @@ class PointsGoodsEvaluateDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updatePointsGoodsEvaluate(array $condition, array $data): bool
+    public function updatePointsGoodsEvaluate(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -124,9 +124,10 @@ class PointsGoodsEvaluateDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 评价信息
      */
-    public function getPointsGoodsEvaluateInfo(array $condition, string $field = '*'): array
+    public function getPointsGoodsEvaluateInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
             ->with(
@@ -136,7 +137,7 @@ class PointsGoodsEvaluateDao extends BaseDao
                     },
                 ]
             )
-            ->field($field)->findOrEmpty()->toArray();
+            ->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -144,11 +145,12 @@ class PointsGoodsEvaluateDao extends BaseDao
      * 
      * @param int $id 评价ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 评价信息
      */
-    public function getPointsGoodsEvaluateInfoById(int $id, string $field = '*'): array
+    public function getPointsGoodsEvaluateInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

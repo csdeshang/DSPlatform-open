@@ -16,7 +16,7 @@ class AttachmentCate extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/attachment/category/list",
+     *     path="/adminapi/attachment/categories",
      *     summary="获取附件分类列表",
      *     tags={"admin-api/attachment/AttachmentCate"},
      *     @OA\Parameter(
@@ -30,7 +30,7 @@ class AttachmentCate extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array",
      *                 @OA\Items(type="object",
@@ -59,7 +59,7 @@ class AttachmentCate extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/attachment/category",
+     *     path="/adminapi/attachment/categories",
      *     summary="创建附件分类",
      *     tags={"admin-api/attachment/AttachmentCate"},
      *     @OA\RequestBody(
@@ -77,7 +77,7 @@ class AttachmentCate extends BaseAdminController
      *         response=200,
      *         description="分类创建成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -101,7 +101,7 @@ class AttachmentCate extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/attachment/category/{id}",
+     *     path="/adminapi/attachment/categories/{id}",
      *     summary="更新附件分类",
      *     tags={"admin-api/attachment/AttachmentCate"},
      *     @OA\Parameter(
@@ -123,7 +123,7 @@ class AttachmentCate extends BaseAdminController
      *         response=200,
      *         description="分类更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -143,7 +143,7 @@ class AttachmentCate extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/attachment/category/{id}",
+     *     path="/adminapi/attachment/categories/{id}",
      *     summary="删除附件分类",
      *     tags={"admin-api/attachment/AttachmentCate"},
      *     @OA\Parameter(
@@ -157,7 +157,7 @@ class AttachmentCate extends BaseAdminController
      *         response=200,
      *         description="分类删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

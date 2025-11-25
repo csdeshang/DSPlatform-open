@@ -127,8 +127,8 @@
                                             <el-form-item label="封面图">
                                                 <el-image 
                                                     v-if="videoInfo.cover_image" 
-                                                    :src="formatFileUrl(videoInfo.cover_image)" 
-                                                    :preview-src-list="[formatFileUrl(videoInfo.cover_image)]"
+                                                    :src="formatImageUrl(videoInfo.cover_image, ThumbnailPresets.medium)" 
+                                                    :preview-src-list="[formatImageUrl(videoInfo.cover_image, ThumbnailPresets.original)]"
                                                     fit="cover"
                                                     style="width: 200px; height: 120px; border-radius: 8px;"
                                                 />
@@ -299,7 +299,7 @@
 <script lang="ts" setup name="VideoShortDetail">
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import { getVideoShortInfo, updateVideoShort } from '@/pages-admin/main/api/video/short'
 import DetailVideoShortComment from '../components/detail-comment.vue'

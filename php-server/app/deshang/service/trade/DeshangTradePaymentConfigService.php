@@ -7,6 +7,7 @@ use app\deshang\service\BaseDeshangService;
 
 use app\common\enum\trade\TradePaymentConfigEnum;
 use app\deshang\exceptions\CommonException;
+use app\deshang\exceptions\PayException;
 
 
 use app\common\dao\trade\TradePaymentConfigDao;
@@ -240,7 +241,7 @@ class DeshangTradePaymentConfigService extends BaseDeshangService
                 'wechat_public_cert_path' => $wechat_public_cert_path,
             ];
         }else{
-            throw new CommonException('支付方式不支持');
+            throw new PayException('支付方式不支持');
         }
         return json_encode($config_data);
     }

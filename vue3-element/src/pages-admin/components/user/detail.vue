@@ -5,7 +5,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formatFileUrl(userInfo.avatar)" />
+                            <el-avatar :size="80" :src="formatImageUrl(userInfo.avatar, ThumbnailPresets.small, 'avatar')" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -363,7 +363,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import { getUserInfo, updateUser } from '@/pages-admin/main/api/user/user'
 import DetailStoreList from './detail-store-list.vue'

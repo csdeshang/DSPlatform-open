@@ -79,7 +79,8 @@ class MerchantBalanceService extends BaseAdminService
             Db::commit();
         } catch (\Exception $e) {
             Db::rollback();
-            throw new CommonException('获取到的异常'.$e->getMessage());
+            // 直接抛出原异常，保持异常类型（SystemException、PermissionException等）
+            throw $e;
         }
     }
 }

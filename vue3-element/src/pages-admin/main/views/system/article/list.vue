@@ -40,7 +40,7 @@
                     <el-image 
                         v-if="row.image"
                         style="width: 60px; height: 60px"
-                        :src="formatFileUrl(row.image)"
+                        :src="formatImageUrl(row.image, ThumbnailPresets.small)"
                         fit="cover"
                     />
                     <span v-else>无图片</span>
@@ -86,7 +86,7 @@
     </el-card>
 
 
-    <sys-article-edit ref="editSysArticleDialog" @complete="getTableList" />
+    <SysArticleEdit ref="editSysArticleDialog" @complete="getTableList" />
 
 </template>
 <script lang="ts" setup>
@@ -97,7 +97,7 @@ import { usePagination } from '@/hooks/usePagination'
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { InfoFilled } from '@element-plus/icons-vue';
 import SysArticleEdit from './edit.vue'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 
 

@@ -4,6 +4,8 @@ namespace app\adminapi\controller\pointsGoods;
 
 use app\deshang\base\controller\BaseAdminController;
 use app\adminapi\service\pointsGoods\PointsGoodsService;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 /**
  * @OA\Tag(
@@ -43,7 +45,7 @@ class PointsGoods extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -79,7 +81,7 @@ class PointsGoods extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -132,7 +134,7 @@ class PointsGoods extends BaseAdminController
      *         response=200,
      *         description="添加成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="添加成功")
      *         )
      *     )
@@ -200,7 +202,7 @@ class PointsGoods extends BaseAdminController
      *         response=200,
      *         description="修改成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="修改成功")
      *         )
      *     )
@@ -233,6 +235,10 @@ class PointsGoods extends BaseAdminController
         $this->validate($data, 'app\adminapi\controller\pointsGoods\validate\PointsGoodsValidate.update');
 
         $result = (new PointsGoodsService())->updatePointsGoods($data);
+
+        // 删除缓存
+        KvManager::cache()->clear(CacheKeyManager::POINTS_GOODS_TAG);
+
         return ds_json_success('修改成功', $result);
     }
 
@@ -251,7 +257,7 @@ class PointsGoods extends BaseAdminController
      *         response=200,
      *         description="删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="删除成功")
      *         )
      *     )
@@ -263,6 +269,10 @@ class PointsGoods extends BaseAdminController
         $this->validate($data, 'app\adminapi\controller\pointsGoods\validate\PointsGoodsValidate.delete');
 
         $result = (new PointsGoodsService())->deletePointsGoods((int)$id);
+
+        // 删除缓存
+        KvManager::cache()->clear(CacheKeyManager::POINTS_GOODS_TAG);
+
         return ds_json_success('删除成功', $result);
     }
 

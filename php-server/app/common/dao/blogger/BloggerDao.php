@@ -51,12 +51,12 @@ class BloggerDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateBlogger(array $condition, array $data): bool
+    public function updateBlogger(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -119,13 +119,14 @@ class BloggerDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 博主信息
      */
-    public function getBloggerInfo(array $condition, string $field = '*'): array
+    public function getBloggerInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
         ->append(['verification_status_desc', 'verification_type_desc'])
-        ->field($field)->findOrEmpty()->toArray();
+        ->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**
@@ -133,11 +134,12 @@ class BloggerDao extends BaseDao
      * 
      * @param int $id 博主ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 博主信息
      */
-    public function getBloggerInfoById(int $id, string $field = '*'): array
+    public function getBloggerInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**

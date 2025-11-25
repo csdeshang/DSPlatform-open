@@ -21,7 +21,7 @@ class SysStorageProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -62,12 +62,12 @@ class SysStorageProvider extends BaseAdminController
     }
     /**
      * @OA\Get(
-     *     path="/adminapi/system/storage-provider/info",
+     *     path="/adminapi/system/storage-provider/{provider}",
      *     summary="获取存储服务商配置信息",
      *     tags={"admin-api/system/SysStorageProvider"},
      *     @OA\Parameter(
      *         name="provider",
-     *         in="query",
+     *         in="path",
      *         required=true,
      *         description="存储服务商标识",
      *         @OA\Schema(type="string", example="aliyun_oss")
@@ -76,7 +76,7 @@ class SysStorageProvider extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -92,9 +92,9 @@ class SysStorageProvider extends BaseAdminController
      * )
      */
     // 获取存储服务商配置信息
-    public function getStorageProviderInfo()
+    public function getStorageProviderInfo($provider)
     {
-        $storage_provider = input('param.provider');
+        $storage_provider = $provider;
         if (empty($storage_provider)) {
             return ds_json_error('存储服务商参数不能为空');
         }
@@ -135,16 +135,21 @@ class SysStorageProvider extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/system/storage-provider/update",
+     * @OA\Put(
+     *     path="/adminapi/system/storage-provider/{provider}",
      *     summary="更新存储服务商配置信息",
      *     tags={"admin-api/system/SysStorageProvider"},
+     *     @OA\Parameter(
+     *         name="provider",
+     *         in="path",
+     *         required=true,
+     *         description="存储服务商标识",
+     *         @OA\Schema(type="string", example="aliyun_oss")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="存储服务商配置信息",
      *         @OA\JsonContent(
-     *             required={"provider"},
-     *             @OA\Property(property="provider", type="string", example="aliyun_oss", description="存储服务商标识"),
      *             @OA\Property(
      *                 property="config",
      *                 type="object",
@@ -162,7 +167,7 @@ class SysStorageProvider extends BaseAdminController
      *         response=200,
      *         description="配置更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="配置更新成功")
      *         )
      *     ),
@@ -177,9 +182,9 @@ class SysStorageProvider extends BaseAdminController
      * )
      */
     // 更新存储服务商配置信息
-    public function updateStorageProviderConfig()
+    public function updateStorageProviderConfig($provider)
     {
-        $storage_provider = input('param.provider');
+        $storage_provider = $provider;
         if (empty($storage_provider)) {
             return ds_json_error('存储服务商参数不能为空');
         }

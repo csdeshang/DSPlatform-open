@@ -13,7 +13,7 @@ class SysNoticeSmsLog extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/notice-sms-log/pages",
+     *     path="/adminapi/system/notice-sms-logs/pages",
      *     summary="获取短信日志分页列表",
      *     tags={"admin-api/system/SysNoticeSmsLog"},
      *     @OA\Parameter(
@@ -76,7 +76,7 @@ class SysNoticeSmsLog extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -103,7 +103,7 @@ class SysNoticeSmsLog extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/notice-sms-log/{id}",
+     *     path="/adminapi/system/notice-sms-logs/{id}",
      *     summary="获取短信日志详情",
      *     tags={"admin-api/system/SysNoticeSmsLog"},
      *     @OA\Parameter(
@@ -117,7 +117,7 @@ class SysNoticeSmsLog extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -126,7 +126,7 @@ class SysNoticeSmsLog extends BaseAdminController
      * )
      */
     // 获取短信日志详情
-    public function getSysSmsLogInfo($id)
+    public function getSysNoticeSmsLogInfo($id)
     {
         $result = (new SysNoticeSmsLogService())->getSysNoticeSmsLogInfo($id);
         return ds_json_success('操作成功', $result);

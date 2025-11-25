@@ -12,7 +12,7 @@ class SysExpress extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/express/list",
+     *     path="/adminapi/system/expresses/pages",
      *     tags={"admin-api/system/SysExpress"},
      *     summary="获取物流列表",
      *     @OA\Parameter(
@@ -25,7 +25,7 @@ class SysExpress extends BaseAdminController
      *         response=200,
      *         description="成功获取物流列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -44,7 +44,7 @@ class SysExpress extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/express/list",
+     *     path="/adminapi/system/expresses/list",
      *     tags={"admin-api/system/SysExpress"},
      *     summary="获取物流列表（不分页）",
      *     @OA\Parameter(
@@ -57,7 +57,7 @@ class SysExpress extends BaseAdminController
      *         response=200,
      *         description="成功获取物流列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -78,7 +78,7 @@ class SysExpress extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/express/{id}",
+     *     path="/adminapi/system/expresses/{id}",
      *     tags={"admin-api/system/SysExpress"},
      *     summary="获取物流信息",
      *     @OA\Parameter(
@@ -91,7 +91,7 @@ class SysExpress extends BaseAdminController
      *         response=200,
      *         description="成功获取物流信息",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -115,7 +115,7 @@ class SysExpress extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/system/express",
+     *     path="/adminapi/system/expresses",
      *     tags={"admin-api/system/SysExpress"},
      *     summary="创建新物流",
      *     @OA\RequestBody(
@@ -162,7 +162,7 @@ class SysExpress extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/express/{id}",
+     *     path="/adminapi/system/expresses/{id}",
      *     tags={"admin-api/system/SysExpress"},
      *     summary="更新物流信息",
      *     @OA\Parameter(
@@ -187,7 +187,7 @@ class SysExpress extends BaseAdminController
      *         response=200,
      *         description="成功更新物流信息",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -216,7 +216,7 @@ class SysExpress extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/system/express/{id}",
+     *     path="/adminapi/system/expresses/{id}",
      *     tags={"admin-api/system/SysExpress"},
      *     summary="删除物流",
      *     @OA\Parameter(
@@ -229,7 +229,7 @@ class SysExpress extends BaseAdminController
      *         response=200,
      *         description="成功删除物流",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

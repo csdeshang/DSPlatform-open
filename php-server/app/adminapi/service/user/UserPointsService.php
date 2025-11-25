@@ -46,8 +46,24 @@ class UserPointsService extends BaseAdminService
         if(isset($data['change_mode']) && $data['change_mode'] !== ''){
             $condition[] = ['change_mode', '=', $data['change_mode']];
         }
+        
+        // 关联ID搜索
+        if(isset($data['related_id']) && $data['related_id'] !== ''){
+            $condition[] = ['related_id', '=', (int)$data['related_id']];
+        }
 
         $result = (new UserPointsLogDao())->getWithRelPointsLogPages($condition);
+        return $result;
+    }
+
+    /**
+     * 获取会员积分日志详情
+     * @param int $id 日志ID
+     * @return array
+     */
+    public function getUserPointsLogInfo($id)
+    {
+        $result = (new UserPointsLogDao())->getPointsLogInfoById($id);
         return $result;
     }
 
@@ -73,7 +89,8 @@ class UserPointsService extends BaseAdminService
             Db::commit();
         } catch (\Exception $e) {
             Db::rollback();
-            throw new CommonException('获取到的异常'.$e->getMessage());
+            // 直接抛出原异常，保持异常类型（SystemException、PermissionException等）
+            throw $e;
         }
     }
 }

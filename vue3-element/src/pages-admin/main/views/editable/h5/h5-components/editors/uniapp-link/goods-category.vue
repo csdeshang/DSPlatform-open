@@ -24,7 +24,7 @@
         <el-table-column label="分类名称" prop="name" min-width="180" show-overflow-tooltip />
         <el-table-column label="图标" width="100">
           <template #default="{ row }">
-            <el-image v-if="row.image" style="width: 60px; height: 60px" :src="formatFileUrl(row.image)"
+            <el-image v-if="row.image" style="width: 60px; height: 60px" :src="formatImageUrl(row.image, ThumbnailPresets.small)"
               fit="cover" />
             <span v-else>无图片</span>
           </template>
@@ -47,7 +47,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { getTblStoreCategoryTree } from '@/pages-admin/main/api/tbl-store/tblStoreCategory'
 import { usePagination } from '@/hooks/usePagination'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 // 定义组件名称
 defineOptions({

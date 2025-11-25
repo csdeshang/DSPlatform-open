@@ -34,6 +34,9 @@ class DistributorApplyValidate extends BaseValidate
 
     public function checkApplyStatus($value, $rule, $data)
     {
+        if (empty($value)) {
+            return true; // 空值允许
+        }
         return array_key_exists($value, DistributorApplyEnum::getDistributorApplyStatusDict());
     }
 } 

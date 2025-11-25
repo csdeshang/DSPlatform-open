@@ -17,7 +17,7 @@ class Merchant extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/merchant/pages",
+     *     path="/adminapi/merchant/merchants/pages",
      *     summary="获取商户分页列表",
      *     tags={"admin-api/merchant/Merchant"},
      *     @OA\Parameter(
@@ -101,7 +101,7 @@ class Merchant extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -130,7 +130,7 @@ class Merchant extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/merchant/{id}",
+     *     path="/adminapi/merchant/merchants/{id}",
      *     summary="获取商户详细信息",
      *     tags={"admin-api/merchant/Merchant"},
      *     @OA\Parameter(
@@ -144,7 +144,7 @@ class Merchant extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -164,7 +164,7 @@ class Merchant extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/merchant",
+     *     path="/adminapi/merchant/merchants",
      *     summary="添加商户",
      *     tags={"admin-api/merchant/Merchant"},
      *     @OA\RequestBody(
@@ -184,7 +184,7 @@ class Merchant extends BaseAdminController
      *         response=200,
      *         description="添加成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="添加成功")
      *         )
      *     )
@@ -211,7 +211,7 @@ class Merchant extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/merchant/{id}",
+     *     path="/adminapi/merchant/merchants/{id}",
      *     summary="修改商户信息",
      *     tags={"admin-api/merchant/Merchant"},
      *     @OA\Parameter(
@@ -237,7 +237,7 @@ class Merchant extends BaseAdminController
      *         response=200,
      *         description="修改成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="修改成功")
      *         )
      *     )
@@ -266,15 +266,16 @@ class Merchant extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/merchant/audit/{id}",
+     * @OA\Patch(
+     *     path="/adminapi/merchant/merchants/{id}/audit",
      *     summary="审核商户申请",
      *     tags={"admin-api/merchant/Merchant"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
-     *         @OA\Schema(type="integer")
+     *         description="商户ID",
+     *         @OA\Schema(type="integer", example=1)
      *     ),
      *     @OA\RequestBody(
      *         required=true,
@@ -289,7 +290,7 @@ class Merchant extends BaseAdminController
      *         response=200,
      *         description="审核成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="审核成功")
      *         )
      *     )

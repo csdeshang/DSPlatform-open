@@ -9,7 +9,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formData.avatar" />
+                            <el-avatar :size="80" :src="formatImageUrl(formData.avatar, ThumbnailPresets.small, 'avatar')" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -329,6 +329,7 @@
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { getMerchantInfo, updateMerchant } from '@/pages-admin/main/api/merchant/merchant'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import DetailStoreList from './detail-store-list.vue'
 import TblStoreAdd from '@/pages-admin/components/tbl-store/store/add.vue'
 import DetailBalanceLog from './detail-balance-log.vue'

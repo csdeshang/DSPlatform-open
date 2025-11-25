@@ -7,7 +7,7 @@ import request, { API_BASE_URLS } from '@/utils/request';
 
 // 创建快卖店铺
 export function createKmsStore(params: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/kms/store/createStore`, params )
+  return request.post(`${API_BASE_URLS.ADMIN}/kms/stores`, params )
 }
 
 

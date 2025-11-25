@@ -10,10 +10,10 @@ class RiderFeeRuleValidate extends BaseValidate
         'id' => 'require|integer|gt:0',
         'rule_name' => 'require|string|max:255',
         'base_fee' => 'require|float|egt:0',
-        'distance_fee_type' => 'require|integer|in:1,2',
-        'weight_fee_type' => 'require|integer|in:0,1,2',
-        'time_period_fee_type' => 'require|integer|in:0,1',
-        'weather_fee_type' => 'require|integer|in:0,1',
+        'distance_fee_type' => 'require|checkDistanceFeeType',
+        'weight_fee_type' => 'require|checkWeightFeeType',
+        'time_period_fee_type' => 'require|checkTimePeriodFeeType',
+        'weather_fee_type' => 'require|checkWeatherFeeType',
         'distance_rules' => 'require|checkDistanceRules',
         'weight_rules' => 'checkWeightRules',
         'time_period_rules' => 'checkTimePeriodRules',
@@ -34,17 +34,13 @@ class RiderFeeRuleValidate extends BaseValidate
         'base_fee.float' => '基础配送费必须为数字',
         'base_fee.egt' => '基础配送费必须大于等于0',
         'distance_fee_type.require' => '距离费用计算类型不能为空',
-        'distance_fee_type.integer' => '距离费用计算类型必须为整数',
-        'distance_fee_type.in' => '距离费用计算类型不正确',
+        'distance_fee_type.checkDistanceFeeType' => '距离费用计算类型值无效（1:阶梯式 2:连续式）',
         'weight_fee_type.require' => '重量费用计算类型不能为空',
-        'weight_fee_type.integer' => '重量费用计算类型必须为整数',
-        'weight_fee_type.in' => '重量费用计算类型不正确',
+        'weight_fee_type.checkWeightFeeType' => '重量费用计算类型值无效（0:不计算 1:阶梯式 2:连续式）',
         'time_period_fee_type.require' => '时段费用计算类型不能为空',
-        'time_period_fee_type.integer' => '时段费用计算类型必须为整数',
-        'time_period_fee_type.in' => '时段费用计算类型不正确',
+        'time_period_fee_type.checkTimePeriodFeeType' => '时段费用计算类型值无效（0:不计算 1:按时段加价）',
         'weather_fee_type.require' => '天气费用计算类型不能为空',
-        'weather_fee_type.integer' => '天气费用计算类型必须为整数',
-        'weather_fee_type.in' => '天气费用计算类型不正确',
+        'weather_fee_type.checkWeatherFeeType' => '天气费用计算类型值无效（0:不计算 1:恶劣天气加价）',
         'distance_rules.require' => '距离规则不能为空',
         'weight_rules.require' => '重量规则不能为空',
         'time_period_rules.require' => '时段规则不能为空',
@@ -288,5 +284,29 @@ class RiderFeeRuleValidate extends BaseValidate
         }
         
         return true;
+    }
+
+    // 验证距离费用计算类型
+    public function checkDistanceFeeType($value, $rule, $data)
+    {
+        return array_key_exists($value, RiderFeeRuleEnum::getDistanceFeeTypeDict());
+    }
+
+    // 验证重量费用计算类型
+    public function checkWeightFeeType($value, $rule, $data)
+    {
+        return array_key_exists($value, RiderFeeRuleEnum::getWeightFeeTypeDict());
+    }
+
+    // 验证时段费用计算类型
+    public function checkTimePeriodFeeType($value, $rule, $data)
+    {
+        return array_key_exists($value, RiderFeeRuleEnum::getTimePeriodFeeTypeDict());
+    }
+
+    // 验证天气费用计算类型
+    public function checkWeatherFeeType($value, $rule, $data)
+    {
+        return array_key_exists($value, RiderFeeRuleEnum::getWeatherFeeTypeDict());
     }
 }

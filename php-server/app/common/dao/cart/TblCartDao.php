@@ -51,12 +51,12 @@ class TblCartDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateCart(array $condition, array $data): bool
+    public function updateCart(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -85,7 +85,7 @@ class TblCartDao extends BaseDao
         return $this->model->where($condition)
             ->with([
                 'goods' => function ($query) {
-                    $query->field('id,goods_name,goods_minprice,goods_status,store_id,brand_id,store_goods_cid,cover_image,stock_num,click_num,sales_num,collect_num,evaluate_num,goods_sort,avg_goods_score,is_flashsale_goods,flashsale_goods_status,is_wholesale_goods,is_userdiscount_goods,is_distributor_goods,distributor_goods_type,sys_status,mall_express_type,mall_express_tpl_id,mall_express_fee');
+                    $query->field('id,platform,goods_name,goods_minprice,goods_status,store_id,brand_id,store_goods_cid,cover_image,stock_num,click_num,sales_num,collect_num,evaluate_num,goods_sort,avg_goods_score,is_flashsale_goods,flashsale_goods_status,is_wholesale_goods,is_userdiscount_goods,is_distributor_goods,distributor_goods_type,sys_status,mall_express_type,mall_express_tpl_id,mall_express_fee,is_deleted');
                 },
                 'goodsSku' => function ($query) {
                     
@@ -106,11 +106,12 @@ class TblCartDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 购物车信息
      */
-    public function getCartInfo(array $condition, string $field = '*'): array
+    public function getCartInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -118,11 +119,12 @@ class TblCartDao extends BaseDao
      * 
      * @param int $id 购物车ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 购物车信息
      */
-    public function getCartInfoById(int $id, string $field = '*'): array
+    public function getCartInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

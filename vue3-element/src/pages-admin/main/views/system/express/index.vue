@@ -25,7 +25,7 @@
                 <el-table-column label="快递鸟公司编码" prop="kdniao_code" width="200" />
                 <el-table-column label="物流公司logo" prop="logo" width="200">
                     <template #default="{ row }">
-                        <el-image :src="formatFileUrl(row.logo)" width="50px" height="50px" fit="cover" />
+                        <el-image :src="formatImageUrl(row.logo, ThumbnailPresets.small)" width="50px" height="50px" fit="cover" />
                     </template>
                 </el-table-column>
 
@@ -65,7 +65,7 @@
 
 import { reactive, ref } from 'vue';
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 
 import { getSysExpressPages, deleteSysExpress } from '@/pages-admin/main/api/system/sysExpress'

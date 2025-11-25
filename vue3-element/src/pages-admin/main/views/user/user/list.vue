@@ -3,8 +3,8 @@
 
     <el-card shadow="never" class="mb-[10px]">
         <el-form :model="searchParams" inline>
-            <el-form-item label="用户名">
-                <el-input v-model="searchParams.username" placeholder="用户名" clearable />
+            <el-form-item label="用户名/ID">
+                <el-input v-model="searchParams.username" placeholder="用户名/ID" clearable />
             </el-form-item>
             <el-form-item label="手机号">
                 <el-input v-model="searchParams.mobile" placeholder="请输入手机号" clearable />

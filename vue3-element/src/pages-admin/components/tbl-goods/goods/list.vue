@@ -29,16 +29,16 @@
                 <el-tab-pane name="deleted" label="已删除"></el-tab-pane>
             </el-tabs>
             <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
-                <el-table-column label="ID" prop="id" width="60" />
+                <el-table-column label="ID" prop="id" width="120" />
                 <el-table-column label="商品" prop="goods_name">
                     <template #default="{ row }">
                         <div class="flex flex-row">
-                            <div>
-                                <el-image :src="formatFileUrl(row.cover_image)" style="width: 50px; height: 50px;"
+                            <div class="mr-[10px]">
+                                <el-image :src="formatImageUrl(row.cover_image, ThumbnailPresets.small, 'goods')" style="width: 50px; height: 50px;"
                                     fit="cover" />
                             </div>
                             <div>
-                                <div>{{ row.goods_name }}</div>
+                                <div class="text-[14px]">{{ row.goods_name }}</div>
                             </div>
                         </div>
                     </template>
@@ -80,7 +80,7 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 const router = useRouter()
 
 import { usePagination } from '@/hooks/usePagination'

@@ -62,12 +62,12 @@ class SysNoticeLogDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateSysNoticeLog(array $condition, array $data): bool
+    public function updateSysNoticeLog(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -105,13 +105,14 @@ class SysNoticeLogDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 日志信息
      */
-    public function getSysNoticeLogInfo(array $condition, string $field = '*'): array
+    public function getSysNoticeLogInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
         ->append(['notice_channel_desc','send_status_desc'])
-        ->field($field)->findOrEmpty()->toArray();
+        ->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**

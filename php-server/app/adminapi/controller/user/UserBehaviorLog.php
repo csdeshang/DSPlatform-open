@@ -12,7 +12,7 @@ class UserBehaviorLog extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/user/behavior-log/pages",
+     *     path="/adminapi/user/behavior-logs/pages",
      *     summary="获取用户行为日志分页列表",
      *     tags={"admin-api/user/UserBehaviorLog"},
      *     @OA\Parameter(
@@ -54,7 +54,7 @@ class UserBehaviorLog extends BaseAdminController
      *         response=200,
      *         description="成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -83,7 +83,7 @@ class UserBehaviorLog extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/behavior-log/{id}",
+     *     path="/adminapi/user/behavior-logs/{id}",
      *     summary="获取用户行为日志详情",
      *     tags={"admin-api/user/UserBehaviorLog"},
      *     @OA\Parameter(
@@ -97,7 +97,7 @@ class UserBehaviorLog extends BaseAdminController
      *         response=200,
      *         description="成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -111,5 +111,37 @@ class UserBehaviorLog extends BaseAdminController
         
         $result = (new UserBehaviorLogService())->getUserBehaviorLogInfo($id);
         return ds_json_success('操作成功', $result);
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/adminapi/user/behavior-logs/{id}",
+     *     summary="删除用户行为日志",
+     *     tags={"admin-api/user/UserBehaviorLog"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="日志ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="删除成功"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
+     */
+    public function deleteUserBehaviorLog($id)
+    {   
+        // 验证参数
+        $this->validate(['id' => $id], 'app\adminapi\controller\user\validate\UserBehaviorLogValidate.delete');
+        
+        (new UserBehaviorLogService())->deleteUserBehaviorLog($id);
+        return ds_json_success('删除成功');
     }
 }

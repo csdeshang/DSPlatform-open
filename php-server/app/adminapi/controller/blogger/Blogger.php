@@ -13,7 +13,7 @@ class Blogger extends BaseAdminController
     /**
      * 获取博主分页列表
      * @OA\Get(
-     *     path="/adminapi/blogger/blogger/pages",
+     *     path="/adminapi/blogger/bloggers/pages",
      *     tags={"admin-api/blogger/Blogger"},
      *     summary="获取博主分页列表",
      *     description="获取博主分页数据",
@@ -77,7 +77,7 @@ class Blogger extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -104,7 +104,7 @@ class Blogger extends BaseAdminController
     /**
      * 获取博主详情
      * @OA\Get(
-     *     path="/adminapi/blogger/blogger/{id}",
+     *     path="/adminapi/blogger/bloggers/{id}",
      *     tags={"admin-api/blogger/Blogger"},
      *     summary="获取博主详情",
      *     description="获取指定博主的详细信息",
@@ -119,7 +119,7 @@ class Blogger extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -135,7 +135,7 @@ class Blogger extends BaseAdminController
     /**
      * 更新博主信息
      * @OA\Put(
-     *     path="/adminapi/blogger/blogger/{id}",
+     *     path="/adminapi/blogger/bloggers/{id}",
      *     tags={"admin-api/blogger/Blogger"},
      *     summary="更新博主信息",
      *     description="更新指定博主的信息",
@@ -164,7 +164,7 @@ class Blogger extends BaseAdminController
      *         response=200,
      *         description="更新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="更新成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -192,17 +192,23 @@ class Blogger extends BaseAdminController
 
     /**
      * 切换博主字段状态
-     * @OA\Post(
-     *     path="/adminapi/blogger/blogger/toggle-field",
+     * @OA\Patch(
+     *     path="/adminapi/blogger/bloggers/{id}/toggle-field",
      *     tags={"admin-api/blogger/Blogger"},
      *     summary="切换博主字段状态",
      *     description="切换博主的布尔字段状态",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="博主ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="切换数据",
      *         @OA\JsonContent(
-     *             required={"id", "field"},
-     *             @OA\Property(property="id", type="integer", example=1, description="博主ID"),
+     *             required={"field"},
      *             @OA\Property(property="field", type="string", example="is_enabled", description="字段名")
      *         )
      *     ),
@@ -210,16 +216,16 @@ class Blogger extends BaseAdminController
      *         response=200,
      *         description="切换成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="切换成功")
      *         )
      *     )
      * )
      */
-    public function toggleBloggerField()
+    public function toggleBloggerField($id)
     {
         $data = [
-            'id' => input('param.id'),
+            'id' => $id,
             'field' => input('param.field')
         ];
 

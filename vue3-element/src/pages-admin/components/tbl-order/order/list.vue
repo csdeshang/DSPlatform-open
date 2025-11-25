@@ -19,6 +19,9 @@
             <el-form-item label="订单号">
                 <el-input v-model="searchParams.order_sn" placeholder="请输入订单号" clearable />
             </el-form-item>
+            <el-form-item label="订单ID">
+                <el-input v-model="searchParams.order_id" placeholder="请输入订单ID" clearable />
+            </el-form-item>
             <el-form-item label="支付单号">
                 <el-input v-model="searchParams.out_trade_no" placeholder="请输入支付单号" clearable />
             </el-form-item>
@@ -74,8 +77,8 @@
     <el-card shadow="never">
 
         <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
-            <el-table-column label="ID" prop="id" width="60" />
-            <el-table-column label="订单号" prop="order_sn" width="200" />
+            <el-table-column label="ID" prop="id" width="100" />
+            <el-table-column label="订单号" prop="order_sn" width="250" />
             <el-table-column label="购买用户" prop="user_id" width="100">
                 <template #default="{ row }">
                     <div class="text-blue-500 cursor-pointer" @click="handleUserDtail(row.user.id)">{{
@@ -90,15 +93,17 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="商品" prop="goods_name" width="450">
+            <el-table-column label="商品" prop="goods_name" width="500">
                 <template #default="{ row }">
                     <div class="flex flex-col">
                         <div v-for="item in row.orderGoodsList" :key="item.id" class="flex flex-row">
-                            <div>
-                                <el-image :src="formatFileUrl(item.goods_image)" style="width: 50px; height: 50px;" fit="cover" />
+                            <div class="mr-[10px]">
+                                <el-image :src="formatImageUrl(item.goods_image, ThumbnailPresets.medium, 'goods')" style="width: 60px; height: 60px;" fit="cover" />
                             </div>
-                            <div>{{ item.goods_name }} ({{ item.sku_name }})</div>
-                            <div>{{ item.pay_price }} X {{ item.goods_num }}</div>
+                            <div>
+                                <div class="text-[14px]">{{ item.goods_name }}<el-tag type="success" v-if="item.sku_name" class="ml-[5px]">{{ item.sku_name }}</el-tag></div>
+                                <div class="text-[12px]">{{ item.pay_price }} X {{ item.goods_num }}</div>
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -137,7 +142,7 @@
 
 import { reactive, ref } from 'vue';
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -164,6 +169,7 @@ const searchParams = reactive({
     store_name: '',
     goods_name: '',
     order_sn: '',
+    order_id: '',
     out_trade_no: '',
     trade_no: '',
     delivery_method: '',

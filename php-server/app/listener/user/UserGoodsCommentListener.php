@@ -1,202 +1,203 @@
 <?php
 
-
 namespace app\listener\user;
 
-use think\facade\Db;
-use app\deshang\exceptions\CommonException;
-
-
-use app\common\enum\user\UserPointsEnum;
 use app\deshang\service\user\DeshangUserPointsService;
-use app\common\enum\user\UserGrowthEnum;
 use app\deshang\service\user\DeshangUserGrowthService;
+use app\deshang\service\store\DeshangTblStoreScoreService;
+use app\deshang\service\goods\DeshangTblGoodsScoreService;
+use app\deshang\queue\core\QueueProducer;
+use app\common\enum\system\SysTaskQueueEnum;
 
-use app\common\dao\store\TblStoreDao;
-use app\common\dao\goods\TblGoodsCommentDao;
-use app\common\dao\goods\TblGoodsDao;
-
-
-
+/**
+ * 用户商品评论监听器
+ * 
+ * 用户商品评论时触发，处理评论奖励（积分、成长值）和评分更新
+ */
 class UserGoodsCommentListener
 {
+    /**
+     * 事件处理方法
+     * 
+     * @param array $params 事件参数，包含：
+     *   - goods_ids: array 商品ID数组
+     *   - store_id: int 店铺ID
+     *   - user_id: int 用户ID
+     *   - order_id: int 订单ID
+     * @return void
+     */
     public function handle(array $params)
     {
+        $goods_ids = $params['goods_ids'];
+        $store_id = $params['store_id'];
+        $user_id = $params['user_id'];
+        $order_id = $params['order_id'];
+
         // 评论获取积分
-        $this->goodsCommentGetPoints($params);
+        $this->goodsCommentGetPoints($user_id, $order_id);
 
         // 评论获取成长值
-        $this->goodsCommentGetGrowth($params);
+        $this->goodsCommentGetGrowth($user_id, $order_id);
 
         // 更新店铺评分
-        $this->updateStoreScore($params);
-        
+        $this->updateStoreScore($store_id, $order_id);
+
         // 更新商品评分
-        $this->updateGoodsScore($params);
+        $this->updateGoodsScore($goods_ids, $order_id);
     }
 
-
-    // 评论获取积分
-    public function goodsCommentGetPoints($params)
+    /**
+     * 评论获取积分
+     * 
+     * 说明：
+     * - 根据系统配置决定是否给予积分奖励
+     * - 使用消息队列异步处理，提高响应速度
+     * - biz_key 使用订单ID，保证唯一性
+     * 
+     * @param int $user_id 用户ID
+     * @param int $order_id 订单ID
+     * @return void
+     */
+    public function goodsCommentGetPoints($user_id, $order_id)
     {
         // 评论获取积分
         $points_review_enabled = sysConfig('points:points_review_enabled');
         if ($points_review_enabled == 1) {
-            // 积分
-            $points_review_amount = sysConfig('points:points_review_amount');
+            // 评论获取积分（已改为消息队列异步处理，保留代码方便后期切换）
+            // (new DeshangUserPointsService())->addPointsForUserGoodsComment($user_id);
 
-            if ($points_review_amount > 0) {
-                $add_data = array(
-                    'user_id' => $params['user_id'],
-                    'related_id' => 0,
-                    'change_type' => UserPointsEnum::TYPE_GOODS_COMMENT,
-                    'change_mode' => UserPointsEnum::MODE_INCREASE,
-                    'change_num' => $points_review_amount,
-                    'change_desc' => '评论获取积分',
-                );
-
-                Db::startTrans();
-                try {
-                    (new DeshangUserPointsService())->modifyUserPoints($add_data);
-                    Db::commit();
-                } catch (\Exception $e) {
-                    Db::rollback();
-                    throw new CommonException('获取到的异常' . $e->getMessage());
-                }
-            }
+            // 使用消息队列异步处理积分增加
+            (new QueueProducer())->enqueue([
+                [
+                    'type' => 'UserGoodsCommentPointsQueue',
+                    'data' => [
+                        'user_id' => $user_id,
+                    ],
+                    'options' => [
+                        'biz_key' => 'UserGoodsCommentPointsQueue_' . $order_id,
+                        'queue_group' => SysTaskQueueEnum::GROUP_USER,
+                        'priority' => 1,
+                    ],
+                ],
+            ]);
         }
     }
 
-
-    // 登录获取成长值
-    public function goodsCommentGetGrowth($params)
+    /**
+     * 评论获取成长值
+     * 
+     * 说明：
+     * - 根据系统配置决定是否给予成长值奖励
+     * - 使用消息队列异步处理，提高响应速度
+     * - biz_key 使用订单ID，保证唯一性
+     * 
+     * @param int $user_id 用户ID
+     * @param int $order_id 订单ID
+     * @return void
+     */
+    public function goodsCommentGetGrowth($user_id, $order_id)
     {
         // 评论获取成长值
         $growth_review_enabled = sysConfig('growth:growth_review_enabled');
         if ($growth_review_enabled == 1) {
-            // 成长值
-            $growth_review_amount = sysConfig('growth:growth_review_amount');
+            // 评论获取成长值（已改为消息队列异步处理，保留代码方便后期切换）
+            // (new DeshangUserGrowthService())->addGrowthForUserGoodsComment($user_id);
 
-            if ($growth_review_amount > 0) {
-                $add_data = array(
-                    'user_id' => $params['user_id'],
-                    'related_id' => 0,
-                    'change_type' => UserGrowthEnum::TYPE_GOODS_COMMENT,
-                    'change_mode' => UserGrowthEnum::MODE_INCREASE,
-                    'change_num' => $growth_review_amount,
-                    'change_desc' => '评论获取成长值',
-                );
-                Db::startTrans();
-                try {
-                    (new DeshangUserGrowthService())->modifyUserGrowth($add_data);
-                    Db::commit();
-                } catch (\Exception $e) {
-                    Db::rollback();
-                    throw new CommonException('获取到的异常' . $e->getMessage());
-                }
-            }
+            // 使用消息队列异步处理成长值增加
+            (new QueueProducer())->enqueue([
+                [
+                    'type' => 'UserGoodsCommentGrowthQueue',
+                    'data' => [
+                        'user_id' => $user_id,
+                    ],
+                    'options' => [
+                        'biz_key' => 'UserGoodsCommentGrowthQueue_' . $order_id,
+                        'queue_group' => SysTaskQueueEnum::GROUP_USER,
+                        'priority' => 1,
+                    ],
+                ],
+            ]);
         }
     }
 
 
-    // 更新店铺评分
-    public function updateStoreScore($params)
+    /**
+     * 更新店铺评分
+     * 
+     * 说明：
+     * - 根据评论重新计算店铺的平均评分
+     * - 使用消息队列异步处理，提高响应速度
+     * - biz_key 使用订单ID，确保每次评论都能触发评分更新
+     * 
+     * @param int $store_id 店铺ID
+     * @param int $order_id 订单ID
+     * @return bool
+     */
+    public function updateStoreScore($store_id, $order_id)
     {
-        $store_id = $params['store_id'];
-
-        // 获取店铺信息
-        $store_info = (new TblStoreDao())->getStoreInfo([['id', '=', $store_id]]);
-        if (empty($store_info)) {
-            throw new CommonException('评价更新店铺评分-店铺不存在');
+        if (empty($store_id)) {
+            return false;
         }
 
-        // 计算1年内的评分（从当前时间往前推1年）
-        $one_year_ago = time() - (365 * 24 * 3600);
+        // 更新店铺评分（已改为消息队列异步处理，保留代码方便后期切换）
+        // (new DeshangTblStoreScoreService())->updateStoreScore($store_id);
 
-        // 使用ThinkPHP查询构建器直接计算各项评分的平均值
-        $result = Db::name('tbl_goods_comment')
-            ->where('store_id', $store_id)
-            ->where('create_at', '>=', $one_year_ago)
-            ->where('is_show', 1)
-            ->where('is_deleted', 0)
-            ->field([
-                'AVG(describe_score) as avg_describe_score',
-                'AVG(logistics_score) as avg_logistics_score',
-                'AVG(service_score) as avg_service_score',
-                'COUNT(*) as total_count'
-            ])
-            ->find();
+        // 使用消息队列异步处理店铺评分更新
+        // 注意：使用 order_id 作为 biz_key 保证唯一性，确保每次评论都能触发评分更新
+        (new QueueProducer())->enqueue([
+            [
+                'type' => 'StoreScoreUpdateQueue',
+                'data' => [
+                    'store_id' => $store_id,
+                ],
+                'options' => [
+                    'biz_key' => 'StoreScoreUpdateQueue_' . $order_id,
+                    'queue_group' => SysTaskQueueEnum::GROUP_DEFAULT,
+                    'priority' => 0,
+                ],
+            ],
+        ]);
 
-        if (empty($result) || $result['total_count'] == 0) {
-            // 如果没有评论，保持默认评分
-            return;
-        }
-
-        // 计算平均分（保留2位小数）
-        $avg_describe_score = $result['avg_describe_score'] ? round($result['avg_describe_score'], 2) : 0.00;
-        $avg_logistics_score = $result['avg_logistics_score'] ? round($result['avg_logistics_score'], 2) : 0.00;
-        $avg_service_score = $result['avg_service_score'] ? round($result['avg_service_score'], 2) : 0.00;
-
-        // 更新店铺评分
-        $update_data = [
-            'avg_describe_score' => $avg_describe_score,
-            'avg_logistics_score' => $avg_logistics_score,
-            'avg_service_score' => $avg_service_score,
-        ];
-
-
-        (new TblStoreDao())->updateStore([['id', '=', $store_id]], $update_data);
+        return true;
     }
 
-
-
-
-    // 更新商品评分
-    public function updateGoodsScore($params)
+    /**
+     * 更新商品评分
+     * 
+     * 说明：
+     * - 根据评论重新计算商品的平均评分
+     * - 使用消息队列异步处理，提高响应速度
+     * - biz_key 使用订单ID，确保每次评论都能触发评分更新
+     * 
+     * @param array $goods_ids 商品ID数组
+     * @param int $order_id 订单ID
+     * @return bool
+     */
+    public function updateGoodsScore($goods_ids, $order_id)
     {
-        $goods_ids = $params['goods_ids'] ?? [];
-        
         if (empty($goods_ids)) {
-            return;
+            return false;
         }
-        
-        // 计算1年内的评分（从当前时间往前推1年）
-        $one_year_ago = time() - (365 * 24 * 3600);
-        
-        // 遍历每个商品，计算平均评分
-        foreach ($goods_ids as $goods_id) {
-            // 使用ThinkPHP查询构建器直接计算商品评分的平均值
-            $result = Db::name('tbl_goods_comment')
-                ->where('goods_id', $goods_id)
-                ->where('create_at', '>=', $one_year_ago)
-                ->where('is_show', 1)
-                ->where('is_deleted', 0)
-                ->field([
-                    'AVG(goods_score) as avg_goods_score',
-                    'COUNT(*) as total_count'
-                ])
-                ->find();
-            
-            if (empty($result) || $result['total_count'] == 0) {
-                // 如果没有评论，保持默认评分
-                continue;
-            }
-            
-            // 计算平均分（保留2位小数）
-            $avg_goods_score = $result['avg_goods_score'] ? round($result['avg_goods_score'], 2) : 0.00;
-            
-            // 更新商品评分
-            $update_data = [
-                'avg_goods_score' => $avg_goods_score,
-            ];
-            
-            (new TblGoodsDao())->updateGoods([['id', '=', $goods_id]], $update_data);
-        }
+
+        // 更新商品评分（已改为消息队列异步处理，保留代码方便后期切换）
+        // (new DeshangTblGoodsScoreService())->updateGoodsScore($goods_ids);
+
+        // 使用消息队列异步处理商品评分更新
+        // 注意：使用 order_id 作为 biz_key 保证唯一性，确保每次评论都能触发评分更新
+        (new QueueProducer())->enqueue([
+            [
+                'type' => 'GoodsScoreUpdateQueue',
+                'data' => [
+                    'goods_ids' => $goods_ids,
+                ],
+                'options' => [
+                    'biz_key' => 'GoodsScoreUpdateQueue_' . $order_id,
+                    'queue_group' => SysTaskQueueEnum::GROUP_DEFAULT,
+                    'priority' => 0,
+                ],
+            ],
+        ]);
+
+        return true;
     }
-
-
-
-
-
-
 }

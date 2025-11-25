@@ -13,7 +13,7 @@ class Technician extends BaseAdminController
     /**
      * 获取师傅分页列表
      * @OA\Get(
-     *     path="/adminapi/technician/technician/pages",
+     *     path="/adminapi/technician/technicians/pages",
      *     tags={"admin-api/technician/Technician"},
      *     summary="获取师傅分页列表",
      *     description="获取师傅分页数据",
@@ -63,7 +63,7 @@ class Technician extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -91,7 +91,7 @@ class Technician extends BaseAdminController
     /**
      * 更新师傅信息
      * @OA\Put(
-     *     path="/adminapi/technician/technician/{id}",
+     *     path="/adminapi/technician/technicians/{id}",
      *     tags={"admin-api/technician/Technician"},
      *     summary="更新师傅信息",
      *     description="更新指定师傅的详细信息",
@@ -123,7 +123,7 @@ class Technician extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -148,7 +148,7 @@ class Technician extends BaseAdminController
         );
         
         // 验证参数
-        $this->validate($data, 'app\adminapi\controller\technician\validate\TechnicianValidate.update');
+        $this->validate(array_merge($data, ['id' => $id]), 'app\adminapi\controller\technician\validate\TechnicianValidate.update');
         
         $result = (new TechnicianService())->updateTechnician($id, $data);
         return ds_json_success('操作成功', $result);
@@ -157,7 +157,7 @@ class Technician extends BaseAdminController
     /**
      * 获取师傅详情
      * @OA\Get(
-     *     path="/adminapi/technician/technician/{id}",
+     *     path="/adminapi/technician/technicians/{id}",
      *     tags={"admin-api/technician/Technician"},
      *     summary="获取师傅详情",
      *     description="获取指定师傅的详细信息",
@@ -172,7 +172,7 @@ class Technician extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -196,7 +196,7 @@ class Technician extends BaseAdminController
     /**
      * 修改师傅绑定店铺 (RESTful)
      * @OA\Put(
-     *     path="/adminapi/technician/technician/{id}/bind-store",
+     *     path="/adminapi/technician/technicians/{id}/bind-store",
      *     tags={"admin-api/technician/Technician"},
      *     summary="修改师傅绑定店铺",
      *     description="管理员更换师傅绑定的店铺",
@@ -218,7 +218,7 @@ class Technician extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

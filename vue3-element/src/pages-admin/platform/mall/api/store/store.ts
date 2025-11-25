@@ -7,7 +7,7 @@ import request, { API_BASE_URLS } from '@/utils/request';
 
 // 创建Mall商城店铺
 export function createMallStore(params: Record<string, any>) {
-  return request.post(`${API_BASE_URLS.ADMIN}/mall/store/createStore`, params )
+  return request.post(`${API_BASE_URLS.ADMIN}/mall/stores`, params )
 }
 
 

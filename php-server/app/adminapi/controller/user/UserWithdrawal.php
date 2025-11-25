@@ -14,7 +14,7 @@ class UserWithdrawal extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/withdrawal-log/pages",
+     *     path="/adminapi/user/withdrawal-logs/pages",
      *     summary="获取用户提现日志分页列表",
      *     tags={"admin-api/user/UserWithdrawal"},
      *     @OA\Parameter(
@@ -56,7 +56,7 @@ class UserWithdrawal extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -79,7 +79,7 @@ class UserWithdrawal extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/withdrawal-log/{id}",
+     *     path="/adminapi/user/withdrawal-logs/{id}",
      *     summary="获取用户提现日志详情",
      *     tags={"admin-api/user/UserWithdrawal"},
      *     @OA\Parameter(
@@ -93,7 +93,7 @@ class UserWithdrawal extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -113,7 +113,7 @@ class UserWithdrawal extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/user/withdrawal/{id}/operation",
+     *     path="/adminapi/user/withdrawal-logs/{id}/operation",
      *     summary="管理员操作提现",
      *     tags={"admin-api/user/UserWithdrawal"},
      *     @OA\Parameter(
@@ -138,7 +138,7 @@ class UserWithdrawal extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -154,7 +154,7 @@ class UserWithdrawal extends BaseAdminController
         );
 
         // 验证器
-        $this->validate($data, 'app\adminapi\controller\user\validate\UserWithdrawalValidate.operation');
+        $this->validate(array_merge($data, ['id' => $id]), 'app\adminapi\controller\user\validate\UserWithdrawalValidate.operation');
 
         $result = (new UserWithdrawalService())->operationUserWithdrawal($id,$data);
         return ds_json_success('操作成功',$result);

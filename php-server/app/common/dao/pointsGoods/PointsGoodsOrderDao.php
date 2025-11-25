@@ -50,16 +50,16 @@ class PointsGoodsOrderDao extends BaseDao
      * 软删除积分兑换订单
      * 
      * @param array $condition 删除条件
-     * @return bool 是否删除成功
+     * @return int 受影响的行数
      */
-    public function softDeletePointsGoodsOrder(array $condition): bool
+    public function softDeletePointsGoodsOrder(array $condition): int
     {
         $data = [
             'is_deleted' => 1,
             'deleted_at' => time(),
         ];
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -67,12 +67,12 @@ class PointsGoodsOrderDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updatePointsGoodsOrder(array $condition, array $data): bool
+    public function updatePointsGoodsOrder(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -127,9 +127,10 @@ class PointsGoodsOrderDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 订单信息
      */
-    public function getPointsGoodsOrderInfo(array $condition, string $field = '*'): array
+    public function getPointsGoodsOrderInfo(array $condition, string $field = '*', bool $lock = false): array
     {
         return $this->model->where($condition)
             ->with(
@@ -141,6 +142,7 @@ class PointsGoodsOrderDao extends BaseDao
             )
             ->field($field)
             ->append(['order_status_desc', 'delivery_method_desc'])
+            ->lock($lock)
             ->findOrEmpty()->toArray();
     }
 
@@ -149,12 +151,14 @@ class PointsGoodsOrderDao extends BaseDao
      * 
      * @param int $id 订单ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 订单信息
      */
-    public function getPointsGoodsOrderInfoById(int $id, string $field = '*'): array
+    public function getPointsGoodsOrderInfoById(int $id, string $field = '*', bool $lock = false): array
     {
         return $this->model->where('id', $id)->field($field)
             ->append(['order_status_desc', 'delivery_method_desc'])
+            ->lock($lock)
             ->findOrEmpty()->toArray();
     }
 

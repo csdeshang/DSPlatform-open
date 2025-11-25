@@ -12,7 +12,7 @@ class VideoComment extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/video/comment/pages",
+     *     path="/adminapi/video/comments/pages",
      *     summary="获取视频评论分页列表",
      *     tags={"admin-api/video/VideoComment"},
      *     @OA\Parameter(
@@ -61,7 +61,7 @@ class VideoComment extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -84,16 +84,22 @@ class VideoComment extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/video/comment/toggle-field",
+     * @OA\Patch(
+     *     path="/adminapi/video/comments/{id}/toggle-field",
      *     summary="切换视频评论字段状态",
      *     tags={"admin-api/video/VideoComment"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="评论ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\RequestBody(
      *         required=true,
      *         description="切换数据",
      *         @OA\JsonContent(
-     *             required={"id", "field"},
-     *             @OA\Property(property="id", type="integer", example=1, description="评论ID"),
+     *             required={"field"},
      *             @OA\Property(property="field", type="string", example="is_show", description="字段名")
      *         )
      *     ),
@@ -101,16 +107,16 @@ class VideoComment extends BaseAdminController
      *         response=200,
      *         description="切换成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="切换成功")
      *         )
      *     )
      * )
      */
-    public function toggleVideoCommentField()
+    public function toggleVideoCommentField($id)
     {
         $data = [
-            'id' => input('param.id'),
+            'id' => (int)$id,
             'field' => input('param.field')
         ];
 

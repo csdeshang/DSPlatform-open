@@ -1,22 +1,19 @@
 
 import request, { API_BASE_URLS } from '@/utils/request'
 
-// 获取店铺授权用户 用户列表
+// 获取店铺授权用户列表
 export function getTblStoreAuthUserList(params: Record<string, any>) {
-    return request.get(`${API_BASE_URLS.ADMIN}/tbl-store/auth/users`, { params })
+    return request.get(`${API_BASE_URLS.ADMIN}/tbl-store/store-auths`, { params })
 }
 
-
-
-
-// 添加授权管理用户
+// 添加店铺授权用户
 export function createTblStoreAuthUser(params: Record<string, any>) {
-    return request.post(`${API_BASE_URLS.ADMIN}/tbl-store/auth/user/create`,  params )
+    return request.post(`${API_BASE_URLS.ADMIN}/tbl-store/store-auths`, params)
 }
 
-// 删除授权管理用户
+// 删除店铺授权用户
 export function deleteTblStoreAuthUser(params: Record<string, any>) {
-    return request.post(`${API_BASE_URLS.ADMIN}/tbl-store/auth/user/delete`, params )
+    return request.delete(`${API_BASE_URLS.ADMIN}/tbl-store/store-auths`, { params })
 }
 
 

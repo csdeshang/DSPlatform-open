@@ -32,7 +32,7 @@
             <el-table-column label="商品ID" prop="id" width="100" />
             <el-table-column label="商品图片" prop="goods_name" width="100">
                 <template #default="{ row }">
-                    <el-image :src="formatFileUrl(row.cover_image)" style="width: 50px; height: 50px;"
+                    <el-image :src="formatImageUrl(row.cover_image, ThumbnailPresets.small, 'goods')" style="width: 50px; height: 50px;"
                                 fit="cover" />
                 </template>
             </el-table-column>
@@ -85,7 +85,7 @@ import TblGoodsDetail from '@/pages-admin/components/tbl-goods/goods/detail.vue'
 
 import { getSysPlatformList } from '@/pages-admin/main/api/system/SysPlatform'
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 
 

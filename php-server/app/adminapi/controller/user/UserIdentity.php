@@ -14,7 +14,7 @@ class UserIdentity extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/identity/list",
+     *     path="/adminapi/user/user-identities/list",
      *     summary="获取用户绑定第三方账号列表",
      *     tags={"admin-api/user/UserIdentity"},
      *     @OA\Parameter(
@@ -28,7 +28,7 @@ class UserIdentity extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )

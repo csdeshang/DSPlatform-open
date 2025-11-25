@@ -10,6 +10,7 @@ use app\deshang\third_party\express\ExpressManager;
 use app\deshang\third_party\printer\PrinterManager;
 
 use app\deshang\exceptions\CommonException;
+use app\deshang\exceptions\PayException;
 
 use app\deshang\service\trade\DeshangTradePaymentConfigService;
 use app\common\enum\trade\TradePaymentConfigEnum;
@@ -92,7 +93,7 @@ class ThirdPartyLoader
 
 
         if (empty($result)) {
-            throw new CommonException('支付配置未开启');
+            throw new PayException('支付配置未开启');
         }
         // 设置回调地址 和 返回地址
         $result['config_data']['notify_url'] = (string)url('/api/trade/notify/' . $merchant_id . '/' . $trade_channel . '/' . $trade_scene . '/' . $trade_type . '/', [], false, true);
@@ -109,19 +110,19 @@ class ThirdPartyLoader
         if ($result['payment_channel'] == TradePaymentConfigEnum::CHANNEL_ALIPAY) {
             // 支付宝支付配置部分检测
             if (empty($result['config_data']['app_id']) || empty($result['config_data']['app_secret_cert'])) {
-                throw new CommonException('支付宝支付配置未开启');
+                throw new PayException('支付宝支付配置未开启');
             }
             // 对应商户的支付配置
             return new TradeManager('Alipay', $result['config_data']);
         } else if ($result['payment_channel'] == TradePaymentConfigEnum::CHANNEL_WECHAT) {
             // 微信支付配置部分检测
             if (empty($result['config_data']['mch_id']) || empty($result['config_data']['mch_secret_key'])) {
-                throw new CommonException('微信支付配置未开启');
+                throw new PayException('微信支付配置未开启');
             }
             // 对应商户的支付配置
             return new TradeManager('Wechat', $result['config_data']);
         } else {
-            throw new CommonException('支付渠道错误,请检查配置');
+            throw new PayException('支付渠道错误,请检查配置');
         }
     }
 

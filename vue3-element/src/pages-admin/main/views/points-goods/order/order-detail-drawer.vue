@@ -5,7 +5,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-image :src="formatFileUrl(orderData.goods_image)" style="width: 80px; height: 80px;"
+                            <el-image :src="formatImageUrl(orderData.goods_image, ThumbnailPresets.small, 'goods')" style="width: 80px; height: 80px;"
                                 fit="cover" />
                         </div>
                         <div class="info">
@@ -256,7 +256,7 @@
 <script lang="ts" setup>
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { ElMessage } from 'element-plus'
 import { getPointsGoodsOrderInfo, updatePointsGoodsOrder, getPointsGoodsOrderLogs } from '@/pages-admin/main/api/points-goods/pointsGoodsOrder'
 

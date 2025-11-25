@@ -59,7 +59,7 @@ class SysAccessLogs extends BaseAdminController
      *         response=200,
      *         description="成功获取系统访问日志分页列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -93,7 +93,7 @@ class SysAccessLogs extends BaseAdminController
      *         response=200,
      *         description="成功获取系统访问日志详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

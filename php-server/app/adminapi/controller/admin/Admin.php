@@ -14,7 +14,7 @@ class Admin extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/admin/admin/pages",
+     *     path="/adminapi/admin/admins/pages",
      *     summary="获取管理员分页列表",
      *     tags={"admin-api/admin/Admin"},
      *     @OA\Parameter(
@@ -28,7 +28,7 @@ class Admin extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -51,7 +51,7 @@ class Admin extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/admin/admin/{id}",
+     *     path="/adminapi/admin/admins/{id}",
      *     summary="获取管理员详情",
      *     tags={"admin-api/admin/Admin"},
      *     @OA\Parameter(
@@ -65,7 +65,7 @@ class Admin extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -80,7 +80,7 @@ class Admin extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/admin/admin",
+     *     path="/adminapi/admin/admins",
      *     summary="创建管理员",
      *     tags={"admin-api/admin/Admin"},
      *     @OA\RequestBody(
@@ -98,7 +98,7 @@ class Admin extends BaseAdminController
      *         response=200,
      *         description="添加管理员成功",
      *         @OA\JsonContent(
-     *              @OA\Property(property="code", type="integer", example=200),
+     *              @OA\Property(property="code", type="integer", example=10000),
      *              @OA\Property(property="msg", type="string", example="添加管理员成功")
      *         )
      *     )
@@ -125,7 +125,7 @@ class Admin extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/admin/admin/{id}",
+     *     path="/adminapi/admin/admins/{id}",
      *     summary="更新管理员",
      *     tags={"admin-api/admin/Admin"},
      *     @OA\Parameter(
@@ -149,7 +149,7 @@ class Admin extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -172,7 +172,7 @@ class Admin extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/admin/admin/{id}",
+     *     path="/adminapi/admin/admins/{id}",
      *     summary="删除管理员",
      *     tags={"admin-api/admin/Admin"},
      *     @OA\Parameter(
@@ -186,7 +186,7 @@ class Admin extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

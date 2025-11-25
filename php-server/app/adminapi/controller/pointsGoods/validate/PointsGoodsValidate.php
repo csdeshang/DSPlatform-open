@@ -3,6 +3,7 @@
 namespace app\adminapi\controller\pointsGoods\validate;
 
 use app\deshang\base\BaseValidate;
+use app\common\enum\pointsGoods\PointsGoodsEnum;
 
 class PointsGoodsValidate extends BaseValidate
 {
@@ -12,7 +13,7 @@ class PointsGoodsValidate extends BaseValidate
         'goods_name' => 'require|max:128|chsDash', // 商品名称，必填，最大长度128，可包含汉字、字母、数字、下划线和破折号
         'goods_advword' => 'max:150|chsDash', // 商品广告词，最大长度150，可包含汉字、字母、数字、下划线和破折号
         'goods_body' => 'max:65535', // 商品详情描述，最大长度65535
-        'goods_status' => 'in:0,1', // 商品状态，必须是0或1
+        'goods_status' => 'checkGoodsStatus', // 商品状态，使用枚举验证
         'category_id' => 'integer|egt:0', // 积分商品分类ID，必须是大于等于0的整数
         'slide_image' => 'require|array', // 商品轮播图，必填，必须是数组
         'points_price' => 'require|integer|egt:0', // 积分价格，必填，必须是大于等于0的整数
@@ -37,7 +38,7 @@ class PointsGoodsValidate extends BaseValidate
         'goods_advword.max' => '商品广告词不能超过150个字符',
         'goods_advword.chsDash' => '商品广告词只能包含汉字、字母、数字、下划线和破折号',
         'goods_body.max' => '商品详情描述不能超过65535个字符',
-        'goods_status.in' => '商品状态必须是0或1',
+        'goods_status.checkGoodsStatus' => '商品状态值无效（0:下架 1:上架）',
         'category_id.integer' => '积分商品分类ID必须是整数',
         'category_id.egt' => '积分商品分类ID必须大于等于0',
         'slide_image.require' => '商品轮播图不能为空',
@@ -69,4 +70,12 @@ class PointsGoodsValidate extends BaseValidate
         'delete' => ['id'], // 删除场景
     ];
 
+    // 验证商品状态
+    public function checkGoodsStatus($value, $rule, $data)
+    {
+        if (empty($value)) {
+            return true; // 空值允许
+        }
+        return array_key_exists($value, PointsGoodsEnum::getGoodsStatusDict());
+    }
 }

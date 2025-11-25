@@ -29,39 +29,23 @@ export function isUrl(str: string): boolean {
 }
 
 
-// 获取服务器ICON地址
-export function fetchRemoteIconUrl(path: string): string {
-  // 服务器ICON地址
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL + '/static/';
-  // 参数校验
-  if (typeof path !== 'string' || path.trim() === '') {
-    throw new Error('图片路径不能为空');
-  }
-  // 确保 path 以斜杠开头
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  // 手动拼接完整的 URL
-  const imageUrl = `${baseUrl}${normalizedPath}`;
-  // 返回完整的 URL
-  return imageUrl;
-}
-
-
 /**
- * 处理文件附件URL，根据存储类型补全完整路径
- * @param url 原始地址
+ * 处理非图片文件URL（视频、音频、文档等），根据存储类型补全完整路径
+ * 注意：图片文件请使用 formatImageUrl 函数，以获得缩略图处理能力
+ * @param url 原始地址（视频、音频、文档等文件URL）
  * @returns 完整的文件附件URL
  */
-export function formatFileUrl(url: string, fileType: string = 'default'): string {
+export function formatFileUrl(url: string): string {
   // 处理空URL情况
-  if (!url && fileType === 'default') return fetchRemoteIconUrl('uniapp/empty/default_goods_image.png');
-  if (!url && fileType === 'store_logo') return fetchRemoteIconUrl('uniapp/empty/default_store_logo.jpg');
-  
+  if (!url) return '';
+
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
-  
+
+  // 获取环境变量中的基础URL，确保有默认值
   const fileBaseUrl = import.meta.env.VITE_FILE_BASE_URL || '';
-  
+
   // 处理URL路径，确保正确添加斜杠
   return fileBaseUrl + (url.startsWith('/') ? url : '/' + url);
 }

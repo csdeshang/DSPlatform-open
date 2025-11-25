@@ -57,7 +57,7 @@
                 <el-table-column label="商品ID" min-width="120">
                     <template #default="{ row }">
                         <div class="flex items-center" @click="handleGoodsDetail(row.goods_id)">
-                            <el-image v-if="row.goods?.goods_image" :src="formatFileUrl(row.goods.goods_image)"
+                            <el-image v-if="row.goods?.goods_image" :src="formatImageUrl(row.goods.goods_image, ThumbnailPresets.small, 'goods')"
                                 style="width: 40px; height: 40px;" class="mr-2" />
                             <span class="text-blue-500 cursor-pointer">{{ row.goods_id }}</span>
                         </div>
@@ -70,8 +70,8 @@
                     <template #default="{ row }">
                         <div v-if="row.evaluate_images" class="flex flex-wrap gap-1">
                             <el-image v-for="(image, index) in getEvaluateImages(row.evaluate_images)" :key="index"
-                                :src="formatFileUrl(image)" style="width: 40px; height: 40px;" fit="cover"
-                                :preview-src-list="getEvaluateImages(row.evaluate_images).map(img => formatFileUrl(img))" />
+                                :src="formatImageUrl(image, ThumbnailPresets.small)" style="width: 40px; height: 40px;" fit="cover"
+                                :preview-src-list="getEvaluateImages(row.evaluate_images).map(img => formatImageUrl(img, ThumbnailPresets.original))" />
                         </div>
                         <span v-else class="text-gray-400">无图片</span>
                     </template>
@@ -161,7 +161,7 @@
 import { reactive, ref } from 'vue'
 import { getPointsGoodsEvaluatePages, togglePointsGoodsEvaluateField, replyPointsGoodsEvaluate } from '@/pages-admin/main/api/points-goods/pointsGoodsEvaluate'
 import { usePagination } from '@/hooks/usePagination'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 搜索参数

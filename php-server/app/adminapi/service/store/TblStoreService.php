@@ -10,7 +10,8 @@ use app\deshang\base\service\BaseAdminService;
 use app\common\enum\store\TblStoreEnum;
 use app\common\enum\goods\TblGoodsEnum;
 use app\common\dao\goods\TblGoodsDao;
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 use app\deshang\utils\SearchHelper;
 
 
@@ -65,7 +66,7 @@ class TblStoreService extends BaseAdminService
             throw new CommonException('getTblStoreList异常 条件为空');
         }
 
-        $result = (new TblStoreDao())->getStoreList($condition);
+        $result = (new TblStoreDao())->getStoreList($condition,'*','id desc',100);
         return $result;
     }
 
@@ -115,7 +116,7 @@ class TblStoreService extends BaseAdminService
         }
 
         // 清除缓存
-        CacheUtil::clear(CacheUtil::STORE_TAG);
+        KvManager::cache()->clear(CacheKeyManager::STORE_TAG);
 
         return $result;
     }

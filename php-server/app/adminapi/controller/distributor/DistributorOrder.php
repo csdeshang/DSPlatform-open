@@ -16,7 +16,7 @@ class DistributorOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/distributor/order/pages",
+     *     path="/adminapi/distributor/orders/pages",
      *     summary="获取分销商订单分页列表",
      *     tags={"admin-api/distributor/DistributorOrder"},
      *     @OA\Parameter(
@@ -107,7 +107,7 @@ class DistributorOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -138,7 +138,7 @@ class DistributorOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/distributor/order/list",
+     *     path="/adminapi/distributor/orders/list",
      *     summary="获取分销商订单列表",
      *     tags={"admin-api/distributor/DistributorOrder"},
      *     @OA\Parameter(
@@ -152,7 +152,7 @@ class DistributorOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )

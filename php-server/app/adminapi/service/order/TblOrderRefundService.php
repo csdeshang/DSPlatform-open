@@ -131,15 +131,13 @@ class TblOrderRefundService extends BaseAdminService
      */
     public function retryTblOrderRefund(int $refund_id): array
     {
-        $refund_info = (new TblOrderRefundDao())->getOrderRefundInfoById($refund_id);
-        if (empty($refund_info)) {
-            throw new CommonException('退款信息不存在');
-        }
-
-
         // 事务处理
         Db::startTrans();
         try {
+            $refund_info = (new TblOrderRefundDao())->getOrderRefundInfoById($refund_id);
+            if (empty($refund_info)) {
+                throw new CommonException('退款信息不存在');
+            }
             // 处理退款
             $result = (new DeshangTblOrderRefundService)->processRefund($refund_info, 'admin', 0);
             // 提交事务
@@ -147,7 +145,8 @@ class TblOrderRefundService extends BaseAdminService
         } catch (\Exception $e) {
             // 回滚事务
             Db::rollback();
-            throw new CommonException('获取到的异常' . $e->getMessage());
+            // 直接抛出原异常，保持异常类型（SystemException、PermissionException等）
+            throw $e;
         }
 
         return [];

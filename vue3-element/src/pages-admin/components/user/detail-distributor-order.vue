@@ -41,9 +41,6 @@
 
 import { reactive, watch } from 'vue';
 
-import { formatFileUrl } from '@/utils/util'
-
-
 import { usePagination } from '@/hooks/usePagination'
 
 import { getDistributorOrderPages } from '@/pages-admin/main/api/distributor/distributorOrder'

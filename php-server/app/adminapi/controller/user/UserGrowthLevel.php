@@ -14,14 +14,14 @@ class UserGrowthLevel extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/growth-level/list",
+     *     path="/adminapi/user/growth-levels/list",
      *     summary="获取用户成长值等级列表",
      *     tags={"admin-api/user/UserGrowthLevel"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -38,7 +38,7 @@ class UserGrowthLevel extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/growth-level/{id}",
+     *     path="/adminapi/user/growth-levels/{id}",
      *     summary="获取用户成长值等级详情",
      *     tags={"admin-api/user/UserGrowthLevel"},
      *     @OA\Parameter(
@@ -52,7 +52,7 @@ class UserGrowthLevel extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -76,7 +76,7 @@ class UserGrowthLevel extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/user/growth-level/create",
+     *     path="/adminapi/user/growth-levels",
      *     summary="创建用户成长值等级",
      *     tags={"admin-api/user/UserGrowthLevel"},
      *     @OA\RequestBody(
@@ -93,7 +93,7 @@ class UserGrowthLevel extends BaseAdminController
      *         response=200,
      *         description="添加成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="添加成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -117,7 +117,7 @@ class UserGrowthLevel extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/user/growth-level/{id}",
+     *     path="/adminapi/user/growth-levels/{id}",
      *     summary="更新用户成长值等级",
      *     tags={"admin-api/user/UserGrowthLevel"},
      *     @OA\Parameter(
@@ -141,7 +141,7 @@ class UserGrowthLevel extends BaseAdminController
      *         response=200,
      *         description="修改成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="修改成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -167,7 +167,7 @@ class UserGrowthLevel extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/user/growth-level/{id}",
+     *     path="/adminapi/user/growth-levels/{id}",
      *     summary="删除用户成长值等级",
      *     tags={"admin-api/user/UserGrowthLevel"},
      *     @OA\Parameter(
@@ -181,7 +181,7 @@ class UserGrowthLevel extends BaseAdminController
      *         response=200,
      *         description="删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="删除成功"),
      *             @OA\Property(property="data", type="object")
      *         )

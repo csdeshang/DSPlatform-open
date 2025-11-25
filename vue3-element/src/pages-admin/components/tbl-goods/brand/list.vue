@@ -10,7 +10,7 @@
             <el-table-column label="菜单名称" prop="name" min-width="150" show-overflow-tooltip />
             <el-table-column label="图标" prop="image" min-width="100">
                 <template #default="{ row }">
-                    <el-image v-if="row.image" :src="formatFileUrl(row.image)" style="width: 50px; height: 50px" fit="cover" />
+                    <el-image v-if="row.image" :src="formatImageUrl(row.image, ThumbnailPresets.small)" style="width: 50px; height: 50px" fit="cover" />
                 </template>
             </el-table-column>
             <el-table-column label="是否显示" prop="is_show" min-width="100">
@@ -50,7 +50,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import TblGoodsBrandEdit from './edit.vue'
 import { getTblGoodsBrandTree, deleteTblGoodsBrand } from '@/pages-admin/main/api/tbl-goods/tblGoodsBrand';

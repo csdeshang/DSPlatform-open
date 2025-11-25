@@ -35,7 +35,7 @@ class Login extends BaseAdminController
      *         response=200,
      *         description="登录成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object",
      *                 example={"token": "your_jwt_token", "user_info": {"id": 1, "username": "admin"}}
@@ -63,7 +63,7 @@ class Login extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/login/refresh_token",
+     *     path="/adminapi/login/refresh-token",
      *     summary="刷新 Token 接口",
      *     tags={"admin-api/login/Login"},
      *     @OA\RequestBody(
@@ -78,7 +78,7 @@ class Login extends BaseAdminController
      *         response=200,
      *         description="Token 刷新成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object",
      *                 example={"token": "new_jwt_token"}

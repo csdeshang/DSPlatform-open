@@ -11,7 +11,7 @@
     <router-link to="/" class="logo-link">
       <!-- Logo 图片 -->
       <img 
-        :src="formatFileUrl(logoSrc)" 
+        :src="formatImageUrl(logoSrc, ThumbnailPresets.original)" 
         class="logo-img"
         :alt="siteName"
       >
@@ -22,7 +22,8 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import useThemeConfigStore from '@/stores/modules/themeConfig'
-import { getSystemType,formatFileUrl } from '@/utils/util'
+import { getSystemType } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { useConfigStore } from '@/stores/modules/config'
 
 const themeConfigStore = useThemeConfigStore()

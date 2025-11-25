@@ -62,12 +62,12 @@ class TblGoodsSkuDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updateGoodsSku(array $condition, array $data): bool
+    public function updateGoodsSku(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -114,11 +114,12 @@ class TblGoodsSkuDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array SKU信息
      */
-    public function getGoodsSkuInfo(array $condition, string $field = '*'): array
+    public function getGoodsSkuInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -126,11 +127,12 @@ class TblGoodsSkuDao extends BaseDao
      * 
      * @param int $id SKU ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array SKU信息
      */
-    public function getGoodsSkuInfoById(int $id, string $field = '*'): array
+    public function getGoodsSkuInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

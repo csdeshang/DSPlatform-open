@@ -12,7 +12,7 @@ class TblGoodsCategory extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-goods/category/tree",
+     *     path="/adminapi/tbl-goods/categories/tree",
      *     tags={"admin-api/tblGoods/TblGoodsCategory"},
      *     summary="获取商品分类树组结构",
      *     @OA\Parameter(
@@ -25,7 +25,7 @@ class TblGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取商品分类树组结构",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -49,7 +49,7 @@ class TblGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-goods/category/{id}",
+     *     path="/adminapi/tbl-goods/categories/{id}",
      *     tags={"admin-api/tblGoods/TblGoodsCategory"},
      *     summary="获取商品分类详情",
      *     @OA\Parameter(
@@ -62,7 +62,7 @@ class TblGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取商品分类详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -84,7 +84,7 @@ class TblGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/tbl-goods/category",
+     *     path="/adminapi/tbl-goods/categories",
      *     tags={"admin-api/tblGoods/TblGoodsCategory"},
      *     summary="添加商品分类",
      *     @OA\RequestBody(
@@ -134,7 +134,7 @@ class TblGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/tbl-goods/category/{id}",
+     *     path="/adminapi/tbl-goods/categories/{id}",
      *     tags={"admin-api/tblGoods/TblGoodsCategory"},
      *     summary="编辑商品分类",
      *     @OA\Parameter(
@@ -159,7 +159,7 @@ class TblGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功编辑商品分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -187,7 +187,7 @@ class TblGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/tbl-goods/category/{id}",
+     *     path="/adminapi/tbl-goods/categories/{id}",
      *     tags={"admin-api/tblGoods/TblGoodsCategory"},
      *     summary="删除商品分类",
      *     @OA\Parameter(
@@ -200,7 +200,7 @@ class TblGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功删除商品分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

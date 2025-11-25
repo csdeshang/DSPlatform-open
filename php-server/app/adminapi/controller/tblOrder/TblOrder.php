@@ -13,7 +13,7 @@ class TblOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/pages",
+     *     path="/adminapi/tbl-order/orders/pages",
      *     summary="获取订单分页列表",
      *     tags={"admin-api/tblOrder/TblOrder"},
      *     @OA\Parameter(
@@ -50,6 +50,13 @@ class TblOrder extends BaseAdminController
      *         required=false,
      *         description="订单号",
      *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="order_id",
+     *         in="query",
+     *         required=false,
+     *         description="订单ID",
+     *         @OA\Schema(type="integer", example=123)
      *     ),
      *     @OA\Parameter(
      *         name="out_trade_no",
@@ -139,7 +146,7 @@ class TblOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -157,6 +164,7 @@ class TblOrder extends BaseAdminController
             'store_name' => input('param.store_name'),
             'goods_name' => input('param.goods_name'),
             'order_sn' => input('param.order_sn'),
+            'order_id' => input('param.order_id'),
             'out_trade_no' => input('param.out_trade_no'),
             'trade_no' => input('param.trade_no'),
             'delivery_method' => input('param.delivery_method'),
@@ -175,36 +183,7 @@ class TblOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/info-by-id/{id}",
-     *     summary="根据ID获取订单详情",
-     *     tags={"admin-api/tblOrder/TblOrder"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="订单ID",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="操作成功",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
-     *             @OA\Property(property="msg", type="string", example="操作成功"),
-     *             @OA\Property(property="data", type="object")
-     *         )
-     *     )
-     * )
-     */
-    public function getTblOrderInfoById($id)
-    {
-        $result = (new TblOrderService())->getTblOrderInfoById($id);
-        return ds_json_success('操作成功', $result);
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/adminapi/tbl-order/info/{id}",
+     *     path="/adminapi/tbl-order/orders/{id}",
      *     summary="获取订单详情",
      *     tags={"admin-api/tblOrder/TblOrder"},
      *     @OA\Parameter(
@@ -218,7 +197,7 @@ class TblOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -254,7 +233,7 @@ class TblOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -302,7 +281,7 @@ class TblOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -323,7 +302,7 @@ class TblOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/log/list",
+     *     path="/adminapi/tbl-order/order-logs",
      *     summary="获取订单日志列表",
      *     tags={"admin-api/tblOrder/TblOrder"},
      *     @OA\Parameter(
@@ -337,7 +316,7 @@ class TblOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -355,7 +334,7 @@ class TblOrder extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/tbl-order/pay-log/list",
+     *     path="/adminapi/tbl-order/order-pay-logs",
      *     summary="获取订单支付日志列表",
      *     tags={"admin-api/tblOrder/TblOrder"},
      *     @OA\Parameter(
@@ -376,7 +355,7 @@ class TblOrder extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )

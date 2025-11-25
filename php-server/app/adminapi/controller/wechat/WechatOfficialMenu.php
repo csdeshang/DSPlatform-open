@@ -14,14 +14,14 @@ class WechatOfficialMenu extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/wechat/official-menu/info",
+     *     path="/adminapi/wechat/official/menus",
      *     summary="获取微信公众号菜单",
      *     tags={"admin-api/wechat/WechatOfficialMenu"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -35,8 +35,8 @@ class WechatOfficialMenu extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/wechat/official-menu/update",
+     * @OA\Put(
+     *     path="/adminapi/wechat/official/menus",
      *     summary="保存微信公众号菜单",
      *     tags={"admin-api/wechat/WechatOfficialMenu"},
      *     @OA\RequestBody(
@@ -50,7 +50,7 @@ class WechatOfficialMenu extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )
@@ -64,14 +64,14 @@ class WechatOfficialMenu extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/wechat/official-menu/publish",
+     *     path="/adminapi/wechat/official/menus/publish",
      *     summary="发布微信公众号菜单",
      *     tags={"admin-api/wechat/WechatOfficialMenu"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

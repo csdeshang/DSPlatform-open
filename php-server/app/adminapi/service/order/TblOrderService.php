@@ -38,6 +38,9 @@ class TblOrderService extends BaseAdminService
         if (isset($data['order_sn']) && $data['order_sn'] != '') {
             $condition['order_sn'] = $data['order_sn'];
         }
+        if (isset($data['order_id']) && $data['order_id'] != '') {
+            $condition['id'] = (int)$data['order_id'];
+        }
         if (isset($data['order_status']) && $data['order_status'] != '') {
             $condition['order_status'] = $data['order_status'];
         }
@@ -129,12 +132,6 @@ class TblOrderService extends BaseAdminService
         return $result;
     }
 
-
-    public function getTblOrderInfoById($id): array
-    {
-        $result = $this->dao->getOrderInfoById($id);
-        return $result;
-    }
 
     public function getTblOrderInfo($id): array
     {

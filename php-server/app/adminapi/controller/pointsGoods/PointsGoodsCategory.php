@@ -12,14 +12,14 @@ class PointsGoodsCategory extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/points-goods/category/tree",
+     *     path="/adminapi/points-goods/categories/tree",
      *     tags={"admin-api/points-goods/PointsGoodsCategory"},
      *     summary="获取积分商品分类树形结构",
      *     @OA\Response(
      *         response=200,
      *         description="成功获取积分商品分类树形结构",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -41,7 +41,7 @@ class PointsGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/points-goods/category/{id}",
+     *     path="/adminapi/points-goods/categories/{id}",
      *     tags={"admin-api/points-goods/PointsGoodsCategory"},
      *     summary="获取积分商品分类详情",
      *     @OA\Parameter(
@@ -54,7 +54,7 @@ class PointsGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功获取积分商品分类详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -78,7 +78,7 @@ class PointsGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/points-goods/category",
+     *     path="/adminapi/points-goods/categories",
      *     tags={"admin-api/points-goods/PointsGoodsCategory"},
      *     summary="添加积分商品分类",
      *     @OA\RequestBody(
@@ -121,7 +121,7 @@ class PointsGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/points-goods/category/{id}",
+     *     path="/adminapi/points-goods/categories/{id}",
      *     tags={"admin-api/points-goods/PointsGoodsCategory"},
      *     summary="编辑积分商品分类",
      *     @OA\Parameter(
@@ -144,7 +144,7 @@ class PointsGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功编辑积分商品分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -170,7 +170,7 @@ class PointsGoodsCategory extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/points-goods/category/{id}",
+     *     path="/adminapi/points-goods/categories/{id}",
      *     tags={"admin-api/points-goods/PointsGoodsCategory"},
      *     summary="删除积分商品分类",
      *     @OA\Parameter(
@@ -183,7 +183,7 @@ class PointsGoodsCategory extends BaseAdminController
      *         response=200,
      *         description="成功删除积分商品分类",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

@@ -14,7 +14,7 @@ class UserRecharge extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/recharge-log/pages",
+     *     path="/adminapi/user/recharge-logs/pages",
      *     summary="获取用户充值日志分页列表",
      *     tags={"admin-api/user/UserRecharge"},
      *     @OA\Parameter(
@@ -91,7 +91,7 @@ class UserRecharge extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

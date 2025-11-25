@@ -12,7 +12,7 @@ class TechnicianTrack extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/technician/track/pages",
+     *     path="/adminapi/technician/tracks/pages",
      *     summary="获取师傅轨迹分页列表",
      *     tags={"admin-api/technician/TechnicianTrack"},
      *     @OA\Parameter(
@@ -47,7 +47,7 @@ class TechnicianTrack extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -71,7 +71,7 @@ class TechnicianTrack extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/technician/track/{id}",
+     *     path="/adminapi/technician/tracks/{id}",
      *     summary="获取师傅轨迹详情",
      *     tags={"admin-api/technician/TechnicianTrack"},
      *     @OA\Parameter(
@@ -85,7 +85,7 @@ class TechnicianTrack extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -103,7 +103,7 @@ class TechnicianTrack extends BaseAdminController
 
     /**
      * @OA\Delete(
-     *     path="/adminapi/technician/track/{id}",
+     *     path="/adminapi/technician/tracks/{id}",
      *     summary="删除师傅轨迹记录",
      *     tags={"admin-api/technician/TechnicianTrack"},
      *     @OA\Parameter(
@@ -117,7 +117,7 @@ class TechnicianTrack extends BaseAdminController
      *         response=200,
      *         description="删除成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="删除成功")
      *         )
      *     )
@@ -133,32 +133,38 @@ class TechnicianTrack extends BaseAdminController
     }
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/technician/track/clear",
+     * @OA\Delete(
+     *     path="/adminapi/technician/tracks/{technician_id}/all",
      *     summary="清空师傅轨迹记录",
      *     tags={"admin-api/technician/TechnicianTrack"},
-     *     @OA\RequestBody(
+     *     @OA\Parameter(
+     *         name="technician_id",
+     *         in="path",
+     *         description="师傅ID",
      *         required=true,
-     *         description="清空条件",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="technician_id", type="integer", example=1, description="师傅ID"),
-     *             @OA\Property(property="days", type="integer", example=30, description="保留天数")
-     *         )
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="days",
+     *         in="query",
+     *         description="保留天数，0表示清空所有",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=30)
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="清空成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="清空成功")
      *         )
      *     )
      * )
      */
-    public function clearTechnicianTrack()
+    public function clearTechnicianTrack($technician_id)
     {
         $data = [
-            'technician_id' => input('param.technician_id'),
+            'technician_id' => (int)$technician_id,
             'days' => input('param.days', 30),
         ];
 

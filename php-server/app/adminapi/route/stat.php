@@ -8,17 +8,17 @@ use app\adminapi\middleware\AdminAuthorizeLog;
 
 Route::group('stat', function () {
     // 用户统计 概览
-    Route::get('user/overview', 'stat.StatUser/getStatUserOverview');
+    Route::get('users/overview', 'stat.StatUser/getStatUserOverview');
     // 商户统计 概览
-    Route::get('merchant/overview', 'stat.StatMerchant/getStatMerchantOverview');
+    Route::get('merchants/overview', 'stat.StatMerchant/getStatMerchantOverview');
     // 商品统计 概览
     Route::get('goods/overview', 'stat.StatGoods/getStatGoodsOverview');
     // 订单统计 概览
-    Route::get('order/overview', 'stat.StatOrder/getStatOrderOverview');
+    Route::get('orders/overview', 'stat.StatOrder/getStatOrderOverview');
     // 店铺统计 概览
-    Route::get('store/overview', 'stat.StatStore/getStatStoreOverview');
+    Route::get('stores/overview', 'stat.StatStore/getStatStoreOverview');
     // 分销商统计 概览
-    Route::get('distributor/overview', 'stat.StatDistributor/getStatDistributorOverview');
+    Route::get('distributors/overview', 'stat.StatDistributor/getStatDistributorOverview');
 
 
 

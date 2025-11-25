@@ -30,6 +30,7 @@ const setDialogData = async (logId: number) => {
             { field: '错误行', value: res.data.line },
             { field: '错误信息', value: res.data.message },
             { field: 'code', value: res.data.code },
+            { field: '异常类名', value: res.data.exception_class },
             { field: 'ip', value: res.data.ip },
             { field: '请求类型', value: res.data.method },
             { field: '根目录', value: res.data.root },

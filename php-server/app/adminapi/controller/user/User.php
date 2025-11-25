@@ -17,7 +17,7 @@ class User extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/user/user/pages",
+     *     path="/adminapi/user/users/pages",
      *     summary="获取会员分页列表",
      *     tags={"admin-api/user/User"},
      *     @OA\Parameter(
@@ -136,7 +136,7 @@ class User extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -174,7 +174,7 @@ class User extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/user/{id}",
+     *     path="/adminapi/user/users/{id}",
      *     summary="获取会员详细信息",
      *     tags={"admin-api/user/User"},
      *     @OA\Parameter(
@@ -188,7 +188,7 @@ class User extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -212,7 +212,7 @@ class User extends BaseAdminController
 
     /**
      * @OA\Post(
-     *     path="/adminapi/user/user",
+     *     path="/adminapi/user/users",
      *     summary="添加会员",
      *     tags={"admin-api/user/User"},
      *     @OA\RequestBody(
@@ -229,7 +229,7 @@ class User extends BaseAdminController
      *         response=200,
      *         description="添加成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="添加成功")
      *         )
      *     )
@@ -252,7 +252,7 @@ class User extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/user/user/{id}",
+     *     path="/adminapi/user/users/{id}",
      *     summary="修改会员信息",
      *     tags={"admin-api/user/User"},
      *     @OA\Parameter(
@@ -284,7 +284,7 @@ class User extends BaseAdminController
      *         response=200,
      *         description="修改成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="修改成功")
      *         )
      *     )
@@ -317,7 +317,7 @@ class User extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/user/user/relation/list",
+     *     path="/adminapi/user/users/relation/list",
      *     summary="获取会员推广关系列表",
      *     tags={"admin-api/user/User"},
      *     @OA\Parameter(
@@ -331,7 +331,7 @@ class User extends BaseAdminController
      *         response=200,
      *         description="修改成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="修改成功")
      *         )
      *     )

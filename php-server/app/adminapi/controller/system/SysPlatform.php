@@ -15,7 +15,7 @@ class SysPlatform extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/platform/list",
+     *     path="/adminapi/system/platforms/list",
      *     summary="获取平台列表",
      *     tags={"admin-api/system/SysPlatform"},
      *     @OA\Parameter(
@@ -29,7 +29,7 @@ class SysPlatform extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -50,7 +50,7 @@ class SysPlatform extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/platform/{id}",
+     *     path="/adminapi/system/platforms/{id}",
      *     summary="更新平台状态",
      *     tags={"admin-api/system/SysPlatform"},
      *     @OA\Parameter(
@@ -71,7 +71,7 @@ class SysPlatform extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

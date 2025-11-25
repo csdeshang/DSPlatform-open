@@ -5,7 +5,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="technicianInfo.avatar" />
+                            <el-avatar :size="80" :src="formatImageUrl(technicianInfo.avatar, ThumbnailPresets.small)" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -395,6 +395,7 @@ import type { FormInstance } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { getTechnicianInfo, updateTechnician } from '@/pages-admin/main/api/technician/technician'
 import { ElMessage } from 'element-plus'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import DetailBalanceLog from './detail-balance-log.vue'
 import DetailOrderDelivery from './detail-order-delivery.vue'

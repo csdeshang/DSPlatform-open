@@ -76,9 +76,10 @@
                 </template>
             </el-table-column>
             <el-table-column prop="create_at" label="创建时间" width="150" />
-            <el-table-column label="操作" align="right" fixed="right" width="130">
+            <el-table-column label="操作" align="right" fixed="right" width="180">
                 <template #default="{ row }">
                     <el-button type="primary" link @click="handleView(row.id)">详情</el-button>
+                    <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -96,7 +97,8 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-import { getUserBehaviorLogPages } from '@/pages-admin/main/api/user/userBehavior'
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { getUserBehaviorLogPages, deleteUserBehaviorLog } from '@/pages-admin/main/api/user/userBehavior'
 import { usePagination } from '@/hooks/usePagination'
 import { useEnum } from '@/hooks/useEnum'
 
@@ -155,5 +157,32 @@ const userBehaviorLogDetailDialog = ref()
 const handleView = (id: any) => {
     userBehaviorLogDetailDialog.value.setDialogData(id)
     userBehaviorLogDetailDialog.value?.openDialog()
+}
+
+// 删除行为日志
+const handleDelete = async (row: any) => {
+    try {
+        await ElMessageBox.confirm(
+            `确定要删除这条行为日志吗？`,
+            '提示',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }
+        )
+        
+        const res = await deleteUserBehaviorLog(row.id)
+        if (res.code === 10000) {
+            ElMessage.success('删除成功')
+            getTableList()
+        }
+        
+        
+    } catch (error: any) {
+        if (error !== 'cancel') {
+            ElMessage.error(error.message || '删除失败')
+        }
+    }
 }
 </script>

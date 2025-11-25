@@ -5,7 +5,7 @@ import request, { API_BASE_URLS } from '@/utils/request'
  * @param params
  */
 export function getUserBehaviorLogPages(params: Record<string, any>) {
-    return request.get(`${API_BASE_URLS.ADMIN}/user/behavior-log/pages`, { params })
+    return request.get(`${API_BASE_URLS.ADMIN}/user/behavior-logs/pages`, { params })
 }
 
 /**
@@ -13,5 +13,13 @@ export function getUserBehaviorLogPages(params: Record<string, any>) {
  * @param id
  */
 export function getUserBehaviorLogInfo(id: number) {
-    return request.get(`${API_BASE_URLS.ADMIN}/user/behavior-log/${id}`)
+    return request.get(`${API_BASE_URLS.ADMIN}/user/behavior-logs/${id}`)
+}
+
+/**
+ * 删除用户行为日志
+ * @param id
+ */
+export function deleteUserBehaviorLog(id: number) {
+    return request.delete(`${API_BASE_URLS.ADMIN}/user/behavior-logs/${id}`)
 }

@@ -5,7 +5,8 @@ namespace app\adminapi\service\editable;
 use app\deshang\base\service\BaseAdminService;
 use app\deshang\exceptions\CommonException;
 use app\common\dao\editable\EditablePageDao;
-use app\deshang\utils\CacheUtil;
+use app\deshang\kv\KvManager;
+use app\deshang\kv\keys\CacheKeyManager;
 
 class EditablePageService extends BaseAdminService
 {
@@ -55,7 +56,7 @@ class EditablePageService extends BaseAdminService
         $result = (new EditablePageDao())->updateEditablePage([['id', '=', $id], ['store_id', '=', 0]], $data);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::EDITABLE_PAGE_TAG);
+        KvManager::cache()->clear(CacheKeyManager::EDITABLE_PAGE_TAG);
 
         return $result;
     }
@@ -69,7 +70,7 @@ class EditablePageService extends BaseAdminService
         $result = (new EditablePageDao())->deleteEditablePage($condition);
 
         // 删除缓存
-        CacheUtil::clear(CacheUtil::EDITABLE_PAGE_TAG);
+        KvManager::cache()->clear(CacheKeyManager::EDITABLE_PAGE_TAG);
 
         return $result;
     }

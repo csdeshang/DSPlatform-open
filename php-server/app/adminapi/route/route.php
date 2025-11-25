@@ -13,26 +13,22 @@ Route::group(function () {
     Route::post('login', 'login.Login/login');
 
     //刷新token
-    Route::get('refresh_token', 'login.Login/refreshToken');
+    Route::get('refresh-token', 'login.Login/refreshToken');
     //用户退出
     Route::get('logout', 'login.Login/logout');
 
     
 
-    //生成验证码
-    Route::get('captcha/create', 'login.Captcha/create');
-
-    //一次校验验证码
-    Route::get('captcha/check', 'login.Captcha/check');
+    //验证码
+    // 注意路由顺序：特殊路径（2段）必须在动态路径（2段）前面
+    // 校验验证码
+    Route::post('captcha/verify', 'login.Captcha/verify');
+    // 生成验证码
+    Route::post('captcha', 'login.Captcha/create');
 });
 
 
-// TEST 测试
-Route::group('test', function () {
-    //测试
 
-    Route::get('sms', 'test/sms');
-});
 
 
 

@@ -6,7 +6,7 @@
             <div class="item" v-for="(item, index) in imagesList.data" :key="index">
                 <div :style="{ maxWidth: width, maxHeight: height }"
                     class="aspect-square flex items-center justify-center relative group border border-gray-300 rounded-lg mr-[10px] mb-[10px]">
-                    <el-image v-if="type == 'image'" :src="formatFileUrl(item)" :alt="item" fit="cover"
+                    <el-image v-if="type == 'image'" :src="formatImageUrl(item, ThumbnailPresets.medium)" :alt="item" fit="cover"
                         :style="{ width: width, height: height }">
                     </el-image>
                     <video v-if="type == 'video'" :src="formatFileUrl(item)" controls :style="{ width: width, height: height }"
@@ -56,6 +56,7 @@ import { reactive, watch, ref, computed } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 
 import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import AttachmentManageIndex from '@/components/attachment/manage/index.vue'
 
 import Icon from '@/components/icon/index.vue'
@@ -96,7 +97,8 @@ const showImageViewer = ref(false);
 const currentPreviewIndex = ref(0);
 const previewImageList = computed(() => {
     return imagesList.data.map((url) => {
-        return typeof url === 'string' && url.indexOf('data:image') !== -1 ? url : formatFileUrl(url);
+        // 如果是 base64 图片，直接返回；否则使用 formatImageUrl 获取原图用于预览
+        return typeof url === 'string' && url.indexOf('data:image') !== -1 ? url : formatImageUrl(url);
     });
 });
 

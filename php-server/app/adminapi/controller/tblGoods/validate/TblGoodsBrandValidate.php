@@ -13,7 +13,7 @@ class TblGoodsBrandValidate extends BaseValidate
         'name' => 'require|max:100', // 品牌名称，必填，最大长度100
         'description' => 'max:255', // 品牌描述，最大长度255
         'logo' => 'url', // logo链接，必须是有效的URL
-        'sort' => 'integer|>=:0', // 排序，必须是整数，且大于等于0
+        'sort' => 'integer|egt:0', // 排序，必须是整数，且大于等于0
         'is_recommend' => 'boolean', // 是否推荐，必须是布尔值
         'is_show' => 'boolean', // 是否显示，必须是布尔值
         'id' => 'require|integer', // 品牌ID，必填，必须是整数
@@ -30,7 +30,7 @@ class TblGoodsBrandValidate extends BaseValidate
         'description.max' => '品牌描述不能超过255个字符',
         'logo.url' => 'logo链接格式不正确',
         'sort.integer' => '排序必须是整数',
-        'sort.>=:0' => '排序必须大于等于0',
+        'sort.egt' => '排序必须大于等于0',
         'is_recommend.boolean' => '是否推荐必须是布尔值',
         'is_show.boolean' => '是否显示必须是布尔值',
         'id.require' => '品牌ID不能为空',

@@ -9,10 +9,27 @@ use think\facade\Db;
 /**
  * 系统信息控制器
  * 专门处理系统基本信息、版本信息、环境信息等
+ * @OA\Tag(name="admin-api/system/SysInfo", description="系统信息管理接口")
  */
 class SysInfo extends BaseAdminController
 {
 
+    /**
+     * @OA\Get(
+     *     path="/adminapi/system/system-info",
+     *     summary="获取系统信息",
+     *     tags={"admin-api/system/SysInfo"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="操作成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="操作成功"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     )
+     * )
+     */
     public function getSysInfo()
     {
 

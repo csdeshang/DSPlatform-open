@@ -11,7 +11,7 @@ class StatOrder extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/stat/order/overview",
+     *     path="/adminapi/stat/orders/overview",
      *     summary="获取订单概览统计数据",
      *     tags={"admin-api/stat/StatOrder"},
      *     @OA\Parameter(
@@ -32,7 +32,7 @@ class StatOrder extends BaseAdminController
      *         response=200,
      *         description="获取数据成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="获取最新数据成功"),
      *             @OA\Property(property="data", type="object")
      *         )

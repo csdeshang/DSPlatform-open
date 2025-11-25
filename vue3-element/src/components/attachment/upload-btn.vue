@@ -77,8 +77,8 @@ export default defineComponent({
         const action = computed(() => {
             const baseUrl = import.meta.env.VITE_APP_BASE_URL
             return getSystemType() === 'admin'
-                ? `${baseUrl}/adminapi/attachment/file/${props.type}`
-                : `${baseUrl}/api/attachment/file/${props.type}`
+                ? `${baseUrl}/adminapi/attachment/files/${props.type}`
+                : `${baseUrl}/api/attachment/files/${props.type}`
         })
 
 

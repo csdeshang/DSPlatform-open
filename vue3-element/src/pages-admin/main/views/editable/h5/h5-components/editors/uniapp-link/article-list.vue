@@ -25,7 +25,7 @@
                 <el-table-column label="标题" prop="title" min-width="200" show-overflow-tooltip />
                 <el-table-column label="封面图" width="100">
                     <template #default="{ row }">
-                        <el-image v-if="row.image" style="width: 60px; height: 60px" :src="formatFileUrl(row.image)"
+                        <el-image v-if="row.image" style="width: 60px; height: 60px" :src="formatImageUrl(row.image, ThumbnailPresets.small)"
                             fit="cover" />
                         <span v-else>无图片</span>
                     </template>
@@ -48,7 +48,7 @@
 import { ref, computed, onMounted, watch, reactive } from 'vue'
 import { getSysArticlePages } from '@/pages-admin/main/api/system/sysArticle'
 import { usePagination } from '@/hooks/usePagination'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 // 定义组件名称
 defineOptions({

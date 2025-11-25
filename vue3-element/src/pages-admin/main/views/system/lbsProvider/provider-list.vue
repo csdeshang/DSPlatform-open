@@ -1,55 +1,53 @@
 <template>
+    <div>
 
-    <el-card shadow="never" class="mb-5">
-        <el-form-item label="是否启用地图">
-            <el-switch v-model="lbs_is_enabled" size="large" @change="updateLbsIsEnabled" active-value="1" inactive-value="0"  />
-        </el-form-item>
-    </el-card>
-
-
-
-    <el-card shadow="never">
+        <el-card shadow="never" class="mb-5">
+            <el-form-item label="是否启用地图">
+                <el-switch v-model="lbs_is_enabled" size="large" @change="updateLbsIsEnabled" active-value="1"
+                    inactive-value="0" />
+            </el-form-item>
+        </el-card>
 
 
+        <el-card shadow="never">
+            <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
+                <el-table-column label="地图名称" prop="name" width="250" />
+                <el-table-column label="服务商标识" prop="provider" width="300" />
+                <el-table-column label="默认" prop="is_default" width="300" align="center">
+                    <template #default="{ row }">
+                        <el-tag v-if="row.is_default" type="warning" effect="dark">
+                            默认
+                        </el-tag>
+                        <span v-else class="text-gray-400">-</span>
+                    </template>
+                </el-table-column>
 
+                <el-table-column label="操作" align="right" fixed="right">
+                    <template #default="{ row }">
+                        <el-button type="primary" link @click="handleEdit(row)">配置</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-        <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
-            <el-table-column label="地图名称" prop="name" width="250" />
-            <el-table-column label="服务商标识" prop="provider" width="300" />
-            <el-table-column label="默认" prop="is_default" width="300" align="center">
-                <template #default="{ row }">
-                    <el-tag v-if="row.is_default" type="warning" effect="dark">
-                        默认
-                    </el-tag>
-                    <span v-else class="text-gray-400">-</span>
-                </template>
-            </el-table-column>
+        </el-card>
 
-            <el-table-column label="操作" align="right" fixed="right">
-                <template #default="{ row }">
-                    <el-button type="primary" link @click="handleEdit(row)">配置</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+        <!-- 引入高德地图配置组件 -->
+        <GaodeLbsEdit v-if="currentProvider?.provider === 'gaode'" ref="gaodeProviderRef"
+            @complete="fetchLbsProviderList" />
 
-    </el-card>
+        <!-- 引入腾讯云 地图配置组件 -->
+        <TencentLbsEdit v-if="currentProvider?.provider === 'tencent'" ref="tencentProviderRef"
+            @complete="fetchLbsProviderList" />
 
-    <!-- 引入高德地图配置组件 -->
-    <GaodeLbsEdit v-if="currentProvider?.provider === 'gaode'" ref="gaodeProviderRef"
-        @complete="fetchLbsProviderList" />
+        <!-- 引入百度地图配置组件 -->
+        <BaiduLbsEdit v-if="currentProvider?.provider === 'baidu'" ref="baiduProviderRef"
+            @complete="fetchLbsProviderList" />
 
-    <!-- 引入腾讯云 地图配置组件 -->
-    <TencentLbsEdit v-if="currentProvider?.provider === 'tencent'" ref="tencentProviderRef"
-        @complete="fetchLbsProviderList" />
-
-    <!-- 引入百度地图配置组件 -->
-    <BaiduLbsEdit v-if="currentProvider?.provider === 'baidu'" ref="baiduProviderRef"
-        @complete="fetchLbsProviderList" />
-
-    <!-- 引入天地图配置组件 -->
-    <TianDiTuLbsEdit v-if="currentProvider?.provider === 'tianditu'" ref="tiandituProviderRef"
-        @complete="fetchLbsProviderList" />
-
+        <!-- 引入天地图配置组件 -->
+        <TianDiTuLbsEdit v-if="currentProvider?.provider === 'tianditu'" ref="tiandituProviderRef"
+            @complete="fetchLbsProviderList" />
+            
+    </div>
 
 
 </template>

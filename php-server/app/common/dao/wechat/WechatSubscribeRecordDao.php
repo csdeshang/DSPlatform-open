@@ -39,11 +39,15 @@ class WechatSubscribeRecordDao extends BaseDao
     
     /**
      * 更新订阅记录
+     * 
+     * @param array $condition 更新条件
+     * @param array $data 更新数据
+     * @return int 受影响的行数
      */
-    public function updateWechatSubscribeRecord(array $condition, array $data): bool
+    public function updateWechatSubscribeRecord(array $condition, array $data): int
     {
-        $this->model::update($data, $condition);
-        return true;
+        $result = $this->model::update($data, $condition);
+        return $result->getNumRows();
     }
 
     /**
@@ -65,18 +69,28 @@ class WechatSubscribeRecordDao extends BaseDao
 
     /**
      * 获取单条订阅记录信息
+     * 
+     * @param array $condition 查询条件
+     * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
+     * @return array 订阅记录信息
      */
-    public function getWechatSubscribeRecordInfo(array $condition, string $field = '*'): array
+    public function getWechatSubscribeRecordInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**
      * 根据ID获取订阅记录信息
+     * 
+     * @param int $id 订阅记录ID
+     * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
+     * @return array 订阅记录信息
      */
-    public function getWechatSubscribeRecordInfoById(int $id, string $field = '*'): array
+    public function getWechatSubscribeRecordInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
     
     /**

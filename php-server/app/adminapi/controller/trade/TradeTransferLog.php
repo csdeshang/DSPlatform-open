@@ -14,7 +14,7 @@ class TradeTransferLog extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/trade/transfer-log/pages",
+     *     path="/adminapi/trade/transfer-logs/pages",
      *     summary="获取交易转账日志分页列表",
      *     tags={"admin-api/trade/TradeTransferLog"},
      *     @OA\Parameter(
@@ -70,7 +70,7 @@ class TradeTransferLog extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

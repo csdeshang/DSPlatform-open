@@ -3,7 +3,7 @@
 
 
 
-
+<div>
 
     <el-table :data="tableData.data" style="width: 100%" v-loading="tableData.loading">
         <el-table-column label="ID" prop="id" width="60" />
@@ -12,11 +12,13 @@
             <template #default="{ row }">
                 <div class="flex flex-col">
                     <div v-for="item in row.orderGoodsList" :key="item.id" class="flex flex-row">
-                        <div>
-                            <el-image :src="formatFileUrl(item.goods_image)" style="width: 50px; height: 50px;" fit="cover" />
+                        <div class="mr-[10px]">
+                            <el-image :src="formatImageUrl(item.goods_image, ThumbnailPresets.small, 'goods')" style="width:60px; height: 60px;" fit="cover" />
                         </div>
-                        <div>{{ item.goods_name }} ({{ item.sku_name }})</div>
-                        <div>{{ item.pay_price }} X {{ item.goods_num }}</div>
+                        <div>
+                            <div class="text-[14px]">{{ item.goods_name }}<el-tag type="success" v-if="item.sku_name" class="ml-[5px]">{{ item.sku_name }}</el-tag></div>
+                            <div class="text-[12px]">{{ item.pay_price }} X {{ item.goods_num }}</div>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -32,7 +34,7 @@
             layout="total, sizes, prev, pager, next, jumper" :total="tableData.total" @size-change="getTableList()"
             @current-change="getTableList" />
     </div>
-
+</div>
 
 </template>
 
@@ -41,7 +43,7 @@
 
 import { reactive, watch } from 'vue';
 
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 
 import { usePagination } from '@/hooks/usePagination'

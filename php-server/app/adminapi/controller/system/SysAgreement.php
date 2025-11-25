@@ -13,7 +13,7 @@ class SysAgreement extends BaseAdminController
 {
     /**
      * @OA\Get(
-     *     path="/adminapi/system/agreement/list",
+     *     path="/adminapi/system/agreements/list",
      *     summary="获取系统协议列表",
      *     tags={"admin-api/system/SysAgreement"},
      *     @OA\Parameter(
@@ -27,7 +27,7 @@ class SysAgreement extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -49,7 +49,7 @@ class SysAgreement extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/system/agreement/{id}",
+     *     path="/adminapi/system/agreements/{id}",
      *     summary="获取系统协议详情",
      *     tags={"admin-api/system/SysAgreement"},
      *     @OA\Parameter(
@@ -63,7 +63,7 @@ class SysAgreement extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -80,7 +80,7 @@ class SysAgreement extends BaseAdminController
 
     /**
      * @OA\Put(
-     *     path="/adminapi/system/agreement/{id}",
+     *     path="/adminapi/system/agreements/{id}",
      *     summary="更新系统协议",
      *     tags={"admin-api/system/SysAgreement"},
      *     @OA\Parameter(
@@ -104,7 +104,7 @@ class SysAgreement extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )

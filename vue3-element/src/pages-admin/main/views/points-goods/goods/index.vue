@@ -22,7 +22,7 @@
                     <template #default="{ row }">
                         <div class="flex flex-row">
                             <div>
-                                <el-image :src="formatFileUrl(row.goods_image)" style="width: 50px; height: 50px;" fit="cover" />
+                                <el-image :src="formatImageUrl(row.goods_image, ThumbnailPresets.small, 'goods')" style="width: 50px; height: 50px;" fit="cover" />
                             </div>
                             <div class="ml-2">
                                 <div class="font-medium">{{ row.goods_name }}</div>
@@ -80,7 +80,7 @@
 <script lang="ts" setup name="PointsGoodsList">
 import { reactive, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { formatFileUrl } from '@/utils/util'
+import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { usePagination } from '@/hooks/usePagination'
 import { getPointsGoodsPages, deletePointsGoods } from '@/pages-admin/main/api/points-goods/pointsGoods'
 import GoodsDrawer from './goods-drawer.vue'

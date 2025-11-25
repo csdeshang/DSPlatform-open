@@ -51,16 +51,16 @@ class PointsGoodsDao extends BaseDao
      * 软删除积分商品
      * 
      * @param array $condition 删除条件
-     * @return bool 是否删除成功
+     * @return int 受影响的行数
      */
-    public function softDeletePointsGoods(array $condition): bool
+    public function softDeletePointsGoods(array $condition): int
     {
         $data = [
             'is_deleted' => 1,
             'deleted_at' => time(),
         ];
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -68,12 +68,12 @@ class PointsGoodsDao extends BaseDao
      * 
      * @param array $condition 更新条件
      * @param array $data 更新数据
-     * @return bool 是否更新成功
+     * @return int 受影响的行数
      */
-    public function updatePointsGoods(array $condition, array $data): bool
+    public function updatePointsGoods(array $condition, array $data): int
     {
         $result = $this->model::update($data, $condition);
-        return true;
+        return $result->getNumRows();
     }
 
     /**
@@ -84,9 +84,9 @@ class PointsGoodsDao extends BaseDao
      * @param string $order 排序规则，默认按ID降序
      * @return array 积分商品列表
      */
-    public function getPointsGoodsList(array $condition, string $field = '*', string $order = 'id desc'): array
+    public function getPointsGoodsList(array $condition, string $field = '*', string $order = 'id desc', int $limit = 10): array
     {
-        return $this->model->where($condition)->field($field)->order($order)->select()->toArray();
+        return $this->model->where($condition)->field($field)->order($order)->limit($limit)->select()->toArray();
     }
 
     /**
@@ -110,11 +110,12 @@ class PointsGoodsDao extends BaseDao
      * 
      * @param array $condition 查询条件
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 积分商品信息
      */
-    public function getPointsGoodsInfo(array $condition, string $field = '*'): array
+    public function getPointsGoodsInfo(array $condition, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where($condition)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where($condition)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**
@@ -122,11 +123,12 @@ class PointsGoodsDao extends BaseDao
      * 
      * @param int $id 积分商品ID
      * @param string $field 查询字段，默认为所有字段
+     * @param bool $lock 是否加锁，默认为 false
      * @return array 积分商品信息
      */
-    public function getPointsGoodsInfoById(int $id, string $field = '*'): array
+    public function getPointsGoodsInfoById(int $id, string $field = '*', bool $lock = false): array
     {
-        return $this->model->where('id', $id)->field($field)->findOrEmpty()->toArray();
+        return $this->model->where('id', $id)->field($field)->lock($lock)->findOrEmpty()->toArray();
     }
 
     /**

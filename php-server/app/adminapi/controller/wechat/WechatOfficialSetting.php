@@ -14,14 +14,14 @@ class WechatOfficialSetting extends BaseAdminController
 
     /**
      * @OA\Get(
-     *     path="/adminapi/wechat/official-setting/info",
+     *     path="/adminapi/wechat/official/settings",
      *     summary="获取微信公众号设置",
      *     tags={"admin-api/wechat/WechatOfficialSetting"},
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -38,8 +38,8 @@ class WechatOfficialSetting extends BaseAdminController
 
 
     /**
-     * @OA\Post(
-     *     path="/adminapi/wechat/official-setting/update",
+     * @OA\Put(
+     *     path="/adminapi/wechat/official/settings",
      *     summary="更新微信公众号设置",
      *     tags={"admin-api/wechat/WechatOfficialSetting"},
      *     @OA\RequestBody(
@@ -58,7 +58,7 @@ class WechatOfficialSetting extends BaseAdminController
      *         response=200,
      *         description="操作成功",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="msg", type="string", example="操作成功")
      *         )
      *     )

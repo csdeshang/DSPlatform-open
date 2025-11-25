@@ -56,6 +56,28 @@ class SysErrorLogs extends BaseAdminController
      *         @OA\Schema(type="string", example="500")
      *     ),
      *     @OA\Parameter(
+     *         name="include_exception_class",
+     *         in="query",
+     *         required=false,
+     *         description="包含异常类名（支持多选，数组格式）",
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(type="string"),
+     *             example={"CommonException", "ValidateException"}
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="exclude_exception_class",
+     *         in="query",
+     *         required=false,
+     *         description="排除异常类名（支持多选，数组格式）",
+     *         @OA\Schema(
+     *             type="array",
+     *             @OA\Items(type="string"),
+     *             example={"CommonException", "ValidateException"}
+     *         )
+     *     ),
+     *     @OA\Parameter(
      *         name="duration_min",
      *         in="query",
      *         required=false,
@@ -73,7 +95,7 @@ class SysErrorLogs extends BaseAdminController
      *         response=200,
      *         description="成功获取系统错误日志分页列表",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="array", @OA\Items(type="object"))
      *         )
@@ -87,9 +109,14 @@ class SysErrorLogs extends BaseAdminController
             'root' => input('param.root'),
             'ip' => input('param.ip'),
             'code' => input('param.code'),
+            'include_exception_class' => input('param.include_exception_class/a', []), // 使用 /a 修饰符接收数组
+            'exclude_exception_class' => input('param.exclude_exception_class/a', []), // 使用 /a 修饰符接收数组
             'duration_min' => input('param.duration_min'),
             'duration_max' => input('param.duration_max'),
         );
+        
+        $this->validate($data, 'app\adminapi\controller\system\validate\SysErrorLogsValidate.pages');
+        
         $result = (new SysErrorLogsService())->getSysErrorLogsPages($data);
         return ds_json_success('操作成功', $result);
     }
@@ -109,7 +136,7 @@ class SysErrorLogs extends BaseAdminController
      *         response=200,
      *         description="成功获取系统错误日志详情",
      *         @OA\JsonContent(
-     *             @OA\Property(property="code", type="integer", example=200),
+     *             @OA\Property(property="code", type="integer", example=10000),
      *             @OA\Property(property="message", type="string", example="操作成功"),
      *             @OA\Property(property="data", type="object")
      *         )
@@ -122,6 +149,12 @@ class SysErrorLogs extends BaseAdminController
      */
     public function getSysErrorLogsInfo($id)
     {
+        $data = array(
+            'id' => $id,
+        );
+        
+        $this->validate($data, 'app\adminapi\controller\system\validate\SysErrorLogsValidate.info');
+        
         $result = (new SysErrorLogsService())->getSysErrorLogsInfo($id);
         return ds_json_success('操作成功', $result);
     }
