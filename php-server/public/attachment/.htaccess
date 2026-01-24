@@ -1,0 +1,8 @@
+# 禁止执行图片和视频文件中的 PHP 代码
+# 防止图片马等恶意代码被执行
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|bmp|mp4|avi|mov|wmv)$">
+    SetHandler default-handler
+    RemoveHandler .php
+    php_flag engine off
+</FilesMatch>
+

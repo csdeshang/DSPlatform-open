@@ -135,4 +135,47 @@ class TechnicianService extends BaseAdminService
         return true;
     }
 
+    /**
+     * 审核师傅申请
+     * @param array $data 审核数据
+     * @return int
+     */
+    public function auditTechnician(array $data)
+    {
+        // 获取师傅信息
+        $technicianInfo = (new TechnicianDao())->getTechnicianInfo([['id', '=', $data['id']]]);
+
+        // 判断师傅信息是否存在
+        if (empty($technicianInfo)) {
+            throw new CommonException('师傅信息不存在');
+        }
+
+        // 判断师傅申请状态 (审核通过 不能重复审核)
+        if ($technicianInfo['apply_status'] == TechnicianEnum::APPLY_STATUS_APPROVED) {
+            throw new CommonException('师傅申请状态不正确');
+        }
+
+        // 判断审核状态
+        if ($data['apply_status'] == TechnicianEnum::APPLY_STATUS_APPROVED) {
+            // 审核通过 修改信息
+            $updateData = [
+                'apply_status' => TechnicianEnum::APPLY_STATUS_APPROVED,
+                'audit_time' => time(),
+                'audit_remark' => $data['audit_remark'] ?? '',
+            ];
+        } else if ($data['apply_status'] == TechnicianEnum::APPLY_STATUS_REJECTED) {
+            // 审核拒绝 修改信息
+            $updateData = [
+                'apply_status' => TechnicianEnum::APPLY_STATUS_REJECTED,
+                'audit_time' => time(),
+                'audit_remark' => $data['audit_remark'],
+            ];
+        } else {
+            throw new CommonException('师傅申请状态不正确');
+        }
+
+        $condition = [['id', '=', $data['id']]];
+        return (new TechnicianDao())->updateTechnician($condition, $updateData);
+    }
+
 } 

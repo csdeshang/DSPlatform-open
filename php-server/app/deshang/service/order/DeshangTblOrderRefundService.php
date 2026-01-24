@@ -698,6 +698,7 @@ class DeshangTblOrderRefundService extends BaseDeshangService
                     'trade_no' => $order_info['trade_no'],
                     'out_refund_no' => $refund_info['out_refund_no'],
                     'pay_amount' => $order_info['pay_amount'],
+                    'refund_merchant_id' => $order_info['pay_merchant_id'],
                     'refund_amount' => $refund_info['refund_amount'],
                     'refund_channel' => $order_info['pay_channel'],
                     'refund_scene' => $order_info['pay_scene'],
@@ -719,7 +720,26 @@ class DeshangTblOrderRefundService extends BaseDeshangService
                     'change_desc' => '订单退款' . '(订单ID：' . $refund_info['order_id'] . ')',
                 ];
                 (new DeshangUserBalanceService())->modifyUserBalance($user_balance_data);
-                // 原路退回成功
+                
+                // 余额退款 插入记录
+                $trade_refund_log_data = [
+                    'user_id' => $order_info['user_id'],
+                    'source_type' => TradeRefundEnum::SOURCE_TYPE_REFUND,
+                    'source_id' => $refund_info['id'],
+                    'out_trade_no' => $order_info['out_trade_no'],
+                    'trade_no' => $order_info['trade_no'] ?? null, // 余额支付可能没有 trade_no
+                    'out_refund_no' => $refund_info['out_refund_no'],
+                    'pay_amount' => $order_info['pay_amount'],
+                    'refund_merchant_id' => $order_info['pay_merchant_id'],
+                    'refund_amount' => $refund_info['refund_amount'],
+                    'refund_channel' => $order_info['pay_channel'],
+                    'refund_scene' => $order_info['pay_scene'],
+                    'refund_status' => TradeRefundEnum::REFUND_STATUS_SUCCESS, // 余额退款直接成功
+                    'refund_time' => time(),
+                ];
+                (new TradeRefundLogDao())->createTradeRefundLog($trade_refund_log_data);
+                
+                // 余额退款成功
                 $is_refund_success = true;
 
                 break;

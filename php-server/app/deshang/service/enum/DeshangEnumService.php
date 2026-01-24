@@ -152,7 +152,10 @@ class DeshangEnumService extends BaseDeshangService
                 'verification_status' => ['app\common\enum\blogger\BloggerEnum', 'getVerificationStatusDict'],
                 'verification_type' => ['app\common\enum\blogger\BloggerEnum', 'getVerificationTypeDict'],
             ],
-
+            //骑手表
+            'rider' => [
+                'apply_status' => ['app\common\enum\rider\RiderEnum', 'getApplyStatusDict'],
+            ],
             //课时表
             'kms_lesson' => [
                 'lesson_type' => ['app\common\enum\kms\KmsLessonEnum', 'getLessonTypeDict'],

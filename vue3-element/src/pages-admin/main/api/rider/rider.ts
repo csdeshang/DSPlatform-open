@@ -18,7 +18,13 @@ export function updateRider(params: Record<string, any>) {
   return request.put(`${API_BASE_URLS.ADMIN}/rider/riders/${ params.id }`,   params )
 }
 
-
-
-
+/**
+ * 审核骑手申请
+ * @param id 骑手ID
+ * @param params 审核参数
+ * @returns
+ */
+export function auditRider(id: number, params: Record<string, any>) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/rider/riders/${id}/audit`, params)
+}
 

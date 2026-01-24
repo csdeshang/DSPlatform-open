@@ -83,6 +83,12 @@
               :platform="currentPlatform"
               @select="selectDynamicItem"
             />
+
+            <store-category 
+              v-if="showType === 'store_category_content'"
+              :platform="currentPlatform"
+              @select="selectDynamicItem"
+            />
           </div>
         </div>
   
@@ -97,12 +103,13 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, watch } from 'vue'
   import DiyList from './diy-list.vue'
   import ArticleList from './article-list.vue'
   import GoodsList from './goods-list.vue'
   import GoodsCategory from './goods-category.vue'
   import CouponList from './coupon-list.vue'
+  import StoreCategory from './store-category.vue'
   
   // 定义props和emits
   const props = defineProps({
@@ -118,7 +125,7 @@
   const showDialog = ref(false)
   const inputValue = ref(props.modelValue)
   const loading = ref(false)
-  const showType = ref('')
+  const showType = ref('link_content')  // 默认显示链接内容
   const selectedLink = ref('')
   const linkList = ref<any[]>([])
   const currentPlatform = ref('')
@@ -170,6 +177,7 @@
         },
         { label: '选择商品', value: 'mall_goods_list' },
         { label: '商品分类', value: 'mall_goods_category' },
+        { label: '店铺分类', value: 'mall_store_category' },
         { label: '优惠券', value: 'mall_coupon_list' }
       ]
     },
@@ -182,6 +190,7 @@
         },
         { label: '选择商品', value: 'food_goods_list' },
         { label: '商品分类', value: 'food_goods_category' },
+        { label: '店铺分类', value: 'food_store_category' },
         { label: '优惠券', value: 'food_coupon_list' }
       ]
     },
@@ -194,6 +203,7 @@
         },
         { label: '选择商品', value: 'kms_goods_list' },
         { label: '商品分类', value: 'kms_goods_category' },
+        { label: '店铺分类', value: 'kms_store_category' },
         { label: '优惠券', value: 'kms_coupon_list' }
       ]
     },
@@ -206,6 +216,7 @@
         },
         { label: '选择商品', value: 'house_goods_list' },
         { label: '商品分类', value: 'house_goods_category' },
+        { label: '店铺分类', value: 'house_store_category' },
         { label: '优惠券', value: 'house_coupon_list' }
       ]
     },
@@ -244,6 +255,10 @@
         showType.value = 'goods_category_content'
         currentPlatform.value = 'mall'
         break
+      case 'mall_store_category':
+        showType.value = 'store_category_content'
+        currentPlatform.value = 'mall'
+        break
       case 'mall_coupon_list':
         showType.value = 'coupon_list_content'
         currentPlatform.value = 'mall'
@@ -259,6 +274,10 @@
         break
       case 'food_goods_category':
         showType.value = 'goods_category_content'
+        currentPlatform.value = 'food'
+        break
+      case 'food_store_category':
+        showType.value = 'store_category_content'
         currentPlatform.value = 'food'
         break
       case 'food_coupon_list':
@@ -278,9 +297,13 @@
         showType.value = 'goods_category_content'
         currentPlatform.value = 'kms'
         break
+      case 'kms_store_category':
+        showType.value = 'store_category_content'
+        currentPlatform.value = 'kms'
+        break
       case 'kms_coupon_list':
         showType.value = 'coupon_list_content'
-        currentPlatform.value = 'house'
+        currentPlatform.value = 'kms'
         break
         // 家政系统
       case 'house_index':
@@ -293,6 +316,10 @@
         break
       case 'house_goods_category':
         showType.value = 'goods_category_content'
+        currentPlatform.value = 'house'
+        break
+      case 'house_store_category':
+        showType.value = 'store_category_content'
         currentPlatform.value = 'house'
         break
       case 'house_coupon_list':
@@ -400,10 +427,14 @@
   
   // 处理关闭
   const handleClose = () => {
-    showType.value = ''
+    showType.value = 'link_content'  // 关闭时重置为默认显示
     selectedLink.value = ''
     currentPlatform.value = ''
+    loadSystemLinks()  // 重置为系统链接
   }
+
+  // 初始化时加载系统链接
+  loadSystemLinks()
   </script>
   
   <style scoped lang="scss">

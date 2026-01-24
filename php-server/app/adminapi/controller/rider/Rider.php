@@ -26,6 +26,27 @@ class Rider extends BaseAdminController
      *         description="用户名搜索",
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         required=false,
+     *         description="骑手名称",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="mobile",
+     *         in="query",
+     *         required=false,
+     *         description="手机号",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="apply_status",
+     *         in="query",
+     *         required=false,
+     *         description="申请状态：0审核中 1审核通过 2拒绝",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
@@ -41,8 +62,12 @@ class Rider extends BaseAdminController
     {
         $data = array(
             'username' => input('param.username',''),
+            'name' => input('param.name',''),
+            'mobile' => input('param.mobile',''),
+            'apply_status' => input('param.apply_status',''),
         );
         
+        $this->validate($data, 'app\adminapi\controller\rider\validate\RiderValidate.pages');
         
         $result = (new RiderService())->getRiderPages($data);
         return ds_json_success('操作成功', $result);
@@ -186,6 +211,51 @@ class Rider extends BaseAdminController
 
         $result = (new RiderService())->updateRider((int)$id, $data);
         return ds_json_success('修改成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/rider/riders/{id}/audit",
+     *     summary="审核骑手申请",
+     *     tags={"admin-api/rider/Rider"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="骑手ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="审核数据",
+     *         @OA\JsonContent(
+     *             required={"apply_status"},
+     *             @OA\Property(property="apply_status", type="integer", example=1, description="审核状态 1通过 2拒绝"),
+     *             @OA\Property(property="audit_remark", type="string", example="审核备注", description="审核备注")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="审核成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="审核成功")
+     *         )
+     *     )
+     * )
+     */
+    public function auditRider($id)
+    {
+        $data = array(
+            'id' => (int)$id,
+            'apply_status' => input('param.apply_status'),
+            'audit_remark' => input('param.audit_remark', ''),
+        );
+
+        $this->validate($data, 'app\adminapi\controller\rider\validate\RiderValidate.audit');
+
+        $result = (new RiderService())->auditRider($data);
+        return ds_json_success('审核成功', $result);
     }
 
     

@@ -15,9 +15,6 @@ export function getCurrentUserMenus() {
     }else if(systemType === 'merchant'){
         // 获取当前商户的加载路由信息
         return request.get(`${API_BASE_URLS.MERCHANT}/merchant/info/menus`)
-    }else if(systemType === 'consumer'){
-        // 获取当前消费者的加载路由信息
-        
     }
     return Promise.reject('getCurrentUserMenus 系统类型错误')
 }
@@ -36,9 +33,6 @@ export function getCurrentUserInfo() {
         // 获取当前商户的信息
         return request.get(`${API_BASE_URLS.USER}/user/user/info-with-roles`)
         // return request.get(`${API_BASE_URLS.MERCHANT}/merchant/info/info`)
-    }else if(systemType === 'consumer'){
-        // 获取当前消费者的加载路由信息
-        return request.get(`${API_BASE_URLS.USER}/user/user/info-with-roles`)
     }
     return Promise.reject('getCurrentUserInfo 系统类型错误')
 }

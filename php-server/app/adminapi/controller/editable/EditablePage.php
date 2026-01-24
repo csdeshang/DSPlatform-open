@@ -36,6 +36,13 @@ class EditablePage extends BaseAdminController
      *         description="平台类型",
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *         name="device_type",
+     *         in="query",
+     *         required=false,
+     *         description="设备类型 pc-电脑端 mobile-手机端",
+     *         @OA\Schema(type="string", example="mobile")
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
@@ -52,6 +59,7 @@ class EditablePage extends BaseAdminController
         $data = array(
             'title' => input('param.title'),
             'platform' => input('param.platform'),
+            'device_type' => input('param.device_type'),
         );
 
 
@@ -104,7 +112,8 @@ class EditablePage extends BaseAdminController
      *             required={"title", "platform", "type"},
      *             @OA\Property(property="title", type="string", example="首页", description="页面标题"),
      *             @OA\Property(property="platform", type="string", example="h5", description="平台类型"),
-     *             @OA\Property(property="type", type="string", example="home", description="页面类型")
+     *             @OA\Property(property="type", type="string", example="home", description="页面类型"),
+     *             @OA\Property(property="device_type", type="string", example="mobile", description="设备类型 pc-电脑端 mobile-手机端")
      *         )
      *     ),
      *     @OA\Response(
@@ -124,6 +133,7 @@ class EditablePage extends BaseAdminController
             'title' => input('param.title', ''),
             'platform' => input('param.platform', ''),
             'type' => input('param.type', ''),
+            'device_type' => input('param.device_type', 'mobile'), // 默认手机端
             'is_default' => 0,
         );
 

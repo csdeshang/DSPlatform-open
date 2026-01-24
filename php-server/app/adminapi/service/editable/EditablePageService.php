@@ -24,6 +24,9 @@ class EditablePageService extends BaseAdminService
         if (isset($data['platform']) && !empty($data['platform'])) {
             $condition[] = ['platform', '=', $data['platform']];
         }
+        if (isset($data['device_type']) && !empty($data['device_type'])) {
+            $condition[] = ['device_type', '=', $data['device_type']];
+        }
         $condition[] = ['store_id', '=', 0];
 
 

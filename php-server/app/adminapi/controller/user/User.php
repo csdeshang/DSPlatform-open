@@ -150,6 +150,7 @@ class User extends BaseAdminController
             'mobile' => input('param.mobile',''),
             'inviter_id' => input('param.inviter_id',''),
             'is_enabled' => input('param.is_enabled',''),
+            'is_deleted' => input('param.is_deleted',''),
             'balance_min' => input('param.balance_min',''),
             'balance_max' => input('param.balance_max',''),
             'balance_in_min' => input('param.balance_in_min',''),
@@ -349,6 +350,71 @@ class User extends BaseAdminController
         return ds_json_success('操作成功', $result);
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/user/users/{id}/soft-delete",
+     *     summary="软删除会员",
+     *     tags={"admin-api/user/User"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="会员ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="操作成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="删除成功")
+     *         )
+     *     )
+     * )
+     */
+    public function softDeleteUser($id)
+    {
+        $data = array('id' => $id);
+        
+        // 验证参数
+        $this->validate($data, 'app\adminapi\controller\user\validate\UserValidate.softDelete');
+        
+        $result = (new UserService())->softDeleteUser((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/user/users/{id}/restore",
+     *     summary="恢复已删除的会员",
+     *     tags={"admin-api/user/User"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="会员ID",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="操作成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="恢复成功")
+     *         )
+     *     )
+     * )
+     */
+    public function restoreUser($id)
+    {
+        $data = array('id' => $id);
+        
+        // 验证参数
+        $this->validate($data, 'app\adminapi\controller\user\validate\UserValidate.restore');
+        
+        $result = (new UserService())->restoreUser((int)$id);
+        return ds_json_success('恢复成功', $result);
+    }
 
     
 

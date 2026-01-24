@@ -3,6 +3,8 @@
 namespace app\adminapi\service\user;
 
 use app\deshang\base\service\BaseAdminService;
+use app\deshang\exceptions\CommonException;
+use app\deshang\utils\TokenCache;
 
 use app\deshang\service\user\DeshangUserService;
 
@@ -21,6 +23,15 @@ class UserService extends BaseAdminService
     public function getUserPages($data)
     {
         $condition = [];
+
+        // 根据参数控制是否显示已删除数据
+        if (isset($data['is_deleted']) && $data['is_deleted'] !== '') {
+            // 明确指定查询已删除或未删除的数据
+            $condition[] = ['is_deleted', '=', (int)$data['is_deleted']];
+        } else {
+            // 默认只显示未删除的数据
+            $condition[] = ['is_deleted', '=', 0];
+        }
 
         if (isset($data['username']) && $data['username'] != '') {
             $username = trim($data['username']);
@@ -158,6 +169,81 @@ class UserService extends BaseAdminService
             $user['hasChildren'] = $user['direct_count'] > 0;
         }
 
+        return $result;
+    }
+
+    /**
+     * 软删除用户
+     * 
+     * @param int $id 用户ID
+     * @return int 受影响的行数
+     */
+    public function softDeleteUser(int $id)
+    {
+        // 检查用户是否存在
+        $user_info = $this->dao->getUserInfoById($id);
+        if (empty($user_info)) {
+            throw new CommonException('用户不存在');
+        }
+        
+        // 检查是否已删除
+        if ($user_info['is_deleted'] == 1) {
+            throw new CommonException('用户已被删除');
+        }
+        
+        
+        // 软删除：设置标志位
+        $update_data = [
+            'is_deleted' => 1,
+            'deleted_at' => time()
+        ];
+        
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 0]
+        ];
+        
+        $result = $this->dao->updateUser($condition, $update_data);
+        
+        // 使该用户的所有Token失效
+        if ($result > 0) {
+            (new TokenCache())->invalidateToken('user', $id);
+        }
+        
+        return $result;
+    }
+
+    /**
+     * 恢复用户
+     * 
+     * @param int $id 用户ID
+     * @return int 受影响的行数
+     */
+    public function restoreUser(int $id)
+    {
+        // 检查用户是否存在（包括已删除的）
+        $user_info = $this->dao->getUserInfoById($id);
+        if (empty($user_info)) {
+            throw new CommonException('用户不存在');
+        }
+        
+        // 检查是否已删除
+        if ($user_info['is_deleted'] != 1) {
+            throw new CommonException('用户未被删除，无需恢复');
+        }
+        
+        // 恢复：清除删除标志
+        $update_data = [
+            'is_deleted' => 0,
+            'deleted_at' => null
+        ];
+        
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 1]
+        ];
+        
+        $result = $this->dao->updateUser($condition, $update_data);
         return $result;
     }
 }

@@ -12,6 +12,7 @@ class Admin extends BaseValidate
         'password' => 'require|min:6',
         'confirm_password' => 'min:6|confirm:password',
         'role_id' => 'require|integer',
+        'is_enabled' => 'in:0,1',
         'http_code' => 'integer',
     ];
 
@@ -28,12 +29,13 @@ class Admin extends BaseValidate
         'confirm_password.confirm' => '两次输入的密码不一致',
         'role_id.require' => '请选择权限组',
         'role_id.integer' => '权限组ID必须是数字',
+        'is_enabled.in' => '启用状态值不正确，只能是0或1',
         'http_code.integer' => 'HTTP状态码必须是数字',
     ];
 
     protected $scene = [
-        'create' => ['username', 'password', 'confirm_password', 'role_id'],
-        'update' => ['id', 'password', 'confirm_password', 'role_id'],
+        'create' => ['username', 'password', 'confirm_password', 'role_id', 'is_enabled'],
+        'update' => ['id', 'password', 'confirm_password', 'role_id', 'is_enabled'],
         'pages' => ['http_code'],
     ];
 

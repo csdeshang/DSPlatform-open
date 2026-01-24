@@ -25,6 +25,10 @@ class LoginService extends BaseService
             throw new CommonException('用户不存在');
         }
 
+        // 验证管理员是否启用
+        if (isset($admin_info['is_enabled']) && $admin_info['is_enabled'] != 1) {
+            throw new CommonException('管理员已被禁用');
+        }
 
         if (!check_password($password, $admin_info['password'])) {
             throw new CommonException('密码错误');
@@ -97,7 +101,8 @@ class LoginService extends BaseService
         // 验证 refresh_token
         $token_info = (new JwtToken())->validateToken($refresh_token);
 
-        if ($token_info['role'] != 'admin') {
+        // 先检查 token_info 是否为 false 或空，再访问数组元素
+        if (empty($token_info) || $token_info['role'] != 'admin') {
             throw new CommonException('refresh_token 无效');
         }
 
@@ -116,6 +121,10 @@ class LoginService extends BaseService
             throw new CommonException('用户不存在');
         }
 
+        // 验证管理员是否启用
+        if (isset($admin_info['is_enabled']) && $admin_info['is_enabled'] != 1) {
+            throw new CommonException('管理员已被禁用');
+        }
 
         $data = $this->generateAdminToken($admin_info);
         return $data;

@@ -8,8 +8,6 @@ import { findFirstAccessibleRoute, addRoutesRecursively } from './utils'
 
 export const DEFAULT_LAYOUT = () => import('@/layout/index.vue')
 
-// 导入消费者端路由
-import { consumerRoutes } from './modules/consumer'
 
 // 根据系统类型获取默认路由
 import { getSystemType } from '@/utils/util'
@@ -64,8 +62,6 @@ function getDefaultRoutes() {
 
       }
     ]
-  }else if (systemType == 'consumer') {
-    return consumerRoutes
   } else {
     console.log('systemType error')
     return []
@@ -103,7 +99,7 @@ router.beforeEach(async (to, from, next) => {
   const userInfoStore = useUserInfoStore()
   const multiTagsStore = useMultiTagsStore()
 
-  if (whiteList.includes(to.path) || systemType == 'consumer') {
+  if (whiteList.includes(to.path)) {
     // 白名单路由直接放行  或是消费者访问
     next()
   } else if (userInfoStore.refresh_token) {

@@ -19,6 +19,13 @@
                     <el-option label="禁用" value="0" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="删除状态">
+                <el-select v-model="searchParams.is_deleted" placeholder="请选择状态" clearable class="w-[120px]">
+                    <el-option label="全部" value="" />
+                    <el-option label="未删除" value="0" />
+                    <el-option label="已删除" value="1" />
+                </el-select>
+            </el-form-item>
             <el-form-item label="可用金额">
                 <div class="flex items-center gap-2">
                     <el-input v-model="searchParams.balance_min" placeholder="最小金额" clearable class="w-[120px]" />
@@ -60,7 +67,7 @@
             <el-table-column label="成长值" prop="growth" />
             <el-table-column label="最近登录" prop="login_time" />
             <el-table-column label="邀请人ID" prop="inviter_id" width="120" />
-            <el-table-column label="操作" align="right" fixed="right" width="130">
+            <el-table-column label="操作" align="right" fixed="right" width="150">
                 <template #default="{ row }">
                     <div class="flex flex-row">
                         <el-button type="primary" link @click="handleDtail(row.id)">详情</el-button>
@@ -72,12 +79,12 @@
                                     <el-dropdown-item command="points">调整积分</el-dropdown-item>
                                     <el-dropdown-item command="growth">调整成长值</el-dropdown-item>
                                     <el-dropdown-item command="inviter">修改推荐人</el-dropdown-item>
+                                    <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                    <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
                     </div>
-                    <!-- <el-button type="primary" link @click="handleEdit(row)">编辑</el-button> -->
-                    <!-- <el-button type="primary" link @click="handleDelete(row.id)">删除</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -102,8 +109,9 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
 
-import { getUserPage } from '@/pages-admin/main/api/user/user'
+import { getUserPage, softDeleteUser, restoreUser } from '@/pages-admin/main/api/user/user'
 import { usePagination } from '@/hooks/usePagination'
 
 import UserAdd from './add.vue'
@@ -123,6 +131,7 @@ const searchParams = reactive({
     mobile: '',
     inviter_id: '',
     is_enabled: '',
+    is_deleted: '',
     balance_min: '',
     balance_max: '',
     balance_in_min: '',
@@ -152,14 +161,43 @@ const handleAdd = () => {
 
 }
 
-const handleEdit = (row: any) => {
-    // TODO: 实现编辑功能
-    console.log('编辑', row)
+
+/**
+ * 软删除用户
+ */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此用户吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteUser(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {
+        })
+    }).catch(() => {
+        // 用户取消删除
+    })
 }
 
-const handleDelete = (id: number) => {
-    // TODO: 实现删除功能
-    console.log('删除', id)
+/**
+ * 恢复用户
+ */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此用户吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreUser(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {
+        })
+    }).catch(() => {
+        // 用户取消恢复
+    })
 }
 
 
@@ -186,6 +224,12 @@ const handleMore = (command: string, row: any,) => {
             break;
         case 'inviter':
             handleModifyInviter(row);
+            break;
+        case 'softDelete':
+            handleSoftDelete(row.id);
+            break;
+        case 'restore':
+            handleRestore(row.id);
             break;
         default:
             console.log('未知命令', command);

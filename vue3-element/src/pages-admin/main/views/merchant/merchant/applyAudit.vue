@@ -7,7 +7,7 @@
           <el-radio label="拒绝" :value="2" />
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="审核备注" prop="audit_remark" v-if="formData.apply_status === 2">
+      <el-form-item label="审核备注" prop="audit_remark">
         <el-input v-model="formData.audit_remark" type="textarea" :rows="3" placeholder="请输入审核备注" />
       </el-form-item>
     </el-form>
@@ -47,13 +47,7 @@ const formRules = computed(() => {
     apply_status: [
       { required: true, message: '请选择审核状态', trigger: 'change' }
     ],
-    audit_remark: [
-      { 
-        required: formData.apply_status === 2, 
-        message: '请输入审核备注', 
-        trigger: 'blur' 
-      }
-    ]
+    audit_remark: []
   }
 })
 

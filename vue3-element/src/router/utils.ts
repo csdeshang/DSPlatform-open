@@ -10,6 +10,7 @@ export interface MenuItem {
   icon?: string
   permissions?: string[]
   is_show?: boolean  // 使用 is_show 替代 hidden
+  is_enabled?: boolean
   keepAlive?: boolean
   sort?: number
   children?: MenuItem[]
@@ -40,10 +41,6 @@ if (systemType == 'admin') {
 }else if (systemType == 'merchant') {
   // 匹配views里面所有的.vue文件，动态引入
   const sysyemModules = import.meta.glob('/src/pages-merchant/main/views/**/*.vue')
-  allModules = { ...sysyemModules };
-}else if (systemType == 'consumer') {
-  // 匹配views里面所有的.vue文件，动态引入
-  const sysyemModules = import.meta.glob('/src/pages-consumer/main/views/**/*.vue')
   allModules = { ...sysyemModules };
 }
 

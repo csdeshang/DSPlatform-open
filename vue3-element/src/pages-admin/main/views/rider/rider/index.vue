@@ -3,6 +3,12 @@
 
     <el-card shadow="never" class="mb-[10px]">
         <el-form :model="searchParams" inline>
+            <el-form-item label="骑手名称">
+                <el-input v-model="searchParams.name" placeholder="骑手名称" clearable />
+            </el-form-item>
+            <el-form-item label="手机号">
+                <el-input v-model="searchParams.mobile" placeholder="手机号" clearable />
+            </el-form-item>
             <el-form-item label="用户名">
                 <el-input v-model="searchParams.username" placeholder="用户名" clearable />
             </el-form-item>
@@ -15,6 +21,11 @@
     </el-card>
 
     <el-card shadow="never">
+
+            <el-tabs v-model="searchParams.apply_status" @tab-change="handleTabChange">
+                <el-tab-pane name="" label="全部"></el-tab-pane>
+                <el-tab-pane v-for="item in apply_status_options" :key="item.value" :name="item.value" :label="item.label"></el-tab-pane>
+            </el-tabs>
 
         <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
             <el-table-column label="ID" prop="id" min-width="60" />
@@ -37,10 +48,11 @@
 
             <el-table-column label="创建时间" prop="create_at" />
             <el-table-column label="更新时间" prop="update_at" />
-            <el-table-column label="操作" align="right" fixed="right" width="130">
+            <el-table-column label="操作" align="right" fixed="right" width="200">
                 <template #default="{ row }">
                     <div class="flex flex-row">
                         <el-button type="primary" link @click="handleDtail(row.id)">详情</el-button>
+                        <el-button type="primary" link @click="handleApplyAudit(row)" v-if="row.apply_status != 1">审核</el-button>
                         <el-dropdown class="ml-[10px]" @command="(command) => handleMore(command, row)">
                             <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
                             <template #dropdown>
@@ -69,6 +81,9 @@
     <rider-detail ref="detailRiderDialog" @complete="getTableList()" />
     <rider-modify-balance ref="modifyBalanceDialog" @complete="getTableList()"></rider-modify-balance>
 
+    <!-- 审核 -->
+    <rider-apply-audit ref="applyAuditDialog" @complete="getTableList()" />
+
     <!-- 会员详情弹窗 -->
     <user-detail ref="detailUserDialog" @complete="getTableList()" />
 
@@ -80,9 +95,11 @@ import { reactive, ref } from 'vue';
 
 import { getRiderPage } from '@/pages-admin/main/api/rider/rider'
 import { usePagination } from '@/hooks/usePagination'
+import { useEnum } from '@/hooks/useEnum'
 
 import RiderAdd from './add.vue'
 import RiderModifyBalance from './modify-balance.vue'
+import RiderApplyAudit from './applyAudit.vue'
 
 // 骑手详情弹窗调用
 import RiderDetail from './detail.vue'
@@ -91,6 +108,8 @@ import RiderDetail from './detail.vue'
 const searchParams = reactive({
     name: '',
     mobile: '',
+    username: '',
+    apply_status: '',
 })
 
 const {
@@ -105,6 +124,15 @@ const {
     searchParams: searchParams
 })
 getTableList()
+
+// 使用枚举 Hook
+const { options: apply_status_options } = useEnum('default.rider.apply_status')
+
+// 切换状态
+const handleTabChange = (name: any) => {
+    searchParams.apply_status = name
+    getTableList()
+}
 
 //更多
 const handleMore = (command: string, row: any,) => {
@@ -141,6 +169,13 @@ const modifyBalanceDialog = ref()
 const handleModifyBalance = (row: any) => {
     modifyBalanceDialog.value.setDialogData(row)
     modifyBalanceDialog.value?.openDialog()
+}
+
+// 审核
+const applyAuditDialog = ref()
+const handleApplyAudit = (row: any) => {
+    applyAuditDialog.value.setDialogData(row)
+    applyAuditDialog.value?.openDialog()
 }
 
 

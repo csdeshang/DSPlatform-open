@@ -521,3 +521,28 @@ function ds_debug_log($data, $filename = 'debug.log')
     $logContent = date('Y-m-d H:i:s') . ' - ' . json_encode($data, JSON_UNESCAPED_UNICODE) . "\n";
     file_put_contents($logFile, $logContent, FILE_APPEND | LOCK_EX);
 }
+
+
+/**
+ * 乐观锁重试延迟（指数退避 + 随机延迟）
+ * 
+ * 使用指数退避策略，避免多个请求同时重试造成惊群效应
+ * 延迟时间：第1次重试约5ms，第2次约10ms，第3次约20ms（带随机因子）
+ * 
+ * @param int $retryCount 当前重试次数（从1开始）
+ * @param int $baseDelay 基础延迟时间（微秒），默认5000（5毫秒）
+ * @return void
+ */
+function ds_retry_delay(int $retryCount, int $baseDelay = 5000): void
+{
+    // 指数退避：5ms, 10ms, 20ms, 40ms...
+    $exponentialDelay = $baseDelay * (2 ** ($retryCount - 1));
+    
+    // 随机延迟：±50%，避免多个任务同时重试
+    $randomFactor = 0.5 + (mt_rand(0, 100) / 100); // 0.5 ~ 1.5
+    
+    // 计算最终延迟时间
+    $delay = (int)($exponentialDelay * $randomFactor);
+    
+    usleep($delay);
+}

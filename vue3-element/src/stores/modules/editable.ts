@@ -26,6 +26,7 @@ interface EditablePage {
     store_id: number;
     title: string;
     type: string;
+    device_type: string;
     page_config: string;
     is_default: number;
     create_at: number;

@@ -5,6 +5,7 @@ namespace app\adminapi\service\rider;
 use app\deshang\base\service\BaseAdminService;
 use app\common\dao\rider\RiderDao;
 use app\common\dao\user\UserDao;
+use app\common\enum\rider\RiderEnum;
 use app\deshang\exceptions\CommonException;
 use app\deshang\utils\SearchHelper;
 
@@ -35,6 +36,9 @@ class RiderService extends BaseAdminService
         }
         if (isset($data['mobile']) && $data['mobile'] != '') {
             $condition[] = ['mobile', 'like', '%' . $data['mobile'] . '%'];
+        }
+        if (isset($data['apply_status']) && in_array($data['apply_status'], array_keys(RiderEnum::getApplyStatusDict()))) {
+            $condition[] = ['apply_status', '=', $data['apply_status']];
         }
 
         $result = (new RiderDao())->getWithRelRiderPages($condition);
@@ -83,6 +87,42 @@ class RiderService extends BaseAdminService
         return $result;
     }
 
+    public function auditRider(array $data)
+    {
+        // 获取骑手信息
+        $riderInfo = (new RiderDao())->getRiderInfo([['id', '=', $data['id']]]);
 
+        // 判断骑手信息是否存在
+        if (empty($riderInfo)) {
+            throw new CommonException('骑手信息不存在');
+        }
+
+        // 判断骑手申请状态 (审核通过 不能重复审核)
+        if ($riderInfo['apply_status'] == RiderEnum::APPLY_STATUS_APPROVED) {
+            throw new CommonException('骑手申请状态不正确');
+        }
+
+        // 判断审核状态
+        if ($data['apply_status'] == RiderEnum::APPLY_STATUS_APPROVED) {
+            // 审核通过 修改信息
+            $updateData = [
+                'apply_status' => RiderEnum::APPLY_STATUS_APPROVED,
+                'audit_time' => time(),
+                'audit_remark' => $data['audit_remark'] ?? '',
+            ];
+        } else if ($data['apply_status'] == RiderEnum::APPLY_STATUS_REJECTED) {
+            // 审核拒绝 修改信息
+            $updateData = [
+                'apply_status' => RiderEnum::APPLY_STATUS_REJECTED,
+                'audit_time' => time(),
+                'audit_remark' => $data['audit_remark'],
+            ];
+        } else {
+            throw new CommonException('骑手申请状态不正确');
+        }
+
+        $condition = [['id', '=', $data['id']]];
+        return (new RiderDao())->updateRider($condition, $updateData);
+    }
 
 }

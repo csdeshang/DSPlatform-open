@@ -23,6 +23,9 @@
                         :value="role.id" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="是否启用" prop="is_enabled">
+                <el-switch v-model="formData.is_enabled" :active-value="1" :inactive-value="0" />
+            </el-form-item>
 
         </el-form>
         <template #footer>
@@ -55,6 +58,7 @@ const initialFormData = {
     password: '',
     confirm_password: '',
     role_id: '',
+    is_enabled: 1,
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 

@@ -9,6 +9,7 @@ class RiderValidate extends BaseValidate
 {
     protected $rule = [
         'user_id' => 'require|integer',
+        'username' => 'max:32',
         'name' => 'max:32',
         'mobile' => 'mobile|max:20',
         'status' => 'checkRiderStatus',
@@ -20,6 +21,7 @@ class RiderValidate extends BaseValidate
     protected $message = [
         'user_id.require' => '用户ID不能为空',
         'user_id.integer' => '用户ID必须为整数',
+        'username.max' => '用户名长度不能超过32个字符',
         'name.max' => '骑手姓名不能超过32个字符',
         'mobile.mobile' => '手机号格式不正确',
         'mobile.max' => '手机号不能超过20个字符',
@@ -30,19 +32,29 @@ class RiderValidate extends BaseValidate
     ];
 
     protected $scene = [
+        'pages' => ['username', 'name', 'mobile', 'apply_status'],
         'create' => ['user_id'],
         'update' => ['name', 'mobile', 'status', 'is_enabled', 'apply_status', 'audit_remark'],
+        'audit' => ['id', 'apply_status', 'audit_remark'],
     ];
 
     // 验证骑手状态
     public function checkRiderStatus($value, $rule, $data)
     {
+        // 空值允许（用于更新时可选字段），但 '0' 是有效值需要验证
+        if ($value === '' || $value === null) {
+            return true;
+        }
         return array_key_exists($value, RiderEnum::getRiderStatusDict());
     }
 
     // 验证申请状态
     public function checkApplyStatus($value, $rule, $data)
     {
+        // 空值允许（用于分页查询时"全部"选项），但 '0' 是有效值需要验证
+        if ($value === '' || $value === null) {
+            return true;
+        }
         return array_key_exists($value, RiderEnum::getApplyStatusDict());
     }
 } 

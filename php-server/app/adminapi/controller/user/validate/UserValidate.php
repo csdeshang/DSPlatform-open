@@ -87,5 +87,11 @@ class UserValidate extends BaseValidate
         
         // 获取推广关系
         'relation' => ['inviter_id'],
+        
+        // 软删除用户
+        'softDelete' => ['id'],
+        
+        // 恢复用户
+        'restore' => ['id'],
     ];
 }

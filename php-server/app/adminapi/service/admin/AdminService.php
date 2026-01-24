@@ -32,7 +32,7 @@ class AdminService extends BaseAdminService
         $condition = [
             ['id', '=', $id],
         ];
-        $field = 'id,username,login_time,login_num,is_super,role_id';
+        $field = 'id,username,login_time,login_num,is_super,role_id,is_enabled';
         return $this->dao->getWithRelAdminInfo($condition, $field);
     }
 
@@ -43,6 +43,7 @@ class AdminService extends BaseAdminService
             'username' => $data['username'],
             'password' => create_password($data['password']),
             'role_id' => $data['role_id'],
+            'is_enabled' => isset($data['is_enabled']) ? $data['is_enabled'] : 1,
         );
         
         $id = $this->dao->createAdmin($admin_data);
@@ -58,6 +59,9 @@ class AdminService extends BaseAdminService
         if (!empty($data['password'])) {
             $admin_data['password'] = create_password($data['password']);
         }
+        if (isset($data['is_enabled'])) {
+            $admin_data['is_enabled'] = $data['is_enabled'];
+        }
 
         $condition = [
             ['id', '=', $data['id']],
@@ -67,6 +71,11 @@ class AdminService extends BaseAdminService
         
         // 如果修改了密码，使该管理员的所有Token失效
         if (!empty($data['password'])) {
+            (new TokenCache())->invalidateToken('admin', $data['id']);
+        }
+        
+        // 如果禁用了管理员，使该管理员的所有Token失效
+        if (isset($data['is_enabled']) && $data['is_enabled'] == 0) {
             (new TokenCache())->invalidateToken('admin', $data['id']);
         }
         

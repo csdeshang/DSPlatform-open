@@ -183,19 +183,27 @@ class Request {
             return this.handleTokenRefresh(error)
         }
 
+        // 获取响应体中的错误信息（优先使用）
+        const errorData = error.response?.data as any
+        const responseMessage = errorData?.message || ''
+
         // 处理403错误（拒绝访问）
         if (status === 403) {
-            const errorMessage = '权限不足，请重新登录'
+            // 优先使用响应体中的错误信息，如果没有则使用默认消息
+            const errorMessage = responseMessage || '权限不足，请重新登录'
             this.showMessage({
                 message: errorMessage,
                 type: 'error',
                 duration: 3000
             })
-            // 登出用户
-            useUserInfoStore().logout()
+            // 延迟登出，让用户看到提示
+            setTimeout(() => {
+                useUserInfoStore().logout()
+            }, 2000)
         } else {
             // 处理其他HTTP错误
-            const errorMessage = this.getHttpErrorMessage(status)
+            // 优先使用响应体中的错误信息，如果没有则使用默认消息
+            const errorMessage = responseMessage || this.getHttpErrorMessage(status)
             this.showMessage({
                 message: errorMessage,
                 type: 'error',

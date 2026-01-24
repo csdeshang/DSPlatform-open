@@ -1,16 +1,16 @@
 /**
  * ============================================================================
- * 重要说明：此文件与 uniapp/src/utils/image.ts 的核心逻辑完全一致
+ * 重要说明：此文件与 nuxt-consumer/app/utils/image.ts 和 uniapp/src/utils/image.ts 的核心逻辑完全一致
  * ============================================================================
  * 
- * 两个文件的函数实现、接口定义、处理逻辑完全相同
+ * 三个文件的函数实现、接口定义、处理逻辑完全相同
  * 唯一的区别在于 ThumbnailPresets 的尺寸参数：
- * - PC端（vue-element-admin）：使用较大的尺寸以适应大屏幕
+ * - PC端（nuxt-consumer/vue-element-admin）：使用较大的尺寸以适应大屏幕
  *   small: 150x150, medium: 500x500, large: 1200x1200
  * - 移动端（uniapp）：使用较小的尺寸以节省流量
  *   small: 100x100, medium: 360x360, large: 750x750
  * 
- * 修改此文件时，请同步更新 uniapp/src/utils/image.ts
+ * 修改此文件时，请同步更新 nuxt-consumer/app/utils/image.ts 和 uniapp/src/utils/image.ts
  * ============================================================================
  */
 
@@ -20,9 +20,9 @@
  * 图片URL处理和缩略图工具
  * 支持阿里云OSS、腾讯云COS等云存储的URL参数处理
  * 
- * 注意：此文件与 uniapp/src/utils/image.ts 的核心逻辑完全一致
+ * 注意：此文件与 nuxt-consumer/app/utils/image.ts 和 uniapp/src/utils/image.ts 的核心逻辑完全一致
  * 唯一的区别在于 ThumbnailPresets 的尺寸参数：
- * - PC端（vue-element-admin）：使用较大的尺寸以适应大屏幕（small: 150x150, medium: 500x500, large: 1200x1200）
+ * - PC端（nuxt-consumer/vue-element-admin）：使用较大的尺寸以适应大屏幕（small: 150x150, medium: 500x500, large: 1200x1200）
  * - 移动端（uniapp）：使用较小的尺寸以节省流量（small: 100x100, medium: 360x360, large: 750x750）
  */
 

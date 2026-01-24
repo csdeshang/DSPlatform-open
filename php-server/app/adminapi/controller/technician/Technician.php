@@ -238,4 +238,49 @@ class Technician extends BaseAdminController
         return ds_json_success('操作成功');
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/technician/technicians/{id}/audit",
+     *     summary="审核师傅申请",
+     *     tags={"admin-api/technician/Technician"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="师傅ID",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="审核数据",
+     *         @OA\JsonContent(
+     *             required={"apply_status"},
+     *             @OA\Property(property="apply_status", type="integer", example=1, description="审核状态 1通过 2拒绝"),
+     *             @OA\Property(property="audit_remark", type="string", example="审核备注", description="审核备注")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="审核成功",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="code", type="integer", example=10000),
+     *             @OA\Property(property="msg", type="string", example="审核成功")
+     *         )
+     *     )
+     * )
+     */
+    public function auditTechnician($id)
+    {
+        $data = array(
+            'id' => (int)$id,
+            'apply_status' => input('param.apply_status'),
+            'audit_remark' => input('param.audit_remark', ''),
+        );
+
+        $this->validate($data, 'app\adminapi\controller\technician\validate\TechnicianValidate.audit');
+
+        $result = (new TechnicianService())->auditTechnician($data);
+        return ds_json_success('审核成功', $result);
+    }
+
 } 

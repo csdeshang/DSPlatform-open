@@ -111,6 +111,7 @@ class Admin extends BaseAdminController
             'password' => input('param.password', ''),
             'confirm_password' => input('param.confirm_password', ''),
             'role_id' => input('param.role_id', 0),
+            'is_enabled' => input('param.is_enabled', 1),
         );
 
         //验证器
@@ -162,6 +163,7 @@ class Admin extends BaseAdminController
             'password' => input('param.password', ''),
             'confirm_password' => input('param.confirm_password', ''),
             'role_id' => input('param.role_id', 0),
+            'is_enabled' => input('param.is_enabled', 1),
         );
 
         //验证器

@@ -13,6 +13,7 @@ DSPlatform系统是一个集成的解决方案，基于Thinkphp8 + Vue3 + Elemen
 | 后台PC端 | https://dsplatform.admin.csdeshang.com |  test  |  123456  |
 | 用户PC端 | https://dsplatform.store.csdeshang.com |  seller  |  123456  |
 | 商家PC端 | https://dsplatform.merchant.csdeshang.com |  seller  |  123456  |
+| 用户PC端 | https://dsplatform.consumer.csdeshang.com |  seller  |  123456  |
 | 用户手机端 | https://dsplatform.uniapp.csdeshang.com  |  buyer  |  123456  |
 | 骑手手机端 | https://dsplatform.uniapp.csdeshang.com/rider/pages/index/index |  test  | 123456 |
 | 师傅手机端 | https://dsplatform.uniapp.csdeshang.com/technician/pages/index/index |  test  | 123456 |

@@ -44,34 +44,12 @@ class CurrentAdminService extends BaseAdminService
     {
         $admin_info = (new AdminDao())->getAdminInfoById($this->user_id);
 
-
-        if ($admin_info['is_super'] != 1) {
-            $role_id = $admin_info['role_id'];
-            // 获取角色信息
-            $role_info = (new AdminRoleDao())->getAdminRoleInfo([['id', '=', $role_id]]);
-            $rules = $role_info['rules'];
-
-            if (empty($rules)) {
-                // $condition[] = ['id', 'in', array(0)];
-            } else {
-                // $condition[] = ['id', 'in', unserialize($rules)];
-            }
-        } else {
-            //超级管理员
-
-        }
-
-
-
         $userinfo = [
             'id' => $admin_info['id'],
             'role' => 'admin',
             'user_id' => $admin_info['id'],
             'username' => $admin_info['username'],
         ];
-
-
-
 
         return $userinfo;
     }

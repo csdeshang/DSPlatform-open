@@ -18,5 +18,13 @@ export function updateTechnicianBindStore(data: Record<string, any>) {
   return request.put(`${API_BASE_URLS.ADMIN}/technician/technicians/${data.id}/bind-store`, data)
 }
 
-
+/**
+ * 审核师傅申请
+ * @param id 师傅ID
+ * @param params 审核参数
+ * @returns
+ */
+export function auditTechnician(id: number, params: Record<string, any>) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/technician/technicians/${id}/audit`, params)
+}
 

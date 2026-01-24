@@ -11,13 +11,6 @@
                 <el-form-item label="用户名">
                     <el-input v-model="searchParams.username" placeholder="请输入用户名" clearable />
                 </el-form-item>
-                <el-form-item label="审核状态">
-                    <el-select v-model="searchParams.apply_status" placeholder="审核状态" clearable class="w-[150px]">
-                        <el-option label="审核中" :value="0" />
-                        <el-option label="审核通过" :value="1" />
-                        <el-option label="审核拒绝" :value="2" />
-                    </el-select>
-                </el-form-item>
                 <el-form-item label="师傅状态">
                     <el-select v-model="searchParams.technician_status" placeholder="师傅状态" clearable class="w-[150px]">
                         <el-option label="休息" :value="0" />
@@ -39,6 +32,11 @@
         </el-card>
 
         <el-card shadow="never">
+            <el-tabs v-model="searchParams.apply_status" @tab-change="handleTabChange">
+                <el-tab-pane name="" label="全部"></el-tab-pane>
+                <el-tab-pane v-for="item in apply_status_options" :key="item.value" :name="item.value" :label="item.label"></el-tab-pane>
+            </el-tabs>
+
             <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
                 <el-table-column label="ID" prop="id" min-width="60" />
                 <el-table-column label="关联用户" prop="user.id" min-width="100">
@@ -118,10 +116,11 @@
                 <el-table-column label="更新时间" prop="update_at" min-width="160">
                     <template #default="{ row }">{{ row.update_at }}</template>
                 </el-table-column>
-                <el-table-column label="操作" align="right" fixed="right" width="150">
+                <el-table-column label="操作" align="right" fixed="right" width="200">
                     <template #default="{ row }">
                         <div class="flex flex-row">
                             <el-button type="primary" link @click="handleDetail(row.id)">详情</el-button>
+                            <el-button type="primary" link @click="handleApplyAudit(row)" v-if="row.apply_status != 1">审核</el-button>
                             <el-dropdown class="ml-[10px]" @command="(command: string) => handleMore(command, row)">
                                 <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
                                 <template #dropdown>
@@ -152,6 +151,9 @@
         <!-- 更换绑定店铺弹窗 -->
         <TechnicianModifyBindStore ref="modifyBindStoreDialog" @complete="getTableList()" />
 
+        <!-- 审核 -->
+        <TechnicianApplyAudit ref="applyAuditDialog" @complete="getTableList()" />
+
         <!-- 会员详情弹窗 -->
         <UserDetail ref="detailUserDialog" @complete="getTableList()" />
 
@@ -165,11 +167,12 @@ import { reactive, ref } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { getTechnicianPage } from '@/pages-admin/main/api/technician/technician'
 import { usePagination } from '@/hooks/usePagination'
-
+import { useEnum } from '@/hooks/useEnum'
 
 import TechnicianDetail from './detail.vue'
 import TechnicianModifyBalance from './modify-balance.vue'
 import TechnicianModifyBindStore from './modify-bind-store.vue'
+import TechnicianApplyAudit from './applyAudit.vue'
 import UserDetail from '@/pages-admin/components/user/detail.vue'
 
 const searchParams = reactive({
@@ -195,6 +198,15 @@ const {
 
 // 页面加载时获取数据
 getTableList()
+
+// 使用枚举 Hook
+const { options: apply_status_options } = useEnum('default.technician.apply_status')
+
+// 切换状态
+const handleTabChange = (name: any) => {
+    searchParams.apply_status = name
+    getTableList()
+}
 
 // 更多操作
 const handleMore = (command: string, row: any) => {
@@ -229,6 +241,13 @@ const modifyBindStoreDialog = ref()
 const handleModifyBindStore = (row: any) => {
     modifyBindStoreDialog.value.setDialogData(row)
     modifyBindStoreDialog.value?.openDialog()
+}
+
+// 审核
+const applyAuditDialog = ref()
+const handleApplyAudit = (row: any) => {
+    applyAuditDialog.value.setDialogData(row)
+    applyAuditDialog.value?.openDialog()
 }
 
 // 会员详情弹窗

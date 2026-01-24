@@ -29,12 +29,21 @@ class DeshangTblCartService  extends BaseDeshangService
     // 添加商品到购物车
     public function addTblCart(array $data)
     {
-        // 检查商品是否存在
-        $goods = (new TblGoodsDao())->getGoodsInfoById($data['goods_id']);
-
+        // 检查商品是否存在（包括已删除和系统状态检查）
+        $goods_condition = [
+            ['id', '=', $data['goods_id']],
+            ['is_deleted', '=', 0],
+            ['sys_status', '=', TblGoodsEnum::SYS_STATUS_NORMAL]
+        ];
+        $goods = (new TblGoodsDao())->getGoodsInfo($goods_condition);
 
         if (empty($goods)) {
-            throw new CommonException('商品不存在');
+            throw new CommonException('商品不存在或已下架');
+        }
+
+        // 检查商品是否上架
+        if ($goods['goods_status'] != TblGoodsEnum::STATUS_SHELVED) {
+            throw new CommonException('商品已下架');
         }
 
         // 检查SKU是否存在
@@ -192,10 +201,20 @@ class DeshangTblCartService  extends BaseDeshangService
             throw new CommonException('购物车商品不存在');
         }
 
-        // 检查商品是否存在
-        $goods = (new TblGoodsDao())->getGoodsInfoById($cartItem['goods_id']);
+        // 检查商品是否存在（包括已删除和系统状态检查）
+        $goods_condition = [
+            ['id', '=', $cartItem['goods_id']],
+            ['is_deleted', '=', 0],
+            ['sys_status', '=', TblGoodsEnum::SYS_STATUS_NORMAL]
+        ];
+        $goods = (new TblGoodsDao())->getGoodsInfo($goods_condition);
         if (empty($goods)) {
-            throw new CommonException('商品不存在');
+            throw new CommonException('商品不存在或已下架');
+        }
+
+        // 检查商品是否上架
+        if ($goods['goods_status'] != TblGoodsEnum::STATUS_SHELVED) {
+            throw new CommonException('商品已下架');
         }
 
         // 检查SKU是否存在

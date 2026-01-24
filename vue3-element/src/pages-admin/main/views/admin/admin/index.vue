@@ -18,6 +18,12 @@
             <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
                 <el-table-column label="ID" prop="id" min-width="60" />
                 <el-table-column label="账号" prop="username" />
+                <el-table-column label="是否启用" prop="is_enabled" min-width="100">
+                    <template #default="{ row }">
+                        <el-tag v-if="row.is_enabled == 1" type="success" size="small">启用</el-tag>
+                        <el-tag v-else type="danger" size="small">禁用</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="登录次数" prop="login_num" />
                 <el-table-column label="上次登录时间" prop="login_time" />
                 <el-table-column label="操作" align="right" fixed="right" width="130">

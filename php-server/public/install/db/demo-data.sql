@@ -203,7 +203,25 @@ INSERT INTO `#__attachment` (`id`, `cid`, `user_id`, `user_scene`, `type`, `name
 (201, 14, 1, 1, 'image', '20251027192125', 'attachment/user/1/image/202510/27/2025102719212568ff55b5bebc6.jpg', 55840, 'Local', 0, 1761564085, 1761564085),
 (202, 15, 1, 1, 'image', '20251027192738', 'attachment/user/1/image/202510/27/2025102719273868ff572ae5ac1.jpg', 78912, 'Local', 0, 1761564458, 1761564458),
 (203, 15, 1, 1, 'image', '20251027192738', 'attachment/user/1/image/202510/27/2025102719273868ff572adfaef.jpg', 85298, 'Local', 0, 1761564458, 1761564458),
-(204, 15, 1, 1, 'image', '20251027192738', 'attachment/user/1/image/202510/27/2025102719273868ff572adfda8.jpg', 80778, 'Local', 0, 1761564458, 1761564458);
+(204, 15, 1, 1, 'image', '20251027192738', 'attachment/user/1/image/202510/27/2025102719273868ff572adfda8.jpg', 80778, 'Local', 0, 1761564458, 1761564458),
+(205, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c688432.png', 761461, 'Local', 0, 1767962054, 1767962054),
+(206, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c6a82ab.jpg', 166332, 'Local', 0, 1767962054, 1767962055),
+(207, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c6bcd46.jpg', 116280, 'Local', 0, 1767962054, 1767962055),
+(208, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c6c633a.jpg', 261363, 'Local', 0, 1767962054, 1767962055),
+(209, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c6c7022.jpg', 85264, 'Local', 0, 1767962054, 1767962055),
+(210, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c6cc867.jpg', 151682, 'Local', 0, 1767962054, 1767962055),
+(211, 17, 1, 0, 'image', '20260109203414', 'attachment/admin/1/image/202601/09/202601092034146960f5c6e14b4.jpg', 194655, 'Local', 0, 1767962054, 1767962055),
+(212, 18, 1, 0, 'image', '20260109203426', 'attachment/admin/1/image/202601/09/202601092034266960f5d2e0aac.png', 93986, 'Local', 0, 1767962066, 1767962066),
+(213, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d32d871.png', 522790, 'Local', 0, 1767962067, 1767962067),
+(214, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d31a3a6.jpg', 61489, 'Local', 0, 1767962067, 1767962067),
+(215, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d31caa8.jpg', 321176, 'Local', 0, 1767962067, 1767962067),
+(216, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d332cad.jpg', 324152, 'Local', 0, 1767962067, 1767962067),
+(217, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d3480ac.jpg', 473092, 'Local', 0, 1767962067, 1767962067),
+(218, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d35c305.jpg', 307987, 'Local', 0, 1767962067, 1767962067),
+(219, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d38f0b9.jpg', 590962, 'Local', 0, 1767962067, 1767962067),
+(220, 18, 1, 0, 'image', '20260109203427', 'attachment/admin/1/image/202601/09/202601092034276960f5d3ad7b6.jpg', 266523, 'Local', 0, 1767962067, 1767962067),
+(221, 19, 1, 0, 'image', '20260109220810', 'attachment/admin/1/image/202601/09/2026010922081069610bcaa927d.png', 2099, 'Local', 0, 1767967690, 1767967690),
+(222, 19, 1, 0, 'image', '20260109220810', 'attachment/admin/1/image/202601/09/2026010922081069610bcaa9362.png', 4236, 'Local', 0, 1767967690, 1767967690);
 
 
 
@@ -222,14 +240,18 @@ INSERT INTO `#__attachment_cate` (`id`, `pid`, `user_id`, `user_scene`, `type`, 
 (12, 0, 1, 1, 'image', '沙县小吃', 0, 1761557322, 1761557322),
 (13, 0, 1, 1, 'image', '烧仙草', 0, 1761557852, 1761557852),
 (14, 0, 1, 1, 'image', '油泼面', 0, 1761564073, 1761564073),
-(15, 0, 1, 1, 'image', '过桥米线', 0, 1761564448, 1761564448);
+(15, 0, 1, 1, 'image', '过桥米线', 0, 1761564448, 1761564448),
+(16, 0, 1, 0, 'image', 'PC端图片', 0, 1767961962, 1767962034),
+(17, 16, 1, 0, 'image', '轮播图', 0, 1767962012, 1767962012),
+(18, 16, 1, 0, 'image', '广告图', 0, 1767962022, 1767962022),
+(19, 0, 1, 0, 'image', 'LOGO', 0, 1767967680, 1767967680);
 
 
 INSERT INTO `#__merchant` (`id`, `user_id`, `name`, `is_allow_payment`, `balance`, `balance_in`, `balance_out`, `contact_name`, `contact_phone`, `contact_address`, `is_enabled`, `sort`, `allowed_store_count`, `apply_time`, `apply_status`, `apply_remark`, `audit_time`, `audit_remark`, `version`, `update_at`, `create_at`, `is_deleted`, `deleted_at`) VALUES
 (1, 1, '官方商户', 0, '0.0000', '0.0000', '0.0000', NULL, NULL, NULL, 1, 255, 20, NULL, 1, NULL, NULL, NULL, 0, 1743702829, 1743702829, 0, NULL);
 
 
-INSERT INTO `#__tbl_goods` (`id`, `platform`, `goods_name`, `goods_advword`, `goods_minprice`, `goods_body`, `goods_parameters`, `goods_status`, `store_id`, `brand_id`, `store_goods_cid`, `cover_image`, `slide_image`, `goods_video`, `stock_num`, `click_num`, `sales_num`, `virtual_sales_num`, `collect_num`, `evaluate_num`, `goods_sort`, `avg_goods_score`, `is_flashsale_goods`, `flashsale_goods_status`, `is_wholesale_goods`, `is_userdiscount_goods`, `is_distributor_goods`, `distributor_goods_type`, `sys_status`, `sys_status_reason`, `sys_recommend_status`, `mall_express_type`, `mall_express_tpl_id`, `mall_express_fee`, `version`, `create_at`, `update_at`, `is_deleted`, `deleted_time`) VALUES
+INSERT INTO `#__tbl_goods` (`id`, `platform`, `goods_name`, `goods_advword`, `goods_minprice`, `goods_body`, `goods_parameters`, `goods_status`, `store_id`, `brand_id`, `store_goods_cid`, `cover_image`, `slide_image`, `goods_video`, `stock_num`, `click_num`, `sales_num`, `virtual_sales_num`, `collect_num`, `evaluate_num`, `goods_sort`, `avg_goods_score`, `is_flashsale_goods`, `flashsale_goods_status`, `is_wholesale_goods`, `is_userdiscount_goods`, `is_distributor_goods`, `distributor_goods_type`, `sys_status`, `sys_status_reason`, `sys_recommend_status`, `mall_express_type`, `mall_express_tpl_id`, `mall_express_fee`, `version`, `create_at`, `update_at`, `is_deleted`, `deleted_at`) VALUES
 (1, 'mall', 'Apple/苹果 iPhone 16 新款全网通5G手机 国行官网官方正品旗舰店优惠直降', '顺丰当天发【24期免息】Apple/苹果 iPhone 16 新款全网通5G手机 国行官网官方正品旗舰店优惠直降', '5999.00', '<p><img src=\"http://www.dsadmin.com//attachment/user/1/image/202504/05/2025040514563067f0d41e1470c.jpg\" alt=\"20250405145630\" data-href=\"http://www.dsadmin.com//attachment/user/1/image/202504/05/2025040514563067f0d41e1470c.jpg\" style=\"\"/><img src=\"http://www.dsadmin.com//attachment/user/1/image/202504/04/2025040414245667ef7b38357fd.jpg\" alt=\"20250404142455\" data-href=\"http://www.dsadmin.com//attachment/user/1/image/202504/04/2025040414245667ef7b38357fd.jpg\" style=\"\"/><img src=\"http://www.dsadmin.com//attachment/user/1/image/202504/04/2025040414245667ef7b383576f.jpg\" alt=\"20250404142455\" data-href=\"http://www.dsadmin.com//attachment/user/1/image/202504/04/2025040414245667ef7b383576f.jpg\" style=\"\"/></p>', '[{\"name\":\"\\u552e\\u540e\\u670d\\u52a1\",\"value\":\"\\u5168\\u56fd\\u8054\\u4fdd\",\"sort\":0},{\"name\":\"\\u4e0a\\u5e02\\u65f6\\u95f4\",\"value\":\"2024-09\",\"sort\":10},{\"name\":\"\\u64cd\\u4f5c\\u7cfb\\u7edf\",\"value\":\"IOS\",\"sort\":20},{\"name\":\"\\u7535\\u6c60\\u5bb9\\u91cf\",\"value\":\"3561mAh\",\"sort\":30},{\"name\":\"\\u8d85\\u5e7f\\u89d2\\u50cf\\u7d20\",\"value\":\"1200\\u4e07\\u50cf\\u7d20\",\"sort\":40},{\"name\":\"\\u5206\\u8fa8\\u7387\",\"value\":\"2556x1179\",\"sort\":50},{\"name\":\"Apple\\u578b\\u53f7\",\"value\":\"iPhone 16\",\"sort\":60}]', 1, 1, 3, 3, 'attachment/user/1/image/202504/04/2025040412205367ef5e256f34a.jpg', 'attachment/user/1/image/202504/04/2025040412205367ef5e256f34a.jpg,attachment/user/1/image/202504/05/2025040514552867f0d3e0359d6.jpg,attachment/user/1/image/202504/05/2025040514552867f0d3e03569e.jpg,attachment/user/1/image/202504/05/2025040514545167f0d3bb8033b.png,attachment/user/1/image/202504/04/2025040412205367ef5e2554c85.jpg', 'attachment/user/1/video/202504/05/2025040515082067f0d6e499e5c.mp4', 60000, 0, 0, 200, 0, 0, 0, '0.00', 0, 0, 0, 0, 0, 0, 1, NULL, 0, 0, 0, '0.0000', 0, 1743837211, 1761968313, 0, 0),
 (2, 'mall', 'HUAWEI Mate 70 Pro 优享版华为智能手机官方旗舰正品鸿蒙系统新品', '【晒单奖励200元】 Pro前后多焦段人像AI修图北斗卫星图片消息华为官方旗舰店鸿蒙曲面屏智能手机', '6599.00', '<p><img src=\"http://www.dsadmin.com//attachment/user/1/image/202504/05/2025040515492367f0e08311037.jpg\" alt=\"20250405154922\" data-href=\"http://www.dsadmin.com//attachment/user/1/image/202504/05/2025040515492367f0e08311037.jpg\" style=\"\"/></p>', '[{\"name\":\"\\u54c1\\u724c\",\"value\":\"\\u534e\\u4e3a\",\"sort\":0},{\"name\":\"\\u4e0a\\u5e02\\u65f6\\u95f4\",\"value\":\"2025-02\",\"sort\":10}]', 1, 1, 2, 2, 'attachment/user/1/image/202504/05/2025040515492367f0e083101a5.jpg', 'attachment/user/1/image/202504/05/2025040515492367f0e083101a5.jpg,attachment/user/1/image/202504/05/2025040515492267f0e082875de.jpg,attachment/user/1/image/202504/05/2025040515492267f0e082a077c.jpg,attachment/user/1/image/202504/05/2025040515492267f0e0827c2be.jpg,attachment/user/1/image/202504/05/2025040515492267f0e0829d7e7.jpg', '', 40000, 0, 0, 100, 0, 0, 100, '0.00', 0, 0, 0, 0, 0, 0, 1, NULL, 0, 0, 0, '0.0000', 0, 1743839729, 1761968299, 0, 0),
 (3, 'mall', 'Samsung/三星 Galaxy S24+ 旗舰新品超视觉夜拍 大屏AI智能5G拍照游戏手机 正品', ' 旗舰新品超视觉夜拍 大屏AI智能5G拍照游戏手机 正品 三星（SAMSUNG）Galaxy A55 光学防抖 5000万像素 拍照手机 5000mAh 长续航 5G游戏手机', '0.00', '<p><img src=\"http://www.dsadmin.com//attachment/user/1/image/202504/05/2025040515584567f0e2b51278f.jpg\" alt=\"20250405155844\" data-href=\"http://www.dsadmin.com//attachment/user/1/image/202504/05/2025040515584567f0e2b51278f.jpg\" style=\"\"/></p>', '[{\"name\":\"\\u4e0a\\u5e02\\u65f6\\u95f4\",\"value\":\"2024-01\",\"sort\":0}]', 1, 1, 8, 1, 'attachment/user/1/image/202504/05/2025040515584567f0e2b513043.jpg', 'attachment/user/1/image/202504/05/2025040515584567f0e2b513043.jpg,attachment/user/1/image/202504/05/2025040515584567f0e2b512aff.jpg', '', 10000, 0, 0, 100, 0, 0, 100, '0.00', 0, 0, 0, 0, 0, 0, 1, NULL, 0, 0, 0, '0.0000', 0, 1743840024, 1743840024, 0, 0),
@@ -866,5 +888,82 @@ INSERT INTO `#__tbl_store_goods_category` (`id`, `store_id`, `pid`, `name`, `ima
 
 
 
+
 INSERT INTO `#__user` (`id`, `username`, `password`, `pay_password`, `nickname`, `avatar`, `sex`, `birthday`, `email`, `email_bind`, `mobile`, `mobile_bind`, `qq`, `inviter_id`, `login_num`, `login_time`, `old_login_time`, `login_ip`, `old_login_ip`, `growth`, `growth_level_id`, `points`, `points_in`, `points_out`, `balance`, `balance_in`, `balance_out`, `idcard_status`, `idcard_name`, `idcard_number`, `idcard_image1`, `idcard_image2`, `idcard_image3`, `is_enabled`, `is_distributor`, `distributor_status`, `distributor_level_id`, `distributor_balance`, `distributor_balance_in`, `distributor_balance_out`, `distributor_addtime`, `following_blogger_count`, `version`, `create_at`, `update_at`, `is_deleted`, `deleted_at`) VALUES
-(1, 'seller', '$2y$10$G6HhhkKR8uhmgOjajhIfz.JjSrKTNlonWEHxoH8Phew.acB69fH1i', '$2y$10$ZPkgJIU1tGpjne7Dm9ae3e2jBnreLilk9UwAgOjBqw.kW9MgS7Uvy', '用户seller', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1743743793, 1743739920, '127.0.0.1', '127.0.0.1', 100, 0, 100, 100, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1743702764, NULL, 0, NULL);
+(1, 'seller', '$2y$10$G6HhhkKR8uhmgOjajhIfz.JjSrKTNlonWEHxoH8Phew.acB69fH1i', '$2y$10$ZPkgJIU1tGpjne7Dm9ae3e2jBnreLilk9UwAgOjBqw.kW9MgS7Uvy', '用户seller', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1743743793, 1743739920, '127.0.0.1', '127.0.0.1', 100, 0, 100, 100, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1743702764, 1764476034, 0, NULL),
+(2, 'test001', '$2y$10$YG6CtcwBk6mvMub/MEKxY.jo7xJ4FGAlGlrZa4TuEhbe0tAUuoiUa', '$2y$10$wLhoW5zQYtMcnskkMqYOGe/QY9XFhvMbTlhfMA2XpPJi7uq9n49dq', '用户test001', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764476034, 1764475945, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764475945, 1764476034, 0, NULL),
+(3, 'test002', '$2y$10$Rwe8umN3xqz01G.6pJhTO.AOkLOHB5cG61J77yZ7qAxQDZ07LYMwu', '$2y$10$Au8u8XULBsQAFpRbfcnIlOAeTrGQjuljG/1yQd1dZIkoeqakynlqe', '用户test002', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764480895, 1764475963, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764475963, 1764480895, 0, NULL),
+(4, 'test003', '$2y$10$7sbghlxTpDePF72VTl/Glu5iBunmOd2eOtlINKg3esrUzkgcbiRRa', '$2y$10$ecv8tVTJBIpB/EbnWmcjm.NNHdD.FWKirii140AIxYyAu36vchzCS', '用户test003', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764481071, 1764475990, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764475990, 1764481071, 0, NULL),
+(5, 'test004', '$2y$10$UJa/t9FRGq3qLxWufHwJq.R8Qj8GygC7a25BlHOziilI.LFd40.6S', '$2y$10$f/UHvnD0wxFzOlyQzdmf7Oh9PkXWm/PZkdegXYWTr.ocnfoXRIGm6', '用户test004', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764475999, 1764475999, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764475999, 1764476000, 0, NULL),
+(6, 'test005', '$2y$10$ZYWoL6EnG3aTgu.u.YPH8e2GuYNDjDt2fjb3TYdWUCCu9nJ1o0phe', '$2y$10$FUeaTScJWca3UaBu/DnuEuENTkQGUgX5PsXeaKw0HSDK6BrpOFfXe', '用户test005', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764476009, 1764476009, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764476009, 1764476009, 0, NULL),
+(7, 'test006', '$2y$10$whDk3BVukuqc6KRCVXZpvudOzgPy.lTMVwFO75bMBapLXLor1wmrW', '$2y$10$tx9dqwPhtFn9eWLLuUagK.hu/FAAFtChyfTScMb2Z2noVAXqMa/1W', '用户test006', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764476017, 1764476017, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764476017, 1764476017, 0, NULL),
+(8, 'test', '$2y$10$XrPHntMrtXcKoelpJ2/VTuN20Bq/xJN9ncvRl1MfTJU4p/OmIPSd2', '$2y$10$zpp8ycBneQAfNST7yDkyS.OsvOlcfo3bGv76AnzLxaH5bQKIy7CAG', '用户test', NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, 1764481264, 1764481264, '127.0.0.1', '127.0.0.1', 0, 0, 0, 0, 0, '0.0000', '0.0000', '0.0000', 0, NULL, NULL, NULL, NULL, NULL, 1, 0, 0, 0, '0.0000', '0.0000', '0.0000', NULL, 0, 0, 1764481264, 1764481264, 0, NULL);
+
+
+
+INSERT INTO `#__rider` (`id`, `user_id`, `name`, `mobile`, `status`, `comment_count`, `avg_score`, `service_count`, `balance`, `balance_in`, `balance_out`, `is_enabled`, `rider_latitude`, `rider_longitude`, `rider_loc_time`, `apply_status`, `apply_remark`, `audit_time`, `audit_remark`, `version`, `create_at`, `update_at`, `is_deleted`, `deleted_at`) VALUES
+(1, 2, '王大锤', '15555555551', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.353170', '118.171380', 1764476559, 1, '申请说明', 1764480694, '审核备注', 0, 1764476559, 1764480694, 0, NULL),
+(2, 3, '苏有鹏', '15555555552', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.358170', '118.176380', 1764476559, 1, '申请说明', 1764481222, '审核备注', 0, 1764481047, 1764481222, 0, NULL),
+(3, 4, '苏大卫', '15555555553', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.348170', '118.176380', 1764476559, 1, '申请说明', 1764481216, '审核备注', 0, 1764481206, 1764481216, 0, NULL),
+(4, 5, '陈小村', '15555555554', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.358170', '118.166380', 1764476559, 1, '申请说明', 1764481216, '审核备注', 0, 1764481206, 1764481216, 0, NULL),
+(5, 6, '谢停封', '15555555555', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.348170', '118.166380', 1764476559, 1, '申请说明', 1764481216, '审核备注', 0, 1764481206, 1764481216, 0, NULL),
+(6, 7, '王保强', '15555555556', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.361170', '118.171380', 1764476559, 1, '申请说明', 1764481216, '审核备注', 0, 1764481206, 1764481216, 0, NULL),
+(7, 8, '张大大', '15555555550', 1 , 0, '5.00', 0, '0.0000', '0.0000', '0.0000', 1 , '32.345170', '118.171380', 1764476559, 1, '申请说明', 1764481216, '审核备注', 0, 1764481206, 1764481216, 0, NULL);
+
+
+
+INSERT INTO `#__technician` (`id`, `user_id`, `merchant_id`, `store_id`, `name`, `mobile`, `avatar`, `slide_image`, `gender`, `certificate_info`, `work_years`, `description`, `visit_count`, `comment_count`, `avg_score`, `service_count`, `technician_status`, `technician_fee_rate`, `technician_latitude`, `technician_longitude`, `technician_loc_time`, `balance`, `balance_in`, `balance_out`, `is_enabled`, `apply_time`, `apply_status`, `apply_remark`, `audit_time`, `audit_remark`, `version`, `create_at`, `update_at`, `is_deleted`, `deleted_at`) VALUES
+(1, 2, 1, 4, '安妮', '15555555551', NULL, NULL, 0, '资质证书', 5, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.353170', '118.171380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764476526, 1, '申请说明', 1764482170, '审核备注', 0, 1764476526, 1764482194, 0, NULL),
+(2, 3, 1, 4, '苏漫玉', '15555555552', NULL, NULL, 0, '资质证书', 10, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.358170', '118.176380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764481015, 1, '申请说明', 1764482166, '审核备注', 0, 1764481015, 1764482207, 0, NULL),
+(3, 4, 1, 4, '陈星艺', '15555555553', NULL, NULL, 0, '资质证书', 10, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.348170', '118.176380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764481175, 1, '申请说明', 1764482160, '审核备注', 0, 1764481175, 1764482160, 0, NULL),
+(4, 5, 1, 4, '张曼尼', '15555555554', NULL, NULL, 0, '资质证书', 10, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.358170', '118.166380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764481175, 1, '申请说明', 1764482160, '审核备注', 0, 1764481175, 1764482160, 0, NULL),
+(5, 6, 1, 4, '李佳欣', '15555555555', NULL, NULL, 0, '资质证书', 10, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.348170', '118.166380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764481175, 1, '申请说明', 1764482160, '审核备注', 0, 1764481175, 1764482160, 0, NULL),
+(6, 7, 1, 4, '徐紫珊', '15555555556', NULL, NULL, 0, '资质证书', 10, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.361170', '118.171380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764481175, 1, '申请说明', 1764482160, '审核备注', 0, 1764481175, 1764482160, 0, NULL),
+(7, 8, 1, 4, '汪曼春', '15555555550', NULL, NULL, 0, '资质证书', 10, '个人描述', 0, 0, '5.00', 0, 1, 30, '32.345170', '118.171380', 1764476526, '0.0000', '0.0000', '0.0000', 1, 1764481175, 1, '申请说明', 1764482160, '审核备注', 0, 1764481175, 1764482160, 0, NULL);
+
+
+INSERT INTO `#__technician_goods_rel` (`id`, `goods_id`, `technician_id`, `create_at`) VALUES
+(1, 28, 7, 1764486344),
+(2, 27, 7, 1764486345),
+(3, 26, 7, 1764486346),
+(4, 25, 7, 1764486347),
+(5, 24, 7, 1764486348),
+(6, 23, 7, 1764486349),
+(7, 22, 7, 1764486351),
+(8, 28, 1, 1764486367),
+(9, 27, 1, 1764486368),
+(10, 26, 1, 1764486369),
+(11, 25, 1, 1764486370),
+(12, 24, 1, 1764486371),
+(13, 23, 1, 1764486372),
+(14, 22, 1, 1764486372),
+(15, 28, 2, 1764486393),
+(16, 27, 2, 1764486394),
+(17, 26, 2, 1764486395),
+(18, 25, 2, 1764486396),
+(19, 24, 2, 1764486397),
+(20, 23, 2, 1764486397),
+(21, 22, 2, 1764486399),
+(22, 28, 3, 1764486414),
+(23, 27, 3, 1764486415),
+(24, 26, 3, 1764486416),
+(25, 25, 3, 1764486416),
+(26, 24, 3, 1764486417),
+(27, 23, 3, 1764486418),
+(28, 28, 4, 1764486432),
+(29, 27, 4, 1764486433),
+(30, 26, 4, 1764486434),
+(31, 24, 4, 1764486435),
+(32, 23, 4, 1764486436),
+(33, 28, 5, 1764486449),
+(34, 27, 5, 1764486450),
+(35, 25, 5, 1764486451),
+(36, 26, 5, 1764486452),
+(37, 24, 5, 1764486454),
+(38, 22, 5, 1764486455),
+(39, 28, 6, 1764486469),
+(40, 27, 6, 1764486470),
+(41, 26, 6, 1764486471),
+(42, 25, 6, 1764486472),
+(43, 24, 6, 1764486473),
+(44, 23, 6, 1764486474);

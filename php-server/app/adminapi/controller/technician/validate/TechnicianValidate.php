@@ -95,6 +95,9 @@ class TechnicianValidate extends BaseValidate
 
         // 更新店铺绑定场景
         'updateBindStore' => ['id', 'store_id'],
+
+        // 审核场景
+        'audit' => ['id', 'apply_status', 'audit_remark'],
     ];
 
     /**

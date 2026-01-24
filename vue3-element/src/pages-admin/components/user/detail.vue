@@ -10,6 +10,9 @@
                         <div class="info">
                             <div class="name">
                                 {{ userInfo.username }}
+                                <el-tag v-if="userInfo.is_deleted == 1" type="danger" size="small" class="ml-2">已删除</el-tag>
+                                <el-tag v-else-if="userInfo.is_enabled == 1" type="success" size="small" class="ml-2">正常</el-tag>
+                                <el-tag v-else type="warning" size="small" class="ml-2">已禁用</el-tag>
                             </div>
                         </div>
                     </div>
@@ -416,7 +419,8 @@ const userInfo = reactive({
     distributor_balance: 0,
     distributor_balance_in: 0,
     distributor_balance_out: 0,
-    distributor_addtime: ''
+    distributor_addtime: '',
+    is_deleted: 0
 })
 
 const initialFormData = {
