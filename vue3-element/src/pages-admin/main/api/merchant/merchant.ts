@@ -31,3 +31,21 @@ export function updateMerchant(params: Record<string, any>) {
 export function auditMerchant(id: number, params: Record<string, any>) {
   return request.patch(`${API_BASE_URLS.ADMIN}/merchant/merchants/${id}/audit`, params)
 }
+
+/**
+ * 软删除商户
+ * @param id 商户ID
+ * @returns
+ */
+export function softDeleteMerchant(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/merchant/merchants/${id}/soft-delete`)
+}
+
+/**
+ * 恢复已删除的商户
+ * @param id 商户ID
+ * @returns
+ */
+export function restoreMerchant(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/merchant/merchants/${id}/restore`)
+}

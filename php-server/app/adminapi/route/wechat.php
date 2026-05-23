@@ -38,6 +38,14 @@ Route::group('wechat', function () {
     Route::get('mini/settings', 'wechat.WechatMiniSetting/getWechatMiniSetting');
     Route::put('mini/settings', 'wechat.WechatMiniSetting/updateWechatMiniSetting');
 
+    // 微信网站应用设置（PC扫码登录）
+    Route::get('web/settings', 'wechat.WechatWebSetting/getWechatWebSetting');
+    Route::put('web/settings', 'wechat.WechatWebSetting/updateWechatWebSetting');
+
+    // 微信移动应用设置（APP内微信登录）
+    Route::get('app/settings', 'wechat.WechatAppSetting/getWechatAppSetting');
+    Route::put('app/settings', 'wechat.WechatAppSetting/updateWechatAppSetting');
+
 })->middleware([
     AdminAuthorizeToken::class,
     AdminAuthorizeRole::class,

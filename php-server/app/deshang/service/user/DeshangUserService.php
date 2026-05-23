@@ -56,7 +56,7 @@ class DeshangUserService extends BaseDeshangService
         if (isset($data['nickname'])) {
             $user_info['nickname'] = $data['nickname'];
         } else {
-            $user_info['nickname'] = '用户' . $user_info['username'];
+            $user_info['nickname'] = '用户' . mt_rand(100000, 999999); //随机生成一个昵称
         }
         if (isset($data['qq'])) {
             $user_info['qq'] = $data['qq'];
@@ -147,38 +147,57 @@ class DeshangUserService extends BaseDeshangService
     }
 
 
-    // 获取用户信息和其他角色信息
-    public function getUserInfoWithRoles($id)
+    /**
+     * 根据已有用户信息补全角色与店铺数据（只查商户/骑手/技师/博主/店铺，不再查用户表）
+     * @param array $user_info 必须包含 id 的用户信息（如登录后的 $user 或 UserDao 查出的单条）
+     * @return array 补全 merchant、rider、technician、blogger、manage_store_list 后的用户信息
+     */
+    public function getUserInfoWithRoles(array $user_info)
     {
-        $user_info = (new UserDao())->getUserInfoById($id, '*');
+        if (empty($user_info) || empty($user_info['id'])) {
+            return [];
+        }
         unset($user_info['password']);
         unset($user_info['pay_password']);
 
-
-
         // 获取商户信息
-        $user_info['merchant'] = (new MerchantDao)->getMerchantInfo([['user_id', '=', $user_info['id']]], '*');
+        $user_info['merchant'] = (new MerchantDao)->getMerchantInfo([
+            ['user_id', '=', $user_info['id']],
+            ['is_deleted', '=', 0],
+        ], '*');
 
         // 获取骑手信息
-        $user_info['rider'] = (new RiderDao)->getRiderInfo([['user_id', '=', $user_info['id']]], '*');
+        $user_info['rider'] = (new RiderDao)->getRiderInfo([
+            ['user_id', '=', $user_info['id']],
+            ['is_deleted', '=', 0],
+        ], '*');
 
         // 获取师傅信息
-        $user_info['technician'] = (new TechnicianDao)->getTechnicianInfo([['user_id', '=', $user_info['id']]], '*');
+        $user_info['technician'] = (new TechnicianDao)->getTechnicianInfo([
+            ['user_id', '=', $user_info['id']],
+            ['is_deleted', '=', 0],
+        ], '*');
 
         // 获取博主信息
         $user_info['blogger'] = $this->getBloggerInfo($user_info);
 
 
-        // 获取可管理的店铺列表
+        // 获取可管理的店铺列表（仅未删除）
         $manage_store_list = array();
         // 获取商户下的店铺
         if (isset($user_info['merchant']['id'])) {
-            $manage_store_list = (new TblStoreDao)->getStoreList([['merchant_id', '=', $user_info['merchant']['id']]], 'id,platform,merchant_id,store_name,apply_status,is_enabled', 'id desc', 100);
+            $manage_store_list = (new TblStoreDao)->getStoreList([
+                ['merchant_id', '=', $user_info['merchant']['id']],
+                ['is_deleted', '=', 0],
+            ], 'id,platform,merchant_id,store_name,apply_status,is_enabled', 'id desc', 100);
         }
         // 获取用户授权的店铺
         $store_ids = (new TblStoreAuthUserDao)->getStoreAuthUserColumn([['user_id', '=', $user_info['id']]], 'store_id');
         if (!empty($store_ids)) {
-            $manage_store_list = array_merge($manage_store_list, (new TblStoreDao)->getStoreList([['id', 'in', $store_ids]], 'id,platform,merchant_id,store_name,apply_status,is_enabled', 'id desc', 100));
+            $manage_store_list = array_merge($manage_store_list, (new TblStoreDao)->getStoreList([
+                ['id', 'in', $store_ids],
+                ['is_deleted', '=', 0],
+            ], 'id,platform,merchant_id,store_name,apply_status,is_enabled', 'id desc', 100));
         }
         $user_info['manage_store_list'] = $manage_store_list;
 

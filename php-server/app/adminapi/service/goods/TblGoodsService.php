@@ -221,4 +221,58 @@ class TblGoodsService extends BaseAdminService
 
     // 删除商品， 涉及 其他关联数据 需要单独使用 对应的 平台方法进行处理
     public function deleteTblGoods(array $data) {}
+
+    /**
+     * 软删除商品
+     *
+     * @param int $id 商品ID
+     * @return int 受影响的行数
+     */
+    public function softDeleteTblGoods(int $id)
+    {
+        $dao = new TblGoodsDao();
+        $goods_info = $dao->getGoodsInfoById($id);
+        if (empty($goods_info)) {
+            throw new CommonException('商品不存在');
+        }
+        if ($goods_info['is_deleted'] == 1) {
+            throw new CommonException('商品已被删除');
+        }
+        $update_data = [
+            'is_deleted' => 1,
+            'deleted_at' => time(),
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 0],
+        ];
+        return $dao->updateGoods($condition, $update_data);
+    }
+
+    /**
+     * 恢复商品
+     *
+     * @param int $id 商品ID
+     * @return int 受影响的行数
+     */
+    public function restoreTblGoods(int $id)
+    {
+        $dao = new TblGoodsDao();
+        $goods_info = $dao->getGoodsInfoById($id);
+        if (empty($goods_info)) {
+            throw new CommonException('商品不存在');
+        }
+        if ($goods_info['is_deleted'] != 1) {
+            throw new CommonException('商品未被删除，无需恢复');
+        }
+        $update_data = [
+            'is_deleted' => 0,
+            'deleted_at' => null,
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 1],
+        ];
+        return $dao->updateGoods($condition, $update_data);
+    }
 }

@@ -113,4 +113,10 @@ class CacheKeyManager
     // 快递公司
     const SYS_EXPRESS_TAG = 'sys_express';
     const SYS_EXPRESS_LIST_KEY = 'sys_express_list_%s';
+
+    // SSO 单次票据（商户/店铺 PC 跨域换 token）
+    const SSO_TAG = 'sso';
+    const SSO_TICKET_KEY = 'sso_ticket_%s';
+
+    
 }

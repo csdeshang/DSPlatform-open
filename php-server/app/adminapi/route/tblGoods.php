@@ -11,6 +11,9 @@ Route::group('tbl-goods', function () {
 
 
     // 多平台通用 商品列表
+    // goods/:id/restore、soft-delete (3段) 必须在 goods/:id (2段) 前面
+    Route::patch('goods/:id/restore', 'tblGoods.TblGoods/restoreTblGoods');
+    Route::patch('goods/:id/soft-delete', 'tblGoods.TblGoods/softDeleteTblGoods');
     // goods/:id/sys-status (3段) 必须在 goods/:id (2段) 前面 否则 PATCH /goods/123/sys-status 会被 goods/:id 匹配
     Route::patch('goods/:id/sys-status', 'tblGoods.TblGoods/updateTblGoodsSysStatus');
     // goods/:id/sys-recommend (3段) 必须在 goods/:id (2段) 前面 否则 PATCH /goods/123/sys-recommend 会被 goods/:id 匹配
@@ -33,6 +36,8 @@ Route::group('tbl-goods', function () {
     // Route::delete('goods/:id', 'tblGoods.TblGoods/deleteTblGoods');
 
     // 多平台通用 商品评论
+    Route::patch('comments/:id/restore', 'tblGoods.TblGoodsComment/restoreTblGoodsComment');
+    Route::patch('comments/:id/soft-delete', 'tblGoods.TblGoodsComment/softDeleteTblGoodsComment');
     // comments/:id/toggle-field (3段) 必须在 comments/:id (2段) 前面 否则 PATCH /comments/123/toggle-field 会被 comments/:id 匹配
     Route::patch('comments/:id/toggle-field', 'tblGoods.TblGoodsComment/toggleTblGoodsCommentField');
     // comments/pages (2段) 必须在 comments/:id (2段) 前面 否则 GET /comments/pages 会被 comments/:id 匹配

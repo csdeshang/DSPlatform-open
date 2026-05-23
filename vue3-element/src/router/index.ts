@@ -46,6 +46,14 @@ function getDefaultRoutes() {
         meta: { title: '登录', show: false }
 
       }
+      ,
+      {
+        // SSO 回调页：允许跨站换 token 后直接落地（不依赖本地 refresh_token）
+        path: '/store/sso/callback',
+        name: 'store_sso_callback',
+        component: () => import('@/pages-store/main/views/sso/callback.vue'),
+        meta: { title: 'SSO', show: false }
+      }
     ]
   } else if (systemType == 'merchant') {
     return [
@@ -60,6 +68,14 @@ function getDefaultRoutes() {
         component: () => import('@/pages-merchant/main/views/login/index.vue'),
         meta: { title: '登录', show: false }
 
+      }
+      ,
+      {
+        // SSO 回调页：允许跨站换 token 后直接落地（不依赖本地 refresh_token）
+        path: '/merchant/sso/callback',
+        name: 'merchant_sso_callback',
+        component: () => import('@/pages-merchant/main/views/sso/callback.vue'),
+        meta: { title: 'SSO', show: false }
       }
     ]
   } else {
@@ -98,6 +114,13 @@ router.beforeEach(async (to, from, next) => {
   
   const userInfoStore = useUserInfoStore()
   const multiTagsStore = useMultiTagsStore()
+
+  // 允许 SSO 回调页在无本地 refresh_token 情况下直接进入，避免被重定向到登录页
+  const ssoCallbackPath = `/${systemType}/sso/callback`
+  if (to.path === ssoCallbackPath) {
+    next()
+    return
+  }
 
   if (whiteList.includes(to.path)) {
     // 白名单路由直接放行  或是消费者访问

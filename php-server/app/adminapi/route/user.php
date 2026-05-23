@@ -26,6 +26,8 @@ Route::group('user', function () {
     Route::patch('users/:id/restore', 'user.User/restoreUser');
     // users/:id/soft-delete (3段) 必须在 users/:id (2段) 前面
     Route::patch('users/:id/soft-delete', 'user.User/softDeleteUser');
+    // 实名认证审核
+    Route::patch('users/:id/idcard-audit', 'user.User/auditUserIdcard');
     // users/pages (2段) 必须在 users/:id (2段) 前面 否则 GET /users/pages 会被 users/:id 匹配
     Route::get('users/pages', 'user.User/getUserPages');
     Route::get('users/:id', 'user.User/getUserInfo');

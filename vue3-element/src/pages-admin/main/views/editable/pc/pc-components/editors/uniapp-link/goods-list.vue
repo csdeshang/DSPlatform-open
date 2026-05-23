@@ -96,7 +96,7 @@ const handleSelect = (row: any) => {
     desc: row.description || '',
     price: row.price || '',
     image: row.image || '',
-    link: `/pages/${props.platform}/goods/detail?id=${row.id}`
+    link: `/${props.platform}/goods/detail?goods_id=${row.id}`
   }
 
   emit('select', selectData)

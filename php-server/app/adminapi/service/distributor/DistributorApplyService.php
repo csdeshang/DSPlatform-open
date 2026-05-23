@@ -36,7 +36,7 @@ class DistributorApplyService extends BaseAdminService
             $condition[] = ['user_id', 'in', $userIds];
         }
 
-        return (new DistributorApplyDao())->getDistributorApplyPages($condition);
+        return (new DistributorApplyDao())->getWithRelDistributorApplyPages($condition);
     }
 
     // 分销商审核

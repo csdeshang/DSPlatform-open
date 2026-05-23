@@ -57,6 +57,8 @@ class MerchantValidate extends BaseValidate
         'create' => ['user_id', 'name', 'contact_name', 'contact_phone', 'contact_address', 'is_enabled', 'sort'], // 创建场景
         'update' => ['id', 'name', 'contact_name', 'contact_phone', 'contact_address', 'is_enabled', 'sort', 'is_allow_payment', 'allowed_store_count', 'apply_status', 'audit_remark'], // 更新场景
         'audit' => ['id', 'apply_status', 'audit_remark'], // 审核场景
+        'softDelete' => ['id'], // 软删除商户
+        'restore' => ['id'], // 恢复商户
     ];
 
     // 验证申请状态

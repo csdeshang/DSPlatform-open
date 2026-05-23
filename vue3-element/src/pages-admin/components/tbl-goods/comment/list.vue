@@ -41,6 +41,13 @@
                         <el-option label="实名评价" value="0" />
                     </el-select>
                 </el-form-item>
+                <el-form-item label="删除状态">
+                    <el-select v-model="searchParams.is_deleted" placeholder="请选择状态" clearable class="w-[100px]">
+                        <el-option label="全部" value="" />
+                        <el-option label="未删除" value="0" />
+                        <el-option label="已删除" value="1" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetSearchParams">重置</el-button>
@@ -123,22 +130,21 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="评价时间" prop="create_at" min-width="160" />
-                <el-table-column label="操作" min-width="200" fixed="right">
+                <el-table-column label="操作" min-width="150" fixed="right">
                     <template #default="{ row }">
-                        <el-button 
-                            :type="row.is_show == '1' ? 'danger' : 'success'" 
-                            link 
-                            @click="handleToggleField(row, 'is_show')"
-                        >
-                            {{ row.is_show == '1' ? '隐藏' : '显示' }}
-                        </el-button>
-                        <el-button 
-                            type="primary" 
-                            link 
-                            @click="handleToggleField(row, 'is_anonymous')"
-                        >
-                            {{ row.is_anonymous == '1' ? '取消匿名' : '设为匿名' }}
-                        </el-button>
+                        <div class="flex flex-row">
+                            <el-dropdown @command="(command) => handleMore(command, row)">
+                                <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item command="toggleShow">{{ row.is_show == '1' ? '隐藏' : '显示' }}</el-dropdown-item>
+                                        <el-dropdown-item command="toggleAnonymous">{{ row.is_anonymous == '1' ? '取消匿名' : '设为匿名' }}</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -162,7 +168,8 @@
 </template>
 <script setup lang="ts" name="TblGoodsCommentList">
 import { reactive, ref } from 'vue'
-import { getTblGoodsCommentPages, toggleTblGoodsCommentField } from '@/pages-admin/main/api/tbl-goods/tblGoodsComment'
+import { ArrowDown } from '@element-plus/icons-vue'
+import { getTblGoodsCommentPages, toggleTblGoodsCommentField, softDeleteTblGoodsComment, restoreTblGoodsComment } from '@/pages-admin/main/api/tbl-goods/tblGoodsComment'
 import { usePagination } from '@/hooks/usePagination'
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -185,7 +192,8 @@ const searchParams = reactive({
     order_id: '',
     is_show: '',
     is_reply: '',
-    is_anonymous: ''
+    is_anonymous: '',
+    is_deleted: '0'
 })
 
 const {
@@ -202,6 +210,54 @@ const {
 
 // 初始化数据
 getTableList()
+
+// 更多操作
+const handleMore = (command: string, row: any) => {
+    switch (command) {
+        case 'toggleShow':
+            handleToggleField(row, 'is_show')
+            break
+        case 'toggleAnonymous':
+            handleToggleField(row, 'is_anonymous')
+            break
+        case 'softDelete':
+            handleSoftDelete(row.id)
+            break
+        case 'restore':
+            handleRestore(row.id)
+            break
+        default:
+            console.log('未知命令', command)
+    }
+}
+
+/** 软删除评论 */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此评论吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteTblGoodsComment(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
+
+/** 恢复评论 */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此评论吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreTblGoodsComment(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
 
 // 切换字段状态
 const handleToggleField = async (row: any, field: string) => {

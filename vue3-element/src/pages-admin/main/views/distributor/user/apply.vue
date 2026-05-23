@@ -23,10 +23,9 @@
 
         <el-table :data="tableData.data" size="large" v-loading="tableData.loading">
             <el-table-column prop="id" label="ID" width="80" />
-            <el-table-column prop="user_id" label="用户ID" width="80">
+            <el-table-column label="用户名" width="120">
                 <template #default="{ row }">
-                    <el-link type="primary" :underline="false" @click="handleUserDtail(row.user_id)">{{
-                        row.user_id }}</el-link>
+                    <el-link type="primary" :underline="false" @click="handleUserDtail(row.user_id)">{{ row.user?.username || '-' }}</el-link>
                 </template>
             </el-table-column>
 

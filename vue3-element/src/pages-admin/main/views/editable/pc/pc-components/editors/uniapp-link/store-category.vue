@@ -95,10 +95,10 @@ const handleRowClick = (row: any) => {
 
 // 选择处理
 const handleSelect = (row: any) => {
-  // 构建发送到父组件的数据结构（PC端路径）
+  // nuxt-consumer：/{platform}/search/storelist
   const selectData = {
     id: row.id,
-    link: `/pages/${props.platform}/store/list?category_id=${row.id}`
+    link: `/${props.platform}/search/storelist?category_id=${row.id}`
   }
 
   emit('select', selectData)

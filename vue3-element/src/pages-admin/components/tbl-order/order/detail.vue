@@ -251,11 +251,6 @@
 
 
                                     <el-col :span="12">
-                                        <el-form-item label="发票信息" prop="invoice_info">
-                                            <div class="form-text">{{ orderInfo.invoice_info }}</div>
-                                        </el-form-item>
-                                    </el-col>
-                                    <el-col :span="12">
                                         <el-form-item label="评价状态" prop="is_evaluate">
                                             <div class="form-text">{{ orderInfo.is_evaluate }}</div>
                                         </el-form-item>

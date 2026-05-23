@@ -13,6 +13,9 @@ Route::group('rider', function () {
     // 骑手
     // riders/:id/balance (3段) 必须在 riders/:id (2段) 前面 否则 PUT /riders/123/balance 会被 riders/:id 匹配
     Route::put('riders/:id/balance', 'rider.RiderBalance/modifyRiderBalance');
+    // riders/:id/restore (3段) 必须在 riders/:id (2段) 前面
+    Route::patch('riders/:id/restore', 'rider.Rider/restoreRider');
+    Route::patch('riders/:id/soft-delete', 'rider.Rider/softDeleteRider');
     // riders/:id/audit (3段) 必须在 riders/:id (2段) 前面 否则 PATCH /riders/123/audit 会被 riders/:id 匹配
     Route::patch('riders/:id/audit', 'rider.Rider/auditRider');
     // riders/pages (2段) 必须在 riders/:id (2段) 前面 否则 GET /riders/pages 会被 riders/:id 匹配

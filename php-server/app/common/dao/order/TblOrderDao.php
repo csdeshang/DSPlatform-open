@@ -142,7 +142,7 @@ class TblOrderDao extends BaseDao
                     // },
                 ]
             )
-            ->append(['order_status_desc', 'delivery_method_desc'])
+            ->append(['order_status_desc', 'delivery_method_desc', 'invoice_status_desc'])
             ->field($field)
             ->order($order);
         return $this->getPaginate($result);
@@ -204,7 +204,7 @@ class TblOrderDao extends BaseDao
                     },
                 ]
             )
-            ->append(['order_status_desc', 'delivery_method_desc'])
+            ->append(['order_status_desc', 'delivery_method_desc', 'invoice_status_desc'])
             ->field($field)
             ->lock($lock)
             ->findOrEmpty()

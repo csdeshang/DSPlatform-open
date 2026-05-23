@@ -64,6 +64,16 @@ export function restoreUser(id: number) {
 }
 
 /**
+ * 实名认证审核
+ * @param id 用户ID
+ * @param params idcard_status 2=未通过 3=已认证
+ * @returns Promise
+ */
+export function auditUserIdcard(id: number, params: { idcard_status: 2 | 3 }) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/user/users/${id}/idcard-audit`, params)
+}
+
+/**
  * 获取用户推广关系列表
  * @param params 查询参数（inviter_id）
  * @returns Promise

@@ -17,10 +17,10 @@ class TradePaymentConfigEnum
 
 
     // 支付场景
-    const SCENE_H5 = 'h5'; // H5
+    const SCENE_H5 = 'h5'; // 普通浏览器（非微信浏览器）H5支付
     const SCENE_PC = 'pc'; // PC
     const SCENE_APP = 'app'; // APP
-    const SCENE_WECHAT_OFFICIAL = 'wechat_official'; // 微信官方公众号
+    const SCENE_WECHAT_OFFICIAL = 'wechat_official'; // 微信官方公众号（微信浏览器内）
     const SCENE_WECHAT_MINI = 'wechat_mini'; // 微信小程序
     const SCENE_DOUYIN_MINI = 'douyin_mini'; // 抖音小程序
 
@@ -86,11 +86,11 @@ class TradePaymentConfigEnum
     public static function getSystemSupportPaymentList()
     {
         return [
-            // 微信官方公众号
+            // 微信官方公众号（微信浏览器内）
             self::SCENE_WECHAT_OFFICIAL => [self::CHANNEL_BALANCE, self::CHANNEL_WECHAT, self::CHANNEL_ALIPAY],
             // 微信小程序
             self::SCENE_WECHAT_MINI => [self::CHANNEL_BALANCE, self::CHANNEL_WECHAT, self::CHANNEL_ALIPAY],
-            // H5
+            // 普通浏览器（非微信浏览器）H5支付
             self::SCENE_H5 => [self::CHANNEL_BALANCE, self::CHANNEL_WECHAT, self::CHANNEL_ALIPAY],
             // PC
             self::SCENE_PC => [self::CHANNEL_BALANCE, self::CHANNEL_WECHAT, self::CHANNEL_ALIPAY],

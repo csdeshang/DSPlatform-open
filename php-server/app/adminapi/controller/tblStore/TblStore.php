@@ -71,6 +71,7 @@ class TblStore extends BaseAdminController
             'merchant_id'=>input('param.merchant_id'),
             'merchant_name'=>input('param.merchant_name'),
             'apply_status'=>input('param.apply_status'),
+            'is_deleted'=>input('param.is_deleted'),
         );
         $result = (new TblStoreService())->getTblStorePage($data);
         return ds_json_success('操作成功',$result);
@@ -262,6 +263,40 @@ class TblStore extends BaseAdminController
 
         $result = (new TblStoreService())->auditTblStore($data);
         return ds_json_success('操作成功',$result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/tbl-store/stores/{id}/soft-delete",
+     *     summary="软删除店铺",
+     *     tags={"admin-api/tblStore/TblStore"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="店铺ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="删除成功")
+     * )
+     */
+    public function softDeleteTblStore($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\tblStore\validate\TblStoreValidate.softDelete');
+        $result = (new TblStoreService())->softDeleteTblStore((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/tbl-store/stores/{id}/restore",
+     *     summary="恢复已删除的店铺",
+     *     tags={"admin-api/tblStore/TblStore"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="店铺ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="恢复成功")
+     * )
+     */
+    public function restoreTblStore($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\tblStore\validate\TblStoreValidate.restore');
+        $result = (new TblStoreService())->restoreTblStore((int)$id);
+        return ds_json_success('恢复成功', $result);
     }
 
 }

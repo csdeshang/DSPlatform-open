@@ -12,6 +12,10 @@ Route::group('merchant', function () {
     // 商户
     // merchants/:id/audit (3段) 必须在 merchants/:id (2段) 前面 防止将来添加 PATCH merchants/:id 时产生冲突
     Route::patch('merchants/:id/audit', 'merchant.Merchant/auditMerchant');
+    // merchants/:id/restore (3段) 必须在 merchants/:id (2段) 前面
+    Route::patch('merchants/:id/restore', 'merchant.Merchant/restoreMerchant');
+    // merchants/:id/soft-delete (3段) 必须在 merchants/:id (2段) 前面
+    Route::patch('merchants/:id/soft-delete', 'merchant.Merchant/softDeleteMerchant');
     // merchants/pages (2段) 必须在 merchants/:id (2段) 前面 否则 GET /merchants/pages 会被 merchants/:id 匹配
     Route::get('merchants/pages', 'merchant.Merchant/getMerchantPages');
     Route::get('merchants/:id', 'merchant.Merchant/getMerchantInfo');

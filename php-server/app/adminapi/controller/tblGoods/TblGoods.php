@@ -193,4 +193,38 @@ class TblGoods extends BaseAdminController
         return ds_json_success('操作成功', $result);
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/tbl-goods/goods/{id}/soft-delete",
+     *     summary="软删除商品",
+     *     tags={"admin-api/tblGoods/TblGoods"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="商品ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="删除成功")
+     * )
+     */
+    public function softDeleteTblGoods($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\tblGoods\validate\TblGoodsValidate.softDelete');
+        $result = (new TblGoodsService())->softDeleteTblGoods((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/tbl-goods/goods/{id}/restore",
+     *     summary="恢复已删除的商品",
+     *     tags={"admin-api/tblGoods/TblGoods"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="商品ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="恢复成功")
+     * )
+     */
+    public function restoreTblGoods($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\tblGoods\validate\TblGoodsValidate.restore');
+        $result = (new TblGoodsService())->restoreTblGoods((int)$id);
+        return ds_json_success('恢复成功', $result);
+    }
+
 }

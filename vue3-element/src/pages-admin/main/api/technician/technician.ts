@@ -28,3 +28,21 @@ export function auditTechnician(id: number, params: Record<string, any>) {
   return request.patch(`${API_BASE_URLS.ADMIN}/technician/technicians/${id}/audit`, params)
 }
 
+/**
+ * 软删除师傅
+ * @param id 师傅ID
+ * @returns
+ */
+export function softDeleteTechnician(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/technician/technicians/${id}/soft-delete`)
+}
+
+/**
+ * 恢复已删除的师傅
+ * @param id 师傅ID
+ * @returns
+ */
+export function restoreTechnician(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/technician/technicians/${id}/restore`)
+}
+

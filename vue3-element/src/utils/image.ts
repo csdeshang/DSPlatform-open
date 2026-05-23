@@ -93,7 +93,7 @@ function getDefaultImageUrl(imageType: ImageType): string {
  * @param url 原始图片地址
  * @param thumbnail 缩略图配置（可选）
  * @param imageType 图片类型（用于空URL时返回默认图片，默认值为 'default'）
- * @returns 完整的图片URL（带缩略图参数）
+ * @returns 完整图片 URL；云存储且传入 thumbnail 时可能带厂商处理参数；**local** 时为原图地址（无附加查询参数）
  * 
  * @example
  * // 基础用法（不生成缩略图）
@@ -415,65 +415,10 @@ export function addQiniuThumbnail(
 }
 
 /**
- * 为Nginx URL添加缩略图处理参数
- * @param url 原始URL
- * @param options 缩略图配置
- * @returns 带缩略图参数的URL
- */
-export function addNginxThumbnail(
-  url: string,
-  options: ThumbnailOptions
-): string {
-  try {
-    const urlObj = new URL(url);
-
-    // 移除可能已存在的处理参数
-    urlObj.searchParams.delete("w");
-    urlObj.searchParams.delete("h");
-    urlObj.searchParams.delete("q");
-    urlObj.searchParams.delete("format");
-
-    // 如果使用原图，只添加质量和格式参数
-    if (options.useOriginal) {
-      if (options.quality && options.quality >= 1 && options.quality <= 100) {
-        urlObj.searchParams.set("q", options.quality.toString());
-      }
-      if (options.format) {
-        urlObj.searchParams.set("format", options.format);
-      }
-      return urlObj.toString();
-    }
-
-    // 缩放参数（只指定宽度或高度时，Nginx会自动按比例缩放）
-    if (options.width) {
-      urlObj.searchParams.set("w", options.width.toString());
-    }
-    if (options.height) {
-      urlObj.searchParams.set("h", options.height.toString());
-    }
-
-    // 质量参数
-    if (options.quality && options.quality >= 1 && options.quality <= 100) {
-      urlObj.searchParams.set("q", options.quality.toString());
-    }
-
-    // 格式转换（如果Nginx支持）
-    if (options.format) {
-      urlObj.searchParams.set("format", options.format);
-    }
-
-    return urlObj.toString();
-  } catch (error) {
-    console.warn("Nginx URL处理失败:", error);
-    return url;
-  }
-}
-
-/**
  * 处理图片URL，根据配置的存储类型添加缩略图参数
  * @param url 原始图片URL
  * @param thumbnail 缩略图配置
- * @returns 处理后的URL
+ * @returns 处理后的 URL；**local** 时与入参 url 相同；云存储时可能带处理参数
  */
 export function processImageUrl(
   url: string,
@@ -506,9 +451,8 @@ export function processImageUrl(
       return addQiniuThumbnail(url, thumbnail);
       
     case 'local':
-      // 本地存储：使用Nginx参数处理（如果配置了Nginx image_filter模块）
-      // 即使没有配置Nginx，添加参数也不会影响原图访问
-      return addNginxThumbnail(url, thumbnail);
+      // 本地存储：直接返回原图，不追加 w/h 等参数（避免依赖 Nginx image_filter 与站点规则）
+      return url;
       
     default:
       // 环境变量未配置或配置错误，直接返回原URL（不处理缩略图）

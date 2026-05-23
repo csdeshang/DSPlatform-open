@@ -12,6 +12,13 @@
             <el-form-item label="用户名">
                 <el-input v-model="searchParams.username" placeholder="用户名" clearable />
             </el-form-item>
+            <el-form-item label="删除状态">
+                <el-select v-model="searchParams.is_deleted" placeholder="请选择状态" clearable class="w-[100px]">
+                    <el-option label="全部" value="" />
+                    <el-option label="未删除" value="0" />
+                    <el-option label="已删除" value="1" />
+                </el-select>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="resetPage">查询</el-button>
                 <el-button @click="resetSearchParams">重置</el-button>
@@ -58,6 +65,8 @@
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item command="balance">调整余额</el-dropdown-item>
+                                    <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                    <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -92,8 +101,9 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
-
-import { getRiderPage } from '@/pages-admin/main/api/rider/rider'
+import { ArrowDown } from '@element-plus/icons-vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
+import { getRiderPage, softDeleteRider, restoreRider } from '@/pages-admin/main/api/rider/rider'
 import { usePagination } from '@/hooks/usePagination'
 import { useEnum } from '@/hooks/useEnum'
 
@@ -110,6 +120,7 @@ const searchParams = reactive({
     mobile: '',
     username: '',
     apply_status: '',
+    is_deleted: '' as string,
 })
 
 const {
@@ -135,11 +146,16 @@ const handleTabChange = (name: any) => {
 }
 
 //更多
-const handleMore = (command: string, row: any,) => {
-
+const handleMore = (command: string, row: any) => {
     switch (command) {
         case 'balance':
             handleModifyBalance(row);
+            break;
+        case 'softDelete':
+            handleSoftDelete(row.id);
+            break;
+        case 'restore':
+            handleRestore(row.id);
             break;
         default:
             console.log('未知命令', command);
@@ -181,6 +197,34 @@ const handleApplyAudit = (row: any) => {
 
 
 
+
+/** 软删除骑手 */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此骑手吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteRider(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
+
+/** 恢复骑手 */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此骑手吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreRider(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
 
 // 会员详情弹窗
 import UserDetail from '@/pages-admin/components/user/detail.vue'

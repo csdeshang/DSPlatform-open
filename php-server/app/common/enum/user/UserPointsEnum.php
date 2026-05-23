@@ -22,7 +22,7 @@ class UserPointsEnum
     const TYPE_INVITE = 'invite'; // 邀请
     const TYPE_STORE_COUPON = 'store_coupon'; // 领取店铺优惠券
     const TYPE_POINTS_GOODS_ORDER = 'points_goods_order'; // 积分商品订单
-
+    const TYPE_SIGN = 'sign'; // 签到
 
 
     // 获取变动类型列表
@@ -37,6 +37,7 @@ class UserPointsEnum
             self::TYPE_INVITE => '邀请',
             self::TYPE_STORE_COUPON => '领取店铺优惠券',
             self::TYPE_POINTS_GOODS_ORDER => '积分商品订单',
+            self::TYPE_SIGN => '签到',
         ];
     }
 

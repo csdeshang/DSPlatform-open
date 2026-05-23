@@ -18,6 +18,12 @@ class MerchantService extends BaseAdminService
     {
 
         $condition = [];
+
+        // 根据参数控制是否显示已删除数据，空或不传时不筛选（显示全部）
+        if (isset($data['is_deleted']) && $data['is_deleted'] !== '' && $data['is_deleted'] !== null && in_array((int)$data['is_deleted'], [0, 1], true)) {
+            $condition[] = ['is_deleted', '=', (int)$data['is_deleted']];
+        }
+
         if (isset($data['name']) && !empty($data['name'])) {
             $condition[] = ['name', 'like', '%' . $data['name'] . '%'];
         }
@@ -82,9 +88,12 @@ class MerchantService extends BaseAdminService
             throw new CommonException('用户不存在');
         }
 
-        // 当前用户是否是商户
+        // 当前用户是否已有商户（含已删除）
         $merchantInfo = (new MerchantDao())->getMerchantInfo([['user_id', '=', $data['user_id']]]);
         if (!empty($merchantInfo)) {
+            if ($merchantInfo['is_deleted'] === 1) {
+                throw new CommonException('该用户的商户已被删除，无法再次创建');
+            }
             throw new CommonException('用户已经是商户');
         }
 
@@ -160,5 +169,59 @@ class MerchantService extends BaseAdminService
 
         $condition = [['id', '=', $data['id']]];
         return (new MerchantDao())->updateMerchant($condition, $updateData);
+    }
+
+    /**
+     * 软删除商户
+     *
+     * @param int $id 商户ID
+     * @return int 受影响的行数
+     */
+    public function softDeleteMerchant(int $id)
+    {
+        $dao = new MerchantDao();
+        $merchant_info = $dao->getMerchantInfoById($id);
+        if (empty($merchant_info)) {
+            throw new CommonException('商户不存在');
+        }
+        if ($merchant_info['is_deleted'] == 1) {
+            throw new CommonException('商户已被删除');
+        }
+        $update_data = [
+            'is_deleted' => 1,
+            'deleted_at' => time(),
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 0],
+        ];
+        return $dao->updateMerchant($condition, $update_data);
+    }
+
+    /**
+     * 恢复商户
+     *
+     * @param int $id 商户ID
+     * @return int 受影响的行数
+     */
+    public function restoreMerchant(int $id)
+    {
+        $dao = new MerchantDao();
+        $merchant_info = $dao->getMerchantInfoById($id);
+        if (empty($merchant_info)) {
+            throw new CommonException('商户不存在');
+        }
+        if ($merchant_info['is_deleted'] != 1) {
+            throw new CommonException('商户未被删除，无需恢复');
+        }
+        $update_data = [
+            'is_deleted' => 0,
+            'deleted_at' => null,
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 1],
+        ];
+        return $dao->updateMerchant($condition, $update_data);
     }
 }

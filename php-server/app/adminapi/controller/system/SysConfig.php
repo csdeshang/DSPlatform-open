@@ -293,7 +293,13 @@ class SysConfig extends BaseAdminController
      *             @OA\Property(property="points_review_amount", type="integer", example=20, description="评价获取积分"),
      *             @OA\Property(property="points_review_enabled", type="integer", example=1, description="是否开启评价积分"),
      *             @OA\Property(property="points_invite_amount", type="integer", example=200, description="邀请注册获取积分"),
-     *             @OA\Property(property="points_invite_enabled", type="integer", example=1, description="是否开启邀请积分")
+     *             @OA\Property(property="points_invite_enabled", type="integer", example=1, description="是否开启邀请积分"),
+     *             @OA\Property(property="points_sign_enabled", type="integer", example=1, description="是否开启签到积分"),
+     *             @OA\Property(property="points_sign_amount", type="integer", example=10, description="单次签到基础积分"),
+     *             @OA\Property(property="points_sign_streak_enabled", type="integer", example=1, description="是否开启连续签到奖励"),
+     *             @OA\Property(property="points_sign_streak_after_days", type="integer", example=3, description="连续签到满几天起享受倍数"),
+     *             @OA\Property(property="points_sign_streak_multiplier", type="number", example=1.5, description="连续签到奖励倍数"),
+     *             @OA\Property(property="points_sign_streak_max_days", type="integer", example=7, description="最大连续天数")
      *         )
      *     ),
      *     @OA\Response(
@@ -322,6 +328,12 @@ class SysConfig extends BaseAdminController
             'points_review_enabled' => input('param.points_review_enabled'), // 是否开启
             'points_invite_amount' => input('param.points_invite_amount'), // 邀请注册
             'points_invite_enabled' => input('param.points_invite_enabled'), // 是否开启
+            'points_sign_enabled' => input('param.points_sign_enabled'), // 是否开启签到积分
+            'points_sign_amount' => input('param.points_sign_amount'), // 单次签到基础积分
+            'points_sign_streak_enabled' => input('param.points_sign_streak_enabled'), // 是否开启连续签到奖励
+            'points_sign_streak_after_days' => input('param.points_sign_streak_after_days'), // 连续签到满几天起享受倍数
+            'points_sign_streak_multiplier' => input('param.points_sign_streak_multiplier'), // 连续签到奖励倍数
+            'points_sign_streak_max_days' => input('param.points_sign_streak_max_days'), // 最大连续天数
         );
 
         (new SysConfigService)->batchUpdateSysConfig('points', $data);

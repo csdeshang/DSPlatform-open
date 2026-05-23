@@ -122,6 +122,7 @@ class Merchant extends BaseAdminController
             'balance_in_max' => input('param.balance_in_max'),
             'balance_out_min' => input('param.balance_out_min'),
             'balance_out_max' => input('param.balance_out_max'),
+            'is_deleted' => input('param.is_deleted'),
         );
 
         $result = (new MerchantService())->getMerchantPages($data);
@@ -308,5 +309,39 @@ class Merchant extends BaseAdminController
 
         $result = (new MerchantService())->auditMerchant($data);
         return ds_json_success('审核成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/merchant/merchants/{id}/soft-delete",
+     *     summary="软删除商户",
+     *     tags={"admin-api/merchant/Merchant"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="商户ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="删除成功", @OA\JsonContent(@OA\Property(property="code", type="integer", example=10000), @OA\Property(property="msg", type="string", example="删除成功")))
+     * )
+     */
+    public function softDeleteMerchant($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\merchant\validate\MerchantValidate.softDelete');
+        $result = (new MerchantService())->softDeleteMerchant((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/merchant/merchants/{id}/restore",
+     *     summary="恢复已删除的商户",
+     *     tags={"admin-api/merchant/Merchant"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="商户ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="操作成功", @OA\JsonContent(@OA\Property(property="code", type="integer", example=10000), @OA\Property(property="msg", type="string", example="恢复成功")))
+     * )
+     */
+    public function restoreMerchant($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\merchant\validate\MerchantValidate.restore');
+        $result = (new MerchantService())->restoreMerchant((int)$id);
+        return ds_json_success('恢复成功', $result);
     }
 }

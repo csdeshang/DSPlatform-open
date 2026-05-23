@@ -3,8 +3,8 @@
 namespace app\common\model\distributor;
 
 use app\deshang\base\BaseModel;
-
 use app\common\enum\distributor\DistributorApplyEnum;
+use app\common\model\user\UserModel;
 
 class DistributorApplyModel extends BaseModel
 {
@@ -13,6 +13,15 @@ class DistributorApplyModel extends BaseModel
      * @var string
      */
     protected $name = 'distributor_apply';
+
+    /**
+     * 关联用户信息
+     * @return \think\model\relation\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'id');
+    }
 
     // 分销商状态描述获取器
     public function getApplyStatusDescAttr($value, $data)

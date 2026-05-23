@@ -273,6 +273,41 @@
                                 </div>
                             </div>
 
+                            <div class="section-bd-block">
+                                <div class="section-bd-block-title">
+                                    实名认证
+                                </div>
+                                <div class="section-bd-block-content">
+                                    <el-row :gutter="20">
+                                        <el-col :span="12">
+                                            <el-form-item label="认证状态">
+                                                <el-tag :type="idcardStatusTagType">{{ idcardStatusText }}</el-tag>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12" v-if="hasIdcardInfo">
+                                            <el-form-item label="真实姓名">
+                                                <div class="form-text">{{ userInfo.idcard_name || '—' }}</div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="12" v-if="hasIdcardInfo">
+                                            <el-form-item label="身份证号">
+                                                <div class="form-text">{{ userInfo.idcard_number || '—' }}</div>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="24" v-if="hasIdcardInfo">
+                                            <el-form-item label="证件照片">
+                                                <div class="idcard-images">
+                                                    <el-image v-if="userInfo.idcard_image1" :src="formatImageUrl(userInfo.idcard_image1)" :preview-src-list="[formatImageUrl(userInfo.idcard_image1)]" fit="cover" class="idcard-img" />
+                                                    <el-image v-if="userInfo.idcard_image2" :src="formatImageUrl(userInfo.idcard_image2)" :preview-src-list="[formatImageUrl(userInfo.idcard_image2)]" fit="cover" class="idcard-img" />
+                                                    <el-image v-if="userInfo.idcard_image3" :src="formatImageUrl(userInfo.idcard_image3)" :preview-src-list="[formatImageUrl(userInfo.idcard_image3)]" fit="cover" class="idcard-img" />
+                                                </div>
+                                                <div class="form-text hint" v-if="userInfo.idcard_image1 || userInfo.idcard_image2 || userInfo.idcard_image3">手持身份证、正面、反面（点击可预览）</div>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </div>
+
                             <div class="section-bd-block" v-if="userInfo.is_distributor">
                                 <div class="section-bd-block-title">
                                     分销商
@@ -412,6 +447,11 @@ const userInfo = reactive({
     mobile_bind: 0,
     qq: '',
     idcard_name: '',
+    idcard_status: 0,
+    idcard_number: '',
+    idcard_image1: '',
+    idcard_image2: '',
+    idcard_image3: '',
     is_enabled: 1,
     is_distributor: 0,
     distributor_status: 0,
@@ -440,6 +480,23 @@ const initialFormData = {
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
+
+// 实名认证状态：0 未认证 1 审核中 2 未通过 3 已认证
+const idcardStatusMap: Record<number, string> = {
+    0: '未认证',
+    1: '审核中',
+    2: '未通过',
+    3: '已认证'
+}
+const idcardStatusTagMap: Record<number, string> = {
+    0: 'info',
+    1: 'warning',
+    2: 'danger',
+    3: 'success'
+}
+const idcardStatusText = computed(() => idcardStatusMap[userInfo.idcard_status] ?? '未知')
+const idcardStatusTagType = computed(() => idcardStatusTagMap[userInfo.idcard_status] ?? 'info')
+const hasIdcardInfo = computed(() => [1, 2, 3].includes(userInfo.idcard_status) && (userInfo.idcard_name || userInfo.idcard_number || userInfo.idcard_image1 || userInfo.idcard_image2 || userInfo.idcard_image3))
 
 // 表单验证规则
 const formRules = computed(() => {
@@ -497,3 +554,9 @@ defineExpose({
     setDialogData
 })
 </script>
+
+<style scoped>
+.idcard-images { display: flex; gap: 12px; flex-wrap: wrap; }
+.idcard-images .idcard-img { width: 120px; height: 80px; border-radius: 4px; }
+.idcard-images + .form-text { margin-top: 4px; color: var(--el-text-color-secondary); font-size: 12px; }
+</style>

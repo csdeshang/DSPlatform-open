@@ -9,6 +9,7 @@ use app\deshang\utils\TokenCache;
 use app\deshang\service\user\DeshangUserService;
 
 use app\common\dao\user\UserDao;
+use app\common\enum\user\UserEnum;
 
 class UserService extends BaseAdminService
 {
@@ -24,13 +25,9 @@ class UserService extends BaseAdminService
     {
         $condition = [];
 
-        // 根据参数控制是否显示已删除数据
-        if (isset($data['is_deleted']) && $data['is_deleted'] !== '') {
-            // 明确指定查询已删除或未删除的数据
+        // 根据参数控制是否显示已删除数据，空或不传时不筛选（显示全部）
+        if (isset($data['is_deleted']) && $data['is_deleted'] !== '' && $data['is_deleted'] !== null && in_array((int)$data['is_deleted'], [0, 1], true)) {
             $condition[] = ['is_deleted', '=', (int)$data['is_deleted']];
-        } else {
-            // 默认只显示未删除的数据
-            $condition[] = ['is_deleted', '=', 0];
         }
 
         if (isset($data['username']) && $data['username'] != '') {
@@ -62,6 +59,11 @@ class UserService extends BaseAdminService
         // 是否启用搜索
         if (isset($data['is_enabled']) && $data['is_enabled'] !== '') {
             $condition[] = ['is_enabled', '=', $data['is_enabled']];
+        }
+
+        // 实名认证状态搜索
+        if (isset($data['idcard_status']) && $data['idcard_status'] !== '') {
+            $condition[] = ['idcard_status', '=', (int)$data['idcard_status']];
         }
 
         // 可用金额区间搜索
@@ -133,6 +135,27 @@ class UserService extends BaseAdminService
         return $result;
     }
 
+    /**
+     * 实名认证审核（仅当状态为审核中时可操作）
+     * @param int $id 用户ID
+     * @param array $data 必须包含 idcard_status 2=未通过 3=已认证
+     * @return int
+     */
+    public function auditUserIdcard(int $id, array $data)
+    {
+        $user = $this->dao->getUserInfoById($id, 'id,idcard_status');
+        if (empty($user)) {
+            throw new CommonException('会员不存在');
+        }
+        if ((int)$user['idcard_status'] !== UserEnum::IDCARD_STATUS_PENDING) {
+            throw new CommonException('当前实名认证状态不可审核');
+        }
+        $status = (int)$data['idcard_status'];
+        if (!in_array($status, [UserEnum::IDCARD_STATUS_REJECTED, UserEnum::IDCARD_STATUS_VERIFIED], true)) {
+            throw new CommonException('审核结果无效');
+        }
+        return $this->dao->updateUser([['id', '=', $id]], ['idcard_status' => $status]);
+    }
 
     public function getUserInfo($id)
     {

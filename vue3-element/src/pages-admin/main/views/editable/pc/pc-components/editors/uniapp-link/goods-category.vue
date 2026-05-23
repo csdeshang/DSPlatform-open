@@ -30,7 +30,6 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import { getTblGoodsCategoryTree } from '@/pages-admin/main/api/tbl-goods/tblGoodsCategory'
-import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 // 定义组件名称
 defineOptions({
@@ -96,10 +95,10 @@ const handleRowClick = (row: any) => {
 
 // 选择处理
 const handleSelect = (row: any) => {
-  // 构建发送到父组件的数据结构（PC端路径）
+  // nuxt-consumer：/{platform}/search/goodslist
   const selectData = {
     id: row.id,
-    link: `/pages/${props.platform}/goods/list?category_id=${row.id}`
+    link: `/${props.platform}/search/goodslist?category_id=${row.id}`
   }
 
   emit('select', selectData)

@@ -13,6 +13,9 @@ Route::group('tbl-store', function () {
     Route::get('stores/pages', 'tblStore.TblStore/getTblStorePage');
     // stores/list (2段) 必须在 stores/:id (2段) 前面 否则 GET /stores/list 会被 stores/:id 匹配
     Route::get('stores/list', 'tblStore.TblStore/getTblStoreList');
+    // stores/:id/restore、soft-delete (3段) 必须在 stores/:id (2段) 前面
+    Route::patch('stores/:id/restore', 'tblStore.TblStore/restoreTblStore');
+    Route::patch('stores/:id/soft-delete', 'tblStore.TblStore/softDeleteTblStore');
     // stores/:id/audit (3段) 必须在 stores/:id (2段) 前面 否则 PATCH /stores/123/audit 会被 stores/:id 匹配
     Route::patch('stores/:id/audit', 'tblStore.TblStore/auditTblStore');
     Route::post('stores', 'tblStore.TblStore/createTblStore');

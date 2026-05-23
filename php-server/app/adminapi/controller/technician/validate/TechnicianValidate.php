@@ -98,6 +98,10 @@ class TechnicianValidate extends BaseValidate
 
         // 审核场景
         'audit' => ['id', 'apply_status', 'audit_remark'],
+
+        // 软删除、恢复
+        'softDelete' => ['id'],
+        'restore' => ['id'],
     ];
 
     /**

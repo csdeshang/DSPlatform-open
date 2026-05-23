@@ -8,8 +8,24 @@ use EasyWeChat\OfficialAccount\Application;
 use Symfony\Component\HttpFoundation\Response;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 
-//EasyWeChat 公众号服务类  https://easywechat.com/6.x/official-account/config.html
-
+/**
+ * 微信公众号服务类（EasyWeChat封装）
+ * 
+ * 用于处理微信公众号相关的功能：
+ * - 网页授权（OAuth2.0）：微信浏览器内网页授权登录
+ * - 消息推送：接收和回复微信消息
+ * - 菜单管理：自定义菜单
+ * - JS-SDK：微信JS接口
+ * 
+ * 授权场景：wechat_official（公众号网页授权）
+ * - 授权URL: https://open.weixin.qq.com/connect/oauth2/authorize
+ * - 授权范围: snsapi_base（静默授权）或 snsapi_userinfo（需用户确认）
+ * - OpenID字段: wx_oauth_openid
+ * 
+ * 注意：此服务类仅用于公众号授权，区别于网站应用授权（DeshangWebEasyService）
+ * 
+ * 参考文档：https://easywechat.com/6.x/official-account/config.html
+ */
 class DeshangOfficialEasyService extends BaseDeshangService
 {
     /**
@@ -138,11 +154,13 @@ class DeshangOfficialEasyService extends BaseDeshangService
     }
 
     /**
-     * 通过授权Code获取用户信息
+     * 通过授权Code获取用户信息（仅用于wechat_official场景）
      * 
-     * @param string $code 授权code
+     * 注意：此方法仅用于公众号授权，PC扫码登录应使用 DeshangWebEasyService::getWechatInfoByCode()
+     * 
+     * @param string $code 授权code（从公众号授权URL回调获取）
      * @param string $scope 授权类型：snsapi_base或snsapi_userinfo
-     * @return array 用户信息
+     * @return array 用户信息，包含：openid（公众号openid）、unionid、nickname、avatar等
      * @throws CommonException
      */
     public function getWechatInfoByCode(string $code, string $scope = 'snsapi_userinfo'): array

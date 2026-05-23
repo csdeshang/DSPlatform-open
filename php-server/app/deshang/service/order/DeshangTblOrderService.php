@@ -14,6 +14,8 @@ use app\common\dao\order\TblOrderLogDao;
 use app\common\dao\order\TblOrderGoodsDao;
 use app\common\dao\order\TblOrderDeliveryDao;
 use app\common\dao\order\TblOrderFinanceDao;
+use app\common\dao\order\TblOrderInvoiceDao;
+use app\common\enum\order\TblOrderInvoiceEnum;
 use app\common\enum\merchant\MerchantBalanceEnum;
 use app\common\enum\order\TblOrderDeliveryEnum;
 use app\common\enum\rider\RiderBalanceEnum;
@@ -220,6 +222,35 @@ class DeshangTblOrderService  extends BaseDeshangService
             // 评价 (用于未评价，未有退款中的订单，以及无全额退款)
             if ($order_info['is_evaluate'] == 0 && $order_info['refunding_count'] == 0 && $order_info['refund_status'] != TblOrderEnum::REFUND_STATUS_FULL_REFUNDED) {
                 $actions[] = 'evaluate';
+            }
+
+            /**
+             * 开票申请（action: invoice）
+             *
+             * 前置：本段已在「订单已完成」内；另需无退款中、非全额退款（与评价逻辑一致）。
+             *
+             * 订单表 tbl_order.invoice_status 含义见 TblOrderInvoiceEnum：
+             * - STATUS_NOT_SUBMITTED(0)：尚未提交过开票申请；
+             * - STATUS_REJECTED(4)、STATUS_VOIDED(5)：店铺驳回或作废后，需同步回订单字段后用户才可再次申请。
+             * 若为待处理(1)/处理中(2)/已开票(3)，表示仍有在途流程，此处不再给出「申请开票」入口（与订单展示一致）。
+             *
+             * countBlockingByOrderId：统计该订单下 tbl_order_invoice 中仍处于「待处理/处理中/已开票」的记录条数。
+             * 大于 0 时不允许再提交，避免同一订单并行多条进行中的申请；等于 0 时允许 insert 新申请行。
+             */
+            if ($order_info['refunding_count'] == 0 && $order_info['refund_status'] != TblOrderEnum::REFUND_STATUS_FULL_REFUNDED) {
+                // 订单当前开票进度（缺省按未申请）
+                $inv = (int) ($order_info['invoice_status'] ?? TblOrderInvoiceEnum::STATUS_NOT_SUBMITTED);
+                // 仅未申请、已驳回、已作废三种订单态允许出现「申请/再次申请」入口
+                $allowed = $inv === TblOrderInvoiceEnum::STATUS_NOT_SUBMITTED
+                    || $inv === TblOrderInvoiceEnum::STATUS_REJECTED
+                    || $inv === TblOrderInvoiceEnum::STATUS_VOIDED;
+                if ($allowed) {
+                    // 申请单表中是否仍有进行中的记录（与 TblOrderInvoiceEnum::blockingInvoiceStatuses() 一致）
+                    $blocking = (new TblOrderInvoiceDao())->countBlockingByOrderId((int) $order_info['id']);
+                    if ($blocking === 0) {
+                        $actions[] = 'invoice';
+                    }
+                }
             }
         }
         return $actions;

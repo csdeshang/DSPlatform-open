@@ -36,17 +36,6 @@
                 <el-input v-model="formData.publish_author" placeholder="请输入发布作者"></el-input>
             </el-form-item>
 
-            <el-form-item label="发布时间" prop="publish_time">
-                <el-date-picker
-                    v-model="publishDate"
-                    type="datetime"
-                    placeholder="选择发布时间"
-                    format="YYYY-MM-DD HH:mm:ss"
-                    value-format="YYYY-MM-DD HH:mm:ss"
-                    @change="handlePublishDateChange"
-                />
-            </el-form-item>
-
             <el-form-item label="虚拟浏览数" prop="virtual_views">
                 <el-input-number v-model="formData.virtual_views" :min="0" placeholder="请输入虚拟浏览数"></el-input-number>
             </el-form-item>
@@ -70,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed, watch } from 'vue';
+import { ref, reactive, computed } from 'vue';
 
 import { createSysArticle, updateSysArticle, getSysArticleInfo, getSysArticleCategoryTree } from '@/pages-admin/main/api/system/sysArticle';
 import { ElMessage, FormInstance } from 'element-plus';
@@ -92,7 +81,6 @@ const initialFormData = {
     image: '',
     content: '',
     publish_author: '',
-    publish_time: Math.floor(Date.now() / 1000),
     virtual_views: 0,
     actual_views: 0,
     sort: 0,
@@ -102,42 +90,6 @@ const initialFormData = {
 const formData = reactive({ ...initialFormData });
 const formRef = ref<FormInstance>();
 const categoryList = ref<any[]>([]);
-
-// 用于日期选择器的值
-const publishDate = ref('');
-
-// 日期格式化函数
-const formatDateTime = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-};
-
-// 监听 formData.publish_time 变化，更新日期选择器显示
-watch(() => formData.publish_time, (newVal) => {
-    if (newVal) {
-        const date = new Date(newVal * 1000);
-        publishDate.value = formatDateTime(date);
-    }
-}, { immediate: true });
-
-
-
-// 处理发布日期变更
-const handlePublishDateChange = (val: string) => {
-    if (val) {
-        // 将日期字符串转换为时间戳（秒）
-        formData.publish_time = Math.floor(new Date(val).getTime() / 1000);
-    } else {
-        // 如果清空日期，使用当前时间
-        formData.publish_time = Math.floor(Date.now() / 1000);
-    }
-};
 
 // 获取文章分类
 const fetchCategoryList = async () => {
@@ -198,21 +150,10 @@ const setDialogData = async (row: any = null) => {
                     formData[key] = data[key];
                 }
             });
-            
-            // 更新日期选择器的值
-            if (formData.publish_time) {
-                const date = new Date(formData.publish_time * 1000);
-                publishDate.value = formatDateTime(date);
-            }
         } catch (error) {
             console.error('获取文章详情失败', error);
             ElMessage.error('获取文章详情失败');
         }
-    } else {
-        // 新增文章时，默认使用当前时间
-        formData.publish_time = Math.floor(Date.now() / 1000);
-        const date = new Date(formData.publish_time * 1000);
-        publishDate.value = formatDateTime(date);
     }
 
     loading.value = false;

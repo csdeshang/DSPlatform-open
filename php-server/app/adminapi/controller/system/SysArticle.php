@@ -93,7 +93,6 @@ class SysArticle extends BaseAdminController
      *             @OA\Property(property="image", type="string", description="文章封面图", example="/uploads/article/cover.jpg"),
      *             @OA\Property(property="content", type="string", description="文章内容", example="文章内容详情"),
      *             @OA\Property(property="publish_author", type="string", description="发布作者", example="管理员"),
-     *             @OA\Property(property="publish_time", type="string", description="发布时间", example="2024-01-01 12:00:00"),
      *             @OA\Property(property="virtual_views", type="integer", description="虚拟浏览量", example=100),
      *             @OA\Property(property="is_show", type="integer", description="是否显示", example=1),
      *             @OA\Property(property="sort", type="integer", description="排序", example=255)
@@ -119,7 +118,7 @@ class SysArticle extends BaseAdminController
             'image' => input('param.image'),
             'content' => input('param.content'),
             'publish_author' => input('param.publish_author'),
-            'publish_time' => input('param.publish_time'),
+            'publish_time' => time(),
             'virtual_views' => input('param.virtual_views'),
             'is_show' => input('param.is_show', 1), // 默认显示
             'sort' => input('param.sort', 255), // 默认排序
@@ -153,7 +152,6 @@ class SysArticle extends BaseAdminController
      *             @OA\Property(property="image", type="string", description="文章封面图", example="/uploads/article/cover.jpg"),
      *             @OA\Property(property="content", type="string", description="文章内容", example="更新后的文章内容"),
      *             @OA\Property(property="publish_author", type="string", description="发布作者", example="管理员"),
-     *             @OA\Property(property="publish_time", type="string", description="发布时间", example="2024-01-01 12:00:00"),
      *             @OA\Property(property="virtual_views", type="integer", description="虚拟浏览量", example=100),
      *             @OA\Property(property="is_show", type="integer", description="是否显示", example=1),
      *             @OA\Property(property="sort", type="integer", description="排序", example=255)
@@ -178,7 +176,7 @@ class SysArticle extends BaseAdminController
             'image' => input('param.image'),
             'content' => input('param.content'),
             'publish_author' => input('param.publish_author'),
-            'publish_time' => input('param.publish_time'),
+            'publish_time' => time(),
             'virtual_views' => input('param.virtual_views'),
             'is_show' => input('param.is_show', 1), // 默认显示
             'sort' => input('param.sort', 255), // 默认排序

@@ -12,6 +12,9 @@ Route::group('technician', function () {
     Route::put('technicians/:id/bind-store', 'technician.Technician/updateTechnicianBindStore');
     // technicians/:id/balance (3段) 必须在 technicians/:id (2段) 前面 否则 PUT /technicians/123/balance 会被 technicians/:id 匹配
     Route::put('technicians/:id/balance', 'technician.TechnicianBalance/modifyTechnicianBalance');
+    // technicians/:id/restore、soft-delete (3段) 必须在 technicians/:id (2段) 前面
+    Route::patch('technicians/:id/restore', 'technician.Technician/restoreTechnician');
+    Route::patch('technicians/:id/soft-delete', 'technician.Technician/softDeleteTechnician');
     // technicians/:id/audit (3段) 必须在 technicians/:id (2段) 前面 否则 PATCH /technicians/123/audit 会被 technicians/:id 匹配
     Route::patch('technicians/:id/audit', 'technician.Technician/auditTechnician');
     // technicians/pages (2段) 必须在 technicians/:id (2段) 前面 否则 GET /technicians/pages 会被 technicians/:id 匹配

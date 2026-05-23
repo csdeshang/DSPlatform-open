@@ -2,8 +2,14 @@
   <div>
     <el-card shadow="never" class="mb-[10px]">
       <el-form :model="searchParams" inline>
-        <el-form-item label="页面名称">
-          <el-input v-model="searchParams.name" placeholder="请输入页面名称" clearable />
+        <el-form-item label="标题">
+          <el-input v-model="searchParams.title" placeholder="请输入标题" clearable />
+        </el-form-item>
+        <el-form-item label="设备类型" style="width:200px;">
+          <el-select v-model="searchParams.device_type" placeholder="请选择设备类型" clearable>
+            <el-option label="手机端" value="mobile" />
+            <el-option label="PC端" value="pc" />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="resetPage">查询</el-button>
@@ -21,9 +27,17 @@
           </template>
         </el-table-column>
         <el-table-column label="ID" prop="id" width="80" />
-        <el-table-column label="页面名称" prop="name" min-width="180" show-overflow-tooltip />
-        <el-table-column label="描述" prop="desc" min-width="200" show-overflow-tooltip />
-        <el-table-column label="更新时间" prop="updateTime" width="180" />
+        <el-table-column label="标题" prop="title" min-width="140" show-overflow-tooltip />
+        <el-table-column label="页面类型" prop="type_desc" width="100" />
+        <el-table-column label="平台" prop="platform.name" width="100" />
+        <el-table-column label="设备类型" width="90">
+          <template #default="{ row }">
+            <el-tag v-if="row.device_type === 'pc'" type="success" size="small">PC端</el-tag>
+            <el-tag v-else-if="row.device_type === 'mobile'" type="primary" size="small">手机端</el-tag>
+            <span v-else>-</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="更新时间" prop="update_at" width="180" />
       </el-table>
 
       <div class="flex justify-end mt-[20px]">
@@ -50,9 +64,9 @@ const emit = defineEmits(['select'])
 // 状态管理
 const selectedRowId = ref(null)
 
-// 搜索参数
 const searchParams = reactive({
-  name: ''
+  title: '',
+  device_type: '' as string
 })
 
 // 使用分页钩子
@@ -79,7 +93,8 @@ const handleSelect = (row: any) => {
   // 构建发送到父组件的数据结构
   const selectData = {
     id: row.id,
-    link: `/pages/diy/index?id=${row.id}`
+    title: row.title,
+    link: `/diy?id=${row.id}`
   }
 
   emit('select', selectData)

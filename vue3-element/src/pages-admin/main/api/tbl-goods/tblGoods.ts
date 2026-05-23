@@ -26,4 +26,14 @@ export function updateTblGoodsSysRecommend(params: Record<string, any>) {
     return request.patch(`${API_BASE_URLS.ADMIN}/tbl-goods/goods/${params.id}/sys-recommend`, params)
 }
 
+/** 软删除商品 */
+export function softDeleteTblGoods(id: number) {
+    return request.patch(`${API_BASE_URLS.ADMIN}/tbl-goods/goods/${id}/soft-delete`)
+}
+
+/** 恢复已删除的商品 */
+export function restoreTblGoods(id: number) {
+    return request.patch(`${API_BASE_URLS.ADMIN}/tbl-goods/goods/${id}/restore`)
+}
+
 

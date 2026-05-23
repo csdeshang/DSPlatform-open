@@ -151,6 +151,7 @@ class User extends BaseAdminController
             'inviter_id' => input('param.inviter_id',''),
             'is_enabled' => input('param.is_enabled',''),
             'is_deleted' => input('param.is_deleted',''),
+            'idcard_status' => input('param.idcard_status',''),
             'balance_min' => input('param.balance_min',''),
             'balance_max' => input('param.balance_max',''),
             'balance_in_min' => input('param.balance_in_min',''),
@@ -315,6 +316,19 @@ class User extends BaseAdminController
         return ds_json_success('修改成功', $result);
     }
 
+    /**
+     * 实名认证审核
+     */
+    public function auditUserIdcard($id)
+    {
+        $data = [
+            'id' => (int) $id,
+            'idcard_status' => (int) input('param.idcard_status'),
+        ];
+        $this->validate($data, 'app\adminapi\controller\user\validate\UserValidate.idcardAudit');
+        (new UserService())->auditUserIdcard((int)$id, $data);
+        return ds_json_success('操作成功');
+    }
 
     /**
      * @OA\Get(

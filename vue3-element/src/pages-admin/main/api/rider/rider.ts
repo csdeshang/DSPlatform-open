@@ -28,3 +28,21 @@ export function auditRider(id: number, params: Record<string, any>) {
   return request.patch(`${API_BASE_URLS.ADMIN}/rider/riders/${id}/audit`, params)
 }
 
+/**
+ * 软删除骑手
+ * @param id 骑手ID
+ * @returns
+ */
+export function softDeleteRider(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/rider/riders/${id}/soft-delete`)
+}
+
+/**
+ * 恢复已删除的骑手
+ * @param id 骑手ID
+ * @returns
+ */
+export function restoreRider(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/rider/riders/${id}/restore`)
+}
+

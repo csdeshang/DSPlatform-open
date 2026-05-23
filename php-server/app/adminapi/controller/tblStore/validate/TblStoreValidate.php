@@ -66,6 +66,8 @@ class TblStoreValidate extends BaseValidate
     protected $scene = [
         'update' => ['id', 'store_name', 'store_business_status', 'service_fee_rate', 'is_enabled', 'is_recommend', 'sort', 'store_introduction', 'contact_name', 'contact_phone', 'address', 'seo_title', 'seo_keywords', 'seo_description', 'category_id', 'apply_status', 'audit_remark'],
         'audit' => ['id', 'apply_status', 'audit_remark'],
+        'softDelete' => ['id'],
+        'restore' => ['id'],
     ];
 
 

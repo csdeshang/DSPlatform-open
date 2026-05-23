@@ -33,35 +33,60 @@ const useUserInfoStore = defineStore('userInfo', {
   }),
 
   actions: {
-    // 登录
-    login(payload: { username: string; password: string }) {
-      const { username, password } = payload
+    /**
+     * 登录成功后写入 token 与用户态（与 uniapp `loginAfter` 一致；data 含 access_token、refresh_token、userinfo）。
+     */
+    loginAfter(data: any) {
+      const { access_token, refresh_token, userinfo } = data
+      setToken(access_token, 'access_token')
+      setToken(refresh_token, 'refresh_token')
+      this.access_token = access_token
+      this.refresh_token = refresh_token
+      this.userInfo = userinfo
+    },
+
+    /**
+     * 将 manage_store_id 写入本地（请求头带店）。
+     */
+    syncManageStoreId(
+      manageStoreList: any[] | null | undefined,
+      options?: { preferredManageStoreId?: number | null }
+    ) {
+      const preferredId = Number(options?.preferredManageStoreId)
+      if (Number.isFinite(preferredId) && preferredId > 0) {
+        storage.set('manage_store_id', preferredId, 7 * 24 * 60 * 60)
+        return
+      }
+      if (Array.isArray(manageStoreList) && manageStoreList.length > 0) {
+        const available = manageStoreList.find(
+          (s: any) => s?.apply_status === 1 && s?.is_enabled === 1
+        )
+        const defaultStore = available || manageStoreList[0]
+        if (defaultStore?.id != null) {
+          storage.set('manage_store_id', defaultStore.id, 7 * 24 * 60 * 60)
+        }
+      }
+    },
+
+    // 登录（有传 login_type 则带给接口，如 store/merchant 页；admin 不传则不带）
+    login(payload: { username: string; password: string; login_type?: 'user' | 'merchant' | 'store' }) {
+      const { username, password, login_type } = payload
+      const params: Record<string, string> = {
+        username: username.trim(),
+        password
+      }
+      if (login_type != null) {
+        params.login_type = login_type
+      }
       return new Promise((resolve, reject) => {
-        loginNormal({
-          username: username.trim(),
-          password
-        })
+        loginNormal(params)
           .then(res => {
-            // 存储token和用户信息
-            setToken(res.data.access_token, 'access_token')
-            setToken(res.data.refresh_token, 'refresh_token')
-            if (res.data.userinfo.manage_store_list && res.data.userinfo.manage_store_list.length > 0) {
-              // 筛选申请正常且可用的店铺
-              const availableStore = res.data.userinfo.manage_store_list.find(
-                (store: any) => store.apply_status === 1 && store.is_enabled === 1
-              )
-              
-              // 如果找到符合条件的店铺，使用该店铺；否则使用第一个店铺
-              const defaultStore = availableStore || res.data.userinfo.manage_store_list[0]
-              
-              // 设置默认店铺id
-              storage.set('manage_store_id', defaultStore.id, 7 * 24 * 60 * 60)
-            }
-
-            this.access_token = res.data.access_token
-            this.refresh_token = res.data.refresh_token
-            this.userInfo = res.data.userinfo
-
+            this.loginAfter({
+              access_token: res.data.access_token,
+              refresh_token: res.data.refresh_token,
+              userinfo: res.data.userinfo
+            })
+            this.syncManageStoreId(res.data.userinfo?.manage_store_list)
             resolve(res)
           })
           .catch(error => reject(error))

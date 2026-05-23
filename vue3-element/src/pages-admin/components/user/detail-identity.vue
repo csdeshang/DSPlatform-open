@@ -18,6 +18,7 @@
                     <div v-if="row.wx_oauth_openid" class="mb-1">网页授权: {{ row.wx_oauth_openid }}</div>
                     <div v-if="row.wx_mini_openid" class="mb-1">小程序: {{ row.wx_mini_openid }}</div>
                     <div v-if="row.wx_app_openid" class="mb-1">APP: {{ row.wx_app_openid }}</div>
+                    <div v-if="row.wx_web_openid" class="mb-1">网站应用: {{ row.wx_web_openid }}</div>
                     <div v-if="row.wx_unionid" class="mb-1">UnionID: {{ row.wx_unionid }}</div>
                 </div>
             </template>

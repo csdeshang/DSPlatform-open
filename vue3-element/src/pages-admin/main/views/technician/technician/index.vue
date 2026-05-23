@@ -24,6 +24,13 @@
                         <el-option label="可用" :value="1" />
                     </el-select>
                 </el-form-item>
+                <el-form-item label="删除状态">
+                    <el-select v-model="searchParams.is_deleted" placeholder="请选择状态" clearable class="w-[100px]">
+                        <el-option label="全部" value="" />
+                        <el-option label="未删除" value="0" />
+                        <el-option label="已删除" value="1" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetSearchParams">重置</el-button>
@@ -121,12 +128,14 @@
                         <div class="flex flex-row">
                             <el-button type="primary" link @click="handleDetail(row.id)">详情</el-button>
                             <el-button type="primary" link @click="handleApplyAudit(row)" v-if="row.apply_status != 1">审核</el-button>
-                            <el-dropdown class="ml-[10px]" @command="(command: string) => handleMore(command, row)">
+                            <el-dropdown class="ml-[10px]" @command="(command) => handleMore(command, row)">
                                 <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
                                 <template #dropdown>
                                     <el-dropdown-menu>
                                         <el-dropdown-item command="balance">调整余额</el-dropdown-item>
                                         <el-dropdown-item command="bindStore">更换绑定店铺</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
                                     </el-dropdown-menu>
                                 </template>
                             </el-dropdown>
@@ -165,7 +174,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { ArrowDown } from '@element-plus/icons-vue'
-import { getTechnicianPage } from '@/pages-admin/main/api/technician/technician'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import { getTechnicianPage, softDeleteTechnician, restoreTechnician } from '@/pages-admin/main/api/technician/technician'
 import { usePagination } from '@/hooks/usePagination'
 import { useEnum } from '@/hooks/useEnum'
 
@@ -181,7 +191,8 @@ const searchParams = reactive({
     username: '',
     apply_status: '',
     technician_status: '',
-    is_enabled: ''
+    is_enabled: '',
+    is_deleted: '' as string
 })
 
 const {
@@ -217,6 +228,12 @@ const handleMore = (command: string, row: any) => {
         case 'bindStore':
             handleModifyBindStore(row)
             break
+        case 'softDelete':
+            handleSoftDelete(row.id)
+            break
+        case 'restore':
+            handleRestore(row.id)
+            break
         default:
             console.log('未知命令', command)
     }
@@ -248,6 +265,34 @@ const applyAuditDialog = ref()
 const handleApplyAudit = (row: any) => {
     applyAuditDialog.value.setDialogData(row)
     applyAuditDialog.value?.openDialog()
+}
+
+/** 软删除师傅 */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此师傅吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteTechnician(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
+
+/** 恢复师傅 */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此师傅吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreTechnician(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
 }
 
 // 会员详情弹窗

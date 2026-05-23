@@ -58,39 +58,42 @@
 
         <!-- PC预览区域 -->
         <div class="w-full max-w-[1920px] bg-white border border-gray-300 rounded-lg shadow-lg flex flex-col relative">
-          <div class="p-3 bg-gray-50 border-b border-gray-200">
-            <div class="flex justify-between items-center text-xs text-gray-600">
-              <div>PC端预览</div>
-              <div class="flex gap-2">
-                <button @click="setPreviewWidth(1920)" 
-                  class="px-2 py-1 text-xs rounded hover:bg-gray-200"
-                  :class="{ 'bg-blue-500 text-white': previewWidth === 1920 }">1920px</button>
-                <button @click="setPreviewWidth(1440)" 
-                  class="px-2 py-1 text-xs rounded hover:bg-gray-200"
-                  :class="{ 'bg-blue-500 text-white': previewWidth === 1440 }">1440px</button>
-                <button @click="setPreviewWidth(1200)" 
-                  class="px-2 py-1 text-xs rounded hover:bg-gray-200"
-                  :class="{ 'bg-blue-500 text-white': previewWidth === 1200 }">1200px</button>
+          <div class="px-3 py-2 bg-gray-50 border-b border-gray-200 text-xs text-gray-600">
+            PC端预览
+          </div>
+
+          <!-- 固定比例缩放（仅显示）；iframe 仍为 previewWidth 逻辑像素；调 PREVIEW_VIEW_SCALE -->
+          <div class="w-full min-w-0 px-1 pb-1">
+            <div
+              class="mx-auto overflow-hidden rounded-sm bg-white"
+              :style="{
+                width: `${previewWidth * PREVIEW_VIEW_SCALE}px`,
+                height: `${(previewHeight + PREVIEW_TITLE_ROW_H) * PREVIEW_VIEW_SCALE}px`,
+              }">
+              <div
+                :style="{
+                  transform: `scale(${PREVIEW_VIEW_SCALE})`,
+                  transformOrigin: 'top left',
+                  width: `${previewWidth}px`,
+                }">
+                <div
+                  class="text-center text-gray-600 leading-[40px] hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-center"
+                  @click="editableStore.deselectElement">
+                  {{ editableStore.pageConfig.globalSettings.title }}
+                </div>
+                <el-scrollbar :style="`height:${previewHeight}px;`">
+                  <iframe ref="previewIframe" :src="previewUrl" frameborder="0"
+                    :style="`width: ${previewWidth}px; height: 100%; border: none;`" @load="handleIframeLoad">
+                  </iframe>
+                </el-scrollbar>
               </div>
             </div>
           </div>
 
-          <div>
-            <div
-              class="text-center text-gray-600 leading-[40px] hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-center"
-              @click="editableStore.deselectElement">
-              {{ editableStore.pageConfig.globalSettings.title }}
-            </div>
-            <el-scrollbar :style="`height:${previewHeight}px;`">
-              <iframe ref="previewIframe" :src="previewUrl" frameborder="0"
-                :style="`width: ${previewWidth}px; height: 100%; border: none;`" @load="handleIframeLoad">
-              </iframe>
-            </el-scrollbar>
-          </div>
-
-          <!-- 右侧固定操作按钮 -->
-          <div class="absolute -right-[70px] top-1/2 transform -translate-y-1/2 flex flex-col gap-2 z-30">
-            <div class="bg-white shadow-lg rounded-md overflow-hidden">
+          <!-- 固定在预览卡片内右侧，避免伸出父级被 overflow-hidden 裁掉 -->
+          <div
+            class="absolute right-3 top-1/2 z-40 flex flex-col gap-2 -translate-y-1/2 pointer-events-auto">
+            <div class="bg-white shadow-lg rounded-md overflow-hidden border border-gray-200">
               <button
                 @click.stop="editableStore.selectedElementIndex !== null && editableStore.moveElement(editableStore.selectedElementIndex, -1)"
                 class="w-[45px] h-[45px] flex items-center justify-center text-gray-600 hover:bg-blue-50 hover:text-blue-500 transition-colors border-b border-gray-100"
@@ -164,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { ElMessage, ElLoading } from 'element-plus';
 import useEditableStore from '@/stores/modules/editable';
@@ -183,16 +186,15 @@ const route = useRoute();
 // 拖拽状态
 const isDragging = ref(false);
 
-// 预览尺寸
-const previewWidth = ref(1920);
-const previewHeight = ref(1080);
+// 预览逻辑尺寸（固定 1920×16:9，与手机端固定宽度思路一致）
+const PREVIEW_LAYOUT_WIDTH = 1920;
+const previewWidth = ref(PREVIEW_LAYOUT_WIDTH);
+const previewHeight = ref(Math.round((PREVIEW_LAYOUT_WIDTH * 9) / 16));
 
-// 设置预览宽度
-function setPreviewWidth(width) {
-  previewWidth.value = width;
-  // 根据宽度设置高度比例（16:9）
-  previewHeight.value = Math.round(width * 9 / 16);
-}
+/** 预览区整体视觉缩放（仅显示）；嫌小/嫌大只改此常量，如 0.5、0.65 */
+const PREVIEW_VIEW_SCALE = 0.55;
+/** 与标题行 leading-[40px] 一致，用于缩放占位 */
+const PREVIEW_TITLE_ROW_H = 40;
 
 // 动态加载后台自定义组件编辑
 const modulesFiles = import.meta.glob('./pc-components/*.vue', { eager: true });
@@ -236,7 +238,7 @@ function sendDataToPreview() {
 
 // 保存页面数据
 async function savePageData() {
-  const result = await editableStore.savePageData();
+  await editableStore.savePageData();
 }
 
 // 预览模板

@@ -53,5 +53,7 @@ class TblGoodsCommentValidate extends BaseValidate
     protected $scene = [
         'pages' => ['platform', 'user_id', 'goods_id', 'store_id', 'order_id', 'is_show', 'is_reply', 'is_anonymous'],
         'toggle' => ['id', 'field'],
+        'softDelete' => ['id'],
+        'restore' => ['id'],
     ];
 } 

@@ -48,11 +48,24 @@
                 <el-table-column label="总库存" prop="stock_num" width="100" />
                 <el-table-column label="排序" prop="sort" width="100" />
                 <el-table-column label="状态" prop="goods_status_desc" width="100" />
-                <el-table-column label="操作" align="right" fixed="right" width="130">
+                <el-table-column label="操作" align="right" fixed="right" width="160">
                     <template #default="{ row }">
-                        <el-button type="primary" link @click="handleDtail(row)">详情</el-button>
-                        <el-button type="primary" link @click="handleEditSysStatus(row)">修改状态</el-button>
-                        <el-button type="primary" link @click="handleEditSysRecommend(row)">{{ row.sys_recommend_status ? '取消推荐' : '推荐' }}</el-button>
+                        <div class="flex flex-row flex-wrap justify-end gap-x-0">
+                            <el-button type="primary" link @click="handleDtail(row)">详情</el-button>
+                            <el-dropdown class="ml-[6px]" @command="(command) => handleMore(command, row)">
+                                <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item command="previewPc">PC预览</el-dropdown-item>
+                                        <el-dropdown-item command="previewH5">H5预览</el-dropdown-item>
+                                        <el-dropdown-item command="editSysStatus" divided>修改状态</el-dropdown-item>
+                                        <el-dropdown-item command="editSysRecommend">{{ row.sys_recommend_status ? '取消推荐' : '推荐' }}</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -77,14 +90,14 @@
 <script lang="ts" setup>
 
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router'
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
-const router = useRouter()
+import { openGoodsPreview } from '@/utils/goods-preview'
 
+import { ArrowDown } from '@element-plus/icons-vue'
 import { usePagination } from '@/hooks/usePagination'
-import { getTblGoodsPages, updateTblGoodsSysRecommend } from '@/pages-admin/main/api/tbl-goods/tblGoods'
+import { getTblGoodsPages, updateTblGoodsSysRecommend, softDeleteTblGoods, restoreTblGoods } from '@/pages-admin/main/api/tbl-goods/tblGoods'
 import TblGoodsDetail from './detail.vue'
 import EditSysStatus from './editSysStatus.vue'
 
@@ -107,7 +120,7 @@ const searchParams = reactive({
     tab_selected: 'all'
 })
 
-// 切换订单状态
+// 切换列表 Tab
 const handleTabChange = (name: any) => {
   searchParams.tab_selected = name
   getTableList()
@@ -126,7 +139,6 @@ const {
 })
 getTableList()
 
-
 //详情
 const detailTblGoodsDialog = ref()
 const handleDtail = (row: any) => {
@@ -139,6 +151,60 @@ const editSysStatusDialog = ref()
 const handleEditSysStatus = (row: any) => {
     editSysStatusDialog.value.setDialogData(row)
     editSysStatusDialog.value?.openDialog()
+}
+
+// 更多操作
+const handleMore = (command: string, row: any) => {
+    switch (command) {
+        case 'previewPc':
+            openGoodsPreview(row, 'pc')
+            break
+        case 'previewH5':
+            openGoodsPreview(row, 'h5')
+            break
+        case 'editSysStatus':
+            handleEditSysStatus(row)
+            break
+        case 'editSysRecommend':
+            handleEditSysRecommend(row)
+            break
+        case 'softDelete':
+            handleSoftDelete(row.id)
+            break
+        case 'restore':
+            handleRestore(row.id)
+            break
+        default:
+            console.log('未知命令', command)
+    }
+}
+
+/** 软删除商品 */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此商品吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteTblGoods(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
+
+/** 恢复商品 */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此商品吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreTblGoods(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
 }
 
 // 处理推荐/取消推荐商品

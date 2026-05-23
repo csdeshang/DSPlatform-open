@@ -8,6 +8,7 @@ use app\common\enum\rider\RiderEnum;
 class RiderValidate extends BaseValidate
 {
     protected $rule = [
+        'id' => 'require|integer|gt:0',
         'user_id' => 'require|integer',
         'username' => 'max:32',
         'name' => 'max:32',
@@ -19,6 +20,9 @@ class RiderValidate extends BaseValidate
     ];
 
     protected $message = [
+        'id.require' => '骑手ID不能为空',
+        'id.integer' => '骑手ID必须是整数',
+        'id.gt' => '骑手ID必须大于0',
         'user_id.require' => '用户ID不能为空',
         'user_id.integer' => '用户ID必须为整数',
         'username.max' => '用户名长度不能超过32个字符',
@@ -36,6 +40,8 @@ class RiderValidate extends BaseValidate
         'create' => ['user_id'],
         'update' => ['name', 'mobile', 'status', 'is_enabled', 'apply_status', 'audit_remark'],
         'audit' => ['id', 'apply_status', 'audit_remark'],
+        'softDelete' => ['id'],
+        'restore' => ['id'],
     ];
 
     // 验证骑手状态

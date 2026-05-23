@@ -93,7 +93,7 @@ const handleSelect = (row) => {
         name: row.title,  // 为兼容index.vue的处理逻辑
         desc: row.description || '',
         image: row.image || '',
-        link: `/pages/article/detail?id=${row.id}`
+        link: `/system/article/detail?id=${row.id}`
     }
 
     emit('select', selectData)

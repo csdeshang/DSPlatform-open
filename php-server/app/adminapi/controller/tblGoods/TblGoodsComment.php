@@ -118,6 +118,7 @@ class TblGoodsComment extends BaseAdminController
             'username' => input('param.username', ''),
             'store_name' => input('param.store_name', ''),
             'goods_name' => input('param.goods_name', ''),
+            'is_deleted' => input('param.is_deleted', ''),
         ];
 
         $this->validate($data, 'app\adminapi\controller\tblGoods\validate\TblGoodsCommentValidate.pages');
@@ -169,5 +170,38 @@ class TblGoodsComment extends BaseAdminController
         return ds_json_success('切换成功', $result);
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/tbl-goods/comments/{id}/soft-delete",
+     *     summary="软删除商品评论",
+     *     tags={"admin-api/tblGoods/TblGoodsComment"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="评论ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="删除成功")
+     * )
+     */
+    public function softDeleteTblGoodsComment($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\tblGoods\validate\TblGoodsCommentValidate.softDelete');
+        $result = (new TblGoodsCommentService())->softDeleteTblGoodsComment((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/tbl-goods/comments/{id}/restore",
+     *     summary="恢复已删除的商品评论",
+     *     tags={"admin-api/tblGoods/TblGoodsComment"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="评论ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="恢复成功")
+     * )
+     */
+    public function restoreTblGoodsComment($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\tblGoods\validate\TblGoodsCommentValidate.restore');
+        $result = (new TblGoodsCommentService())->restoreTblGoodsComment((int)$id);
+        return ds_json_success('恢复成功', $result);
+    }
 
 }

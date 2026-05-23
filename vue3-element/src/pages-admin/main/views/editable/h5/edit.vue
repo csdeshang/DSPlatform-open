@@ -90,9 +90,10 @@
             </div>
           </div>
 
-          <!-- 右侧固定操作按钮 -->
-          <div class="absolute -right-[70px] top-1/2 transform -translate-y-1/2 flex flex-col gap-2 z-30">
-            <div class="bg-white shadow-lg rounded-md overflow-hidden">
+          <!-- 固定在预览卡片内右侧，避免伸出父级被 overflow-hidden 裁掉 -->
+          <div
+            class="absolute right-3 top-1/2 z-40 flex flex-col gap-2 -translate-y-1/2 pointer-events-auto">
+            <div class="bg-white shadow-lg rounded-md overflow-hidden border border-gray-200">
               <button
                 @click.stop="editableStore.selectedElementIndex !== null && editableStore.moveElement(editableStore.selectedElementIndex, -1)"
                 class="w-[45px] h-[45px] flex items-center justify-center text-gray-600 hover:bg-blue-50 hover:text-blue-500 transition-colors border-b border-gray-100"
@@ -233,8 +234,7 @@ function sendDataToPreview() {
 
 // 保存页面数据
 async function savePageData() {
-  const result = await editableStore.savePageData();
-
+  await editableStore.savePageData();
 }
 
 // 预览模板

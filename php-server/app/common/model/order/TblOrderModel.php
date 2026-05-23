@@ -13,6 +13,7 @@ use app\common\model\order\TblOrderAddressModel;
 use app\common\model\user\UserModel;
 
 use app\common\enum\order\TblOrderEnum;
+use app\common\enum\order\TblOrderInvoiceEnum;
 
 
 class TblOrderModel extends BaseModel
@@ -171,6 +172,12 @@ class TblOrderModel extends BaseModel
     public function getRefundAmountAttr($value, $data)
     {
         return $this->formatPrice($data['refund_amount']);
+    }
+
+    public function getInvoiceStatusDescAttr($value, $data)
+    {
+        $inv = (int) ($data['invoice_status'] ?? TblOrderInvoiceEnum::STATUS_NOT_SUBMITTED);
+        return TblOrderInvoiceEnum::getInvoiceStatusDesc($inv);
     }
 
 

@@ -30,7 +30,10 @@ class DeshangEnumService extends BaseDeshangService
     protected $enumClassMap = [
         // 系统模块
         'default' => [
-
+            // 用户表（会员）
+            'user' => [
+                'idcard_status' => ['app\common\enum\user\UserEnum', 'getIdcardStatusDict'],
+            ],
             // 余额表
             'user_balance_log' => [
                 'change_type' => ['app\common\enum\user\UserBalanceEnum', 'getChangeTypeDict'],
@@ -119,6 +122,7 @@ class DeshangEnumService extends BaseDeshangService
                 'order_status' => ['app\common\enum\order\TblOrderEnum', 'getAllOrderStatusDict'],
                 'delivery_method' => ['app\common\enum\order\TblOrderEnum', 'getAllOrderDeliveryDict'],
                 'refund_status' => ['app\common\enum\order\TblOrderEnum', 'getOrderRefundStatusDict'],
+                'invoice_status' => ['app\common\enum\order\TblOrderInvoiceEnum', 'getAllInvoiceStatusDict'],
             ],
             //订单退款表
             'tbl_order_refund' => [

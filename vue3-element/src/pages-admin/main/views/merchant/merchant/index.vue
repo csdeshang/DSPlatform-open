@@ -35,6 +35,13 @@
                         <el-input v-model="searchParams.balance_out_max" placeholder="最大金额" clearable class="w-[120px]" />
                     </div>
                 </el-form-item>
+                <el-form-item label="删除状态">
+                    <el-select v-model="searchParams.is_deleted" placeholder="请选择状态" clearable class="w-[100px]">
+                        <el-option label="全部" value="" />
+                        <el-option label="未删除" value="0" />
+                        <el-option label="已删除" value="1" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetSearchParams">重置</el-button>
@@ -67,11 +74,22 @@
                 <el-table-column label="允许开店数量" prop="allowed_store_count" />
  
 
-                <el-table-column label="操作" align="right" fixed="right" width="200">
+                <el-table-column label="操作" align="right" fixed="right" width="150">
                     <template #default="{ row }">
-                        <el-button type="primary" link @click="handleDetail(row)">详情</el-button>
-                        <el-button type="primary" link @click="handleModifyBalance(row)">调整余额</el-button>
-                        <el-button type="primary" link @click="handleApplyAudit(row)" v-if="row.apply_status != 1">审核</el-button>
+                        <div class="flex flex-row">
+                            <el-button type="primary" link @click="handleDetail(row)">详情</el-button>
+                            <el-button type="primary" link @click="handleApplyAudit(row)" v-if="row.apply_status != 1">审核</el-button>
+                            <el-dropdown class="ml-[10px]" @command="(command) => handleMore(command, row)">
+                                <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item command="balance">调整余额</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -101,9 +119,10 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ElMessageBox } from 'element-plus';
 import { reactive, ref } from 'vue';
-import { getMerchantPages } from '@/pages-admin/main/api/merchant/merchant'
+import { ArrowDown } from '@element-plus/icons-vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
+import { getMerchantPages, softDeleteMerchant, restoreMerchant } from '@/pages-admin/main/api/merchant/merchant'
 import merchantDetail from './detail.vue'
 import merchantAdd from './add.vue'
 import merchantModifyBalance from './modify-balance.vue'
@@ -124,6 +143,7 @@ const searchParams = reactive({
     balance_in_max: '',
     balance_out_min: '',
     balance_out_max: '',
+    is_deleted: '' as string,
 })
 const {
     tableData,
@@ -150,8 +170,22 @@ const handleApplyAudit = (row: any) => {
     applyAuditDialog.value?.openDialog()
 }
 
-
-
+// 更多操作
+const handleMore = (command: string, row: any) => {
+    switch (command) {
+        case 'balance':
+            handleModifyBalance(row)
+            break
+        case 'softDelete':
+            handleSoftDelete(row.id)
+            break
+        case 'restore':
+            handleRestore(row.id)
+            break
+        default:
+            console.log('未知命令', command)
+    }
+}
 
 // 切换状态
 const handleTabChange = (name: any) => {
@@ -182,8 +216,33 @@ const handleModifyBalance = (data: any) => {
     modifyBalanceDialog.value?.openDialog()
 }
 
+/** 软删除商户 */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此商户吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteMerchant(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
 
-
+/** 恢复商户 */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此商户吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreMerchant(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
 
 // 会员详情弹窗
 import UserDetail from '@/pages-admin/components/user/detail.vue'

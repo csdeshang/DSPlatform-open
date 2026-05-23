@@ -93,6 +93,28 @@ class DistributorApplyDao extends BaseDao
     }
 
     /**
+     * 获取分销商申请分页列表（关联用户信息）
+     *
+     * @param array $condition 查询条件
+     * @param string $field 查询字段，默认为所有字段
+     * @param string $order 排序规则，默认按ID降序
+     * @return array 分页数据（含 user 关联）
+     */
+    public function getWithRelDistributorApplyPages(array $condition, string $field = '*', string $order = 'id desc'): array
+    {
+        $result = $this->model->where($condition)
+            ->append(['apply_status_desc'])
+            ->with([
+                'user' => function ($query) {
+                    $query->field('id,username,nickname,avatar,mobile,create_at');
+                }
+            ])
+            ->field($field)
+            ->order($order);
+        return $this->getPaginate($result);
+    }
+
+    /**
      * 获取单条申请信息
      * 
      * @param array $condition 查询条件

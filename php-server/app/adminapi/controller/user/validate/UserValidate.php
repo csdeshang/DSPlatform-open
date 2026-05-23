@@ -29,6 +29,9 @@ class UserValidate extends BaseValidate
         'is_enabled' => 'in:0,1',
         'is_distributor' => 'in:0,1',
         
+        // 实名认证审核 0 默认 1 审核中 2 未通过 3 已认证
+        'idcard_status' => 'require|in:2,3',
+        
         // 推广关系
         'inviter_id' => 'require|integer|min:1',
     ];
@@ -66,6 +69,10 @@ class UserValidate extends BaseValidate
         'is_enabled.in' => '启用状态值无效',
         'is_distributor.in' => '分销商状态值无效',
         
+        // 实名认证审核
+        'idcard_status.require' => '请选择审核结果',
+        'idcard_status.in' => '审核结果只能为未通过或已认证',
+        
         // 推广关系
         'inviter_id.require' => '推广人ID不能为空',
         'inviter_id.integer' => '推广人ID必须为整数',
@@ -93,5 +100,8 @@ class UserValidate extends BaseValidate
         
         // 恢复用户
         'restore' => ['id'],
+        
+        // 实名认证审核
+        'idcardAudit' => ['id', 'idcard_status'],
     ];
 }

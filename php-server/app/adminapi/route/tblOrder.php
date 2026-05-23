@@ -29,6 +29,9 @@ Route::group('tbl-order', function () {
     // 获取订单支付记录（独立资源，支持跨订单查询）
     Route::get('order-pay-logs', 'tblOrder.TblOrder/getTblOrderPayLogList');
 
+    // 开票申请（只读；invoices/pages 须在 invoices/:id 之前）
+    Route::get('invoices/pages', 'tblOrder.TblOrderInvoice/getTblOrderInvoicePages');
+    Route::get('invoices/:id', 'tblOrder.TblOrderInvoice/getTblOrderInvoiceInfo');
 
     // 退款
     // refunds/pages (2段) 必须在 refunds/:id (2段) 前面 否则 GET /refunds/pages 会被 refunds/:id 匹配

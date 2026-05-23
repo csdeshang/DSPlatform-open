@@ -65,6 +65,7 @@ class Rider extends BaseAdminController
             'name' => input('param.name',''),
             'mobile' => input('param.mobile',''),
             'apply_status' => input('param.apply_status',''),
+            'is_deleted' => input('param.is_deleted',''),
         );
         
         $this->validate($data, 'app\adminapi\controller\rider\validate\RiderValidate.pages');
@@ -258,6 +259,38 @@ class Rider extends BaseAdminController
         return ds_json_success('审核成功', $result);
     }
 
-    
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/rider/riders/{id}/soft-delete",
+     *     summary="软删除骑手",
+     *     tags={"admin-api/rider/Rider"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="骑手ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="删除成功", @OA\JsonContent(@OA\Property(property="code", type="integer", example=10000), @OA\Property(property="msg", type="string", example="删除成功")))
+     * )
+     */
+    public function softDeleteRider($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\rider\validate\RiderValidate.softDelete');
+        $result = (new RiderService())->softDeleteRider((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/rider/riders/{id}/restore",
+     *     summary="恢复已删除的骑手",
+     *     tags={"admin-api/rider/Rider"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="骑手ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="操作成功", @OA\JsonContent(@OA\Property(property="code", type="integer", example=10000), @OA\Property(property="msg", type="string", example="恢复成功")))
+     * )
+     */
+    public function restoreRider($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\rider\validate\RiderValidate.restore');
+        $result = (new RiderService())->restoreRider((int)$id);
+        return ds_json_success('恢复成功', $result);
+    }
 
 }

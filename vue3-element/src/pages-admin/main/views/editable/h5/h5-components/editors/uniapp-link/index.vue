@@ -347,12 +347,15 @@
       { label: '个人中心', value: '/home/pages/user/index/index' },
       { label: '收货地址', value: '/home/pages/user/address/index' },
       { label: '我的订单', value: '/home/pages/user/order/index' },
+      { label: '我的退款', value: '/home/pages/user/refund/index' },
       { label: '我的积分', value: '/home/pages/user/points/index' },
       { label: '我的佣金', value: '/home/pages/user/commission/index' },
       { label: '我的余额', value: '/home/pages/user/balance/index' },
       { label: '我的收藏', value: '/home/pages/user/collect/index' },
       { label: '我的消息', value: '/home/pages/user/message/index' },
       { label: '我的设置', value: '/home/pages/user/setting/index' },
+      { label: '我的评价', value: '/home/pages/user/evaluate/index' },
+      { label: '分销中心', value: '/home/pages/distributor/index' },
     ]
   }
   

@@ -18,6 +18,7 @@ use app\common\dao\technician\TechnicianDao;
 
 use app\deshang\exceptions\CommonException;
 use app\common\enum\order\TblOrderEnum;
+use app\common\enum\order\TblOrderInvoiceEnum;
 use app\common\enum\order\TblOrderMergeEnum;
 use app\common\enum\goods\TblGoodsEnum;
 use app\common\enum\order\TblOrderDeliveryEnum;
@@ -438,7 +439,7 @@ class DeshangOrderCheckoutService  extends BaseDeshangService
                 'order_amount' => $store['order_amount'],
                 'pay_amount' => $store['pay_amount'],
                 'service_amount' => bcmul($store['pay_amount'], $store['store_info']['service_fee_rate'] / 100, 2),
-                'invoice_info' => '',
+                'invoice_status' => TblOrderInvoiceEnum::STATUS_NOT_SUBMITTED,
                 'refund_status' => 0,
                 'refund_amount' => 0.00,
 

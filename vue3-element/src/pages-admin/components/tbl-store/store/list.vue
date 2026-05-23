@@ -13,6 +13,13 @@
                 <el-form-item label="商户名称">
                     <el-input v-model="searchParams.merchant_name" placeholder="商户名称" clearable />
                 </el-form-item>
+                <el-form-item label="删除状态">
+                    <el-select v-model="searchParams.is_deleted" placeholder="请选择状态" clearable class="w-[100px]">
+                        <el-option label="全部" value="" />
+                        <el-option label="未删除" value="0" />
+                        <el-option label="已删除" value="1" />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetSearchParams">重置</el-button>
@@ -51,12 +58,21 @@
                 <el-table-column label="服务费率" prop="service_fee_rate" min-width="50" />
 
 
-                <el-table-column label="操作" align="right" fixed="right" width="130">
+                <el-table-column label="操作" align="right" fixed="right" width="150">
                     <template #default="{ row }">
                         <div class="flex flex-row">
                             <el-button type="primary" link @click="handleDtail(row.id)">详情</el-button>
                             <el-button type="primary" link @click="handleAudit(row)"
                                 v-if="row.apply_status != 1">审核</el-button>
+                            <el-dropdown class="ml-[10px]" @command="(command) => handleMore(command, row)">
+                                <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
+                                        <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
                         </div>
                     </template>
                 </el-table-column>
@@ -86,8 +102,9 @@
 <script lang="ts" setup>
 
 import { reactive, ref } from 'vue';
-
-import { getTblStorePages } from '@/pages-admin/main/api/tbl-store/tblStore'
+import { ArrowDown } from '@element-plus/icons-vue';
+import { ElMessageBox, ElMessage } from 'element-plus';
+import { getTblStorePages, softDeleteTblStore, restoreTblStore } from '@/pages-admin/main/api/tbl-store/tblStore'
 import { usePagination } from '@/hooks/usePagination'
 
 import TblStoreAdd from '@/pages-admin/components/tbl-store/store/add.vue'
@@ -108,7 +125,8 @@ const searchParams = reactive({
     merchant_id: '',
     merchant_name: '',
     platform: props.platform,
-    apply_status: ''
+    apply_status: '',
+    is_deleted: '0'
 })
 
 const {
@@ -157,6 +175,48 @@ const detailTblStoreDialog = ref()
 const handleDtail = (store_id: any) => {
     detailTblStoreDialog.value.setDialogData({ id: store_id })
     detailTblStoreDialog.value?.openDialog()
+}
+
+// 更多操作
+const handleMore = (command: string, row: any) => {
+    switch (command) {
+        case 'softDelete':
+            handleSoftDelete(row.id)
+            break
+        case 'restore':
+            handleRestore(row.id)
+            break
+        default:
+            console.log('未知命令', command)
+    }
+}
+
+/** 软删除店铺 */
+const handleSoftDelete = (id: number) => {
+    ElMessageBox.confirm('确定要删除此店铺吗？删除后可以恢复。', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        softDeleteTblStore(id).then(() => {
+            ElMessage.success('删除成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
+}
+
+/** 恢复店铺 */
+const handleRestore = (id: number) => {
+    ElMessageBox.confirm('确定要恢复此店铺吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        restoreTblStore(id).then(() => {
+            ElMessage.success('恢复成功')
+            getTableList()
+        }).catch(() => {})
+    }).catch(() => {})
 }
 
 

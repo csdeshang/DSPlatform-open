@@ -178,46 +178,46 @@
         { label: '选择商品', value: 'mall_goods_list' },
         { label: '商品分类', value: 'mall_goods_category' },
         { label: '店铺分类', value: 'mall_store_category' },
-        { label: '优惠券', value: 'mall_coupon_list' }
+        // { label: '优惠券', value: 'mall_coupon_list' }
       ]
     },
     {
       label: '外卖系统',
       value: 'food',
       children: [
-        {
-          label: '外卖链接', value: 'food_index',
-        },
-        { label: '选择商品', value: 'food_goods_list' },
-        { label: '商品分类', value: 'food_goods_category' },
-        { label: '店铺分类', value: 'food_store_category' },
-        { label: '优惠券', value: 'food_coupon_list' }
+        // {
+        //   label: '外卖链接', value: 'food_index',
+        // },
+        // { label: '选择商品', value: 'food_goods_list' },
+        // { label: '商品分类', value: 'food_goods_category' },
+        // { label: '店铺分类', value: 'food_store_category' },
+        // { label: '优惠券', value: 'food_coupon_list' }
       ]
     },
     {
       label: '视频教育系统',
       value: 'kms',
       children: [
-        {
-          label: '视频教育链接', value: 'kms_index',
-        },
-        { label: '选择商品', value: 'kms_goods_list' },
-        { label: '商品分类', value: 'kms_goods_category' },
-        { label: '店铺分类', value: 'kms_store_category' },
-        { label: '优惠券', value: 'kms_coupon_list' }
+        // {
+        //   label: '视频教育链接', value: 'kms_index',
+        // },
+        // { label: '选择商品', value: 'kms_goods_list' },
+        // { label: '商品分类', value: 'kms_goods_category' },
+        // { label: '店铺分类', value: 'kms_store_category' },
+        // { label: '优惠券', value: 'kms_coupon_list' }
       ]
     },
     {
       label: '家政系统',
       value: 'house',
       children: [
-        {
-          label: '家政链接', value: 'house_index',
-        },
-        { label: '选择商品', value: 'house_goods_list' },
-        { label: '商品分类', value: 'house_goods_category' },
-        { label: '店铺分类', value: 'house_store_category' },
-        { label: '优惠券', value: 'house_coupon_list' }
+        // {
+        //   label: '家政链接', value: 'house_index',
+        // },
+        // { label: '选择商品', value: 'house_goods_list' },
+        // { label: '商品分类', value: 'house_goods_category' },
+        // { label: '店铺分类', value: 'house_store_category' },
+        // { label: '优惠券', value: 'house_coupon_list' }
       ]
     },
   ]
@@ -329,79 +329,57 @@
     }
   }
   
-  // 加载系统链接（PC端路径）
+  // 加载系统链接（nuxt-consumer，无 /pages 前缀）
   const loadSystemLinks = () => {
     linkList.value = [
-      { label: '首页', value: '/pages/index' },
-      { label: '商城首页', value: '/pages/mall/index' },
-      { label: '外卖首页', value: '/pages/food/index' },
-      { label: '家政首页', value: '/pages/house/index' },
-      { label: '教育首页', value: '/pages/kms/index' },
-      { label: '视频首页', value: '/pages/video/index' },
+      { label: '首页', value: '/' },
+      { label: '商城首页', value: '/' },
     ]
   }
-  
-  // 加载用户中心链接（PC端路径）
+
+  // 加载用户中心链接（nuxt-consumer）
   const loadUserLinks = () => {
     linkList.value = [
-      { label: '个人中心', value: '/pages/user/index' },
-      { label: '收货地址', value: '/pages/user/address' },
-      { label: '我的订单', value: '/pages/user/order' },
-      { label: '我的积分', value: '/pages/user/points' },
-      { label: '我的佣金', value: '/pages/user/commission' },
-      { label: '我的余额', value: '/pages/user/balance' },
-      { label: '我的收藏', value: '/pages/user/collect' },
-      { label: '我的消息', value: '/pages/user/message' },
-      { label: '我的设置', value: '/pages/user/setting' },
+      { label: '个人中心', value: '/user/index' },
+      { label: '收货地址', value: '/user/address' },
+      { label: '我的订单', value: '/user/order' },
+      { label: '我的积分', value: '/user/points' },
+      { label: '我的佣金', value: '/user/withdrawal/apply' },
+      { label: '我的余额', value: '/user/balance' },
+      { label: '我的收藏', value: '/user/favorites' },
+      { label: '我的消息', value: '/system/notice' },
+      { label: '我的设置', value: '/user/setting/profile' }
     ]
   }
-  
-  // 加载商城链接（PC端路径）
+
+  // 加载商城链接（nuxt-consumer）
   const loadMallLinks = () => {
     linkList.value = [
-      { label: '商城首页', value: '/pages/mall/index' },
-      { label: '商品分类', value: '/pages/mall/goods/category' },
-      { label: '店铺分类', value: '/pages/mall/store/category' },
-      { label: '商城购物车', value: '/pages/mall/cart' },
-      { label: '商品列表', value: '/pages/mall/goods/list' },
-      { label: '店铺列表', value: '/pages/mall/store/list' },
+      { label: '商城首页', value: '/' },
+      // { label: '商品分类', value: '/mall/search/goodslist' },
+      // { label: '店铺分类', value: '/mall/search/storelist' },
+      { label: '商城购物车', value: '/mall/cart' },
+      { label: '商品列表', value: '/mall/search/goodslist' },
+      { label: '店铺列表', value: '/mall/search/storelist' }
     ]
   }
-  
-  // 加载外卖链接（PC端路径）
+
+  // 加载外卖链接（nuxt-consumer；购物车仅 mall 有落地页时用 /mall/cart）
   const loadFoodLinks = () => {
     linkList.value = [
-      { label: '外卖首页', value: '/pages/food/index' },
-      { label: '商品分类', value: '/pages/food/goods/category' },
-      { label: '店铺分类', value: '/pages/food/store/category' },
-      { label: '外卖购物车', value: '/pages/food/cart' },
-      { label: '商品列表', value: '/pages/food/goods/list' },
-      { label: '店铺列表', value: '/pages/food/store/list' },
     ]
   }
 
-    // 加载视频教育链接（PC端路径）
-    const loadKmsLinks = () => {
+  // 加载视频教育链接（nuxt-consumer）
+  const loadKmsLinks = () => {
     linkList.value = [
-      { label: '视频教育首页', value: '/pages/kms/index' },
-      { label: '视频教育分类', value: '/pages/kms/goods/category' },
-      { label: '店铺分类', value: '/pages/kms/store/category' },
-      { label: '视频教育购物车', value: '/pages/kms/cart' },
-      { label: '商品列表', value: '/pages/kms/goods/list' },
-      { label: '店铺列表', value: '/pages/kms/store/list' },
     ]
   }
 
-    // 加载家政链接（PC端路径）
-    const loadHouseLinks = () => {
+  // 加载家政链接（nuxt-consumer；师傅列表暂无独立页时指向 /house）
+  const loadHouseLinks = () => {
     linkList.value = [
-      { label: '家政首页', value: '/pages/house/index' },
-      { label: '家政分类', value: '/pages/house/goods/category' },
-      { label: '店铺分类', value: '/pages/house/store/category' },
-      { label: '家政购物车', value: '/pages/house/cart' },
-      { label: '商品列表', value: '/pages/house/goods/list' },
-      { label: '店铺列表', value: '/pages/house/store/list' },
-      { label: '师傅列表', value: '/pages/technician/list' },
+
     ]
   }
   

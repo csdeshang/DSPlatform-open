@@ -26,6 +26,12 @@
                     <el-option label="已删除" value="1" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="实名认证">
+                <el-select v-model="searchParams.idcard_status" placeholder="请选择认证状态" clearable class="w-[120px]">
+                    <el-option label="全部" value="" />
+                    <el-option v-for="item in idcard_status_options" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+            </el-form-item>
             <el-form-item label="可用金额">
                 <div class="flex items-center gap-2">
                     <el-input v-model="searchParams.balance_min" placeholder="最小金额" clearable class="w-[120px]" />
@@ -79,6 +85,7 @@
                                     <el-dropdown-item command="points">调整积分</el-dropdown-item>
                                     <el-dropdown-item command="growth">调整成长值</el-dropdown-item>
                                     <el-dropdown-item command="inviter">修改推荐人</el-dropdown-item>
+                                    <el-dropdown-item v-if="row.idcard_status === 1" command="auditIdcard">实名认证审核</el-dropdown-item>
                                     <el-dropdown-item v-if="row.is_deleted != 1" command="softDelete" divided>删除</el-dropdown-item>
                                     <el-dropdown-item v-if="row.is_deleted == 1" command="restore" divided>恢复</el-dropdown-item>
                                 </el-dropdown-menu>
@@ -104,6 +111,7 @@
     <UserModifyBalance ref="modifyBalanceDialog" @complete="getTableList()"></UserModifyBalance>
     <UserModifyPoints ref="modifyPointsDialog" @complete="getTableList()"></UserModifyPoints>
     <UserModifyGrowth ref="modifyGrowthDialog" @complete="getTableList()"></UserModifyGrowth>
+    <AuditIdcard ref="auditIdcardDialog" @complete="getTableList()" />
 </template>
 
 
@@ -113,6 +121,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 
 import { getUserPage, softDeleteUser, restoreUser } from '@/pages-admin/main/api/user/user'
 import { usePagination } from '@/hooks/usePagination'
+import { useEnum } from '@/hooks/useEnum'
 
 import UserAdd from './add.vue'
 // 会员详情弹窗调用
@@ -123,15 +132,18 @@ import UserModifyBalance from './modify-balance.vue'
 import UserModifyPoints from './modify-points.vue'
 // 调整成长值弹窗调用
 import UserModifyGrowth from './modify-growth.vue'
+// 实名认证审核弹窗
+import AuditIdcard from './audit-idcard.vue'
 
-
+const { options: idcard_status_options } = useEnum('default.user.idcard_status')
 
 const searchParams = reactive({
     username: '',
     mobile: '',
     inviter_id: '',
     is_enabled: '',
-    is_deleted: '',
+    is_deleted: '0',
+    idcard_status: '',
     balance_min: '',
     balance_max: '',
     balance_in_min: '',
@@ -225,6 +237,9 @@ const handleMore = (command: string, row: any,) => {
         case 'inviter':
             handleModifyInviter(row);
             break;
+        case 'auditIdcard':
+            handleAuditIdcard(row);
+            break;
         case 'softDelete':
             handleSoftDelete(row.id);
             break;
@@ -261,6 +276,13 @@ const handleModifyGrowth = (row: any) => {
 const handleModifyInviter = (row: any) => {
     // 实现修改推荐人的功能
     console.log('修改推荐人', row);
+}
+
+// 实名认证审核
+const auditIdcardDialog = ref()
+const handleAuditIdcard = (row: any) => {
+    auditIdcardDialog.value.setDialogData(row)
+    auditIdcardDialog.value?.openDialog()
 }
 
 </script>

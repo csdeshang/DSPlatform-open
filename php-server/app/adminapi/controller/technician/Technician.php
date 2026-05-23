@@ -79,6 +79,7 @@ class Technician extends BaseAdminController
             'apply_status' => input('param.apply_status'),
             'technician_status' => input('param.technician_status'),
             'is_enabled' => input('param.is_enabled'),
+            'is_deleted' => input('param.is_deleted'),
         );
         
         // 验证参数
@@ -281,6 +282,40 @@ class Technician extends BaseAdminController
 
         $result = (new TechnicianService())->auditTechnician($data);
         return ds_json_success('审核成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/technician/technicians/{id}/soft-delete",
+     *     summary="软删除师傅",
+     *     tags={"admin-api/technician/Technician"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="师傅ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="删除成功", @OA\JsonContent(@OA\Property(property="code", type="integer", example=10000), @OA\Property(property="msg", type="string", example="删除成功")))
+     * )
+     */
+    public function softDeleteTechnician($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\technician\validate\TechnicianValidate.softDelete');
+        $result = (new TechnicianService())->softDeleteTechnician((int)$id);
+        return ds_json_success('删除成功', $result);
+    }
+
+    /**
+     * @OA\Patch(
+     *     path="/adminapi/technician/technicians/{id}/restore",
+     *     summary="恢复已删除的师傅",
+     *     tags={"admin-api/technician/Technician"},
+     *     @OA\Parameter(name="id", in="path", required=true, description="师傅ID", @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="操作成功", @OA\JsonContent(@OA\Property(property="code", type="integer", example=10000), @OA\Property(property="msg", type="string", example="恢复成功")))
+     * )
+     */
+    public function restoreTechnician($id)
+    {
+        $data = ['id' => $id];
+        $this->validate($data, 'app\adminapi\controller\technician\validate\TechnicianValidate.restore');
+        $result = (new TechnicianService())->restoreTechnician((int)$id);
+        return ds_json_success('恢复成功', $result);
     }
 
 } 

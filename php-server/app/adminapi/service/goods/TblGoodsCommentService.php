@@ -21,6 +21,11 @@ class TblGoodsCommentService extends BaseAdminService
     public function getTblGoodsCommentPages($data)
     {
         $condition = [];
+
+        // 根据参数控制是否显示已删除数据，空或不传时不筛选（显示全部）
+        if (isset($data['is_deleted']) && $data['is_deleted'] !== '' && $data['is_deleted'] !== null && in_array((int)$data['is_deleted'], [0, 1], true)) {
+            $condition[] = ['is_deleted', '=', (int)$data['is_deleted']];
+        }
         
         // 平台类型搜索
         if (isset($data['platform']) && $data['platform'] != '') {
@@ -114,5 +119,59 @@ class TblGoodsCommentService extends BaseAdminService
         
         $result = (new TblGoodsCommentDao())->updateGoodsComment($condition, $updateData);
         return $result;
+    }
+
+    /**
+     * 软删除商品评论
+     *
+     * @param int $id 评论ID
+     * @return int 受影响的行数
+     */
+    public function softDeleteTblGoodsComment(int $id)
+    {
+        $dao = new TblGoodsCommentDao();
+        $info = $dao->getGoodsCommentById($id);
+        if (empty($info)) {
+            throw new CommonException('评论不存在');
+        }
+        if ($info['is_deleted'] == 1) {
+            throw new CommonException('评论已被删除');
+        }
+        $update_data = [
+            'is_deleted' => 1,
+            'deleted_at' => time(),
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 0],
+        ];
+        return $dao->updateGoodsComment($condition, $update_data);
+    }
+
+    /**
+     * 恢复商品评论
+     *
+     * @param int $id 评论ID
+     * @return int 受影响的行数
+     */
+    public function restoreTblGoodsComment(int $id)
+    {
+        $dao = new TblGoodsCommentDao();
+        $info = $dao->getGoodsCommentById($id);
+        if (empty($info)) {
+            throw new CommonException('评论不存在');
+        }
+        if ($info['is_deleted'] != 1) {
+            throw new CommonException('评论未被删除，无需恢复');
+        }
+        $update_data = [
+            'is_deleted' => 0,
+            'deleted_at' => null,
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 1],
+        ];
+        return $dao->updateGoodsComment($condition, $update_data);
     }
 }

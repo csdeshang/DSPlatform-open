@@ -34,4 +34,18 @@ export function auditTblStore(params: Record<string, any>) {
   return request.patch(`${API_BASE_URLS.ADMIN}/tbl-store/stores/${params.id}/audit`, params)
 }
 
+/**
+ * 软删除店铺
+ */
+export function softDeleteTblStore(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/tbl-store/stores/${id}/soft-delete`)
+}
+
+/**
+ * 恢复已删除的店铺
+ */
+export function restoreTblStore(id: number) {
+  return request.patch(`${API_BASE_URLS.ADMIN}/tbl-store/stores/${id}/restore`)
+}
+
 

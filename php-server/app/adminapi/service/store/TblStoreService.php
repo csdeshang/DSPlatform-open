@@ -3,10 +3,12 @@
 
 namespace app\adminapi\service\store;
 
+use app\common\dao\merchant\MerchantDao;
 use app\common\dao\store\TblStoreDao;
 use app\deshang\exceptions\CommonException;
 use app\deshang\base\service\BaseAdminService;
 
+use app\common\enum\merchant\MerchantEnum;
 use app\common\enum\store\TblStoreEnum;
 use app\common\enum\goods\TblGoodsEnum;
 use app\common\dao\goods\TblGoodsDao;
@@ -24,6 +26,12 @@ class TblStoreService extends BaseAdminService
     {
 
         $condition = [];
+
+        // 根据参数控制是否显示已删除数据，空或不传时不筛选（显示全部）
+        if (isset($data['is_deleted']) && $data['is_deleted'] !== '' && $data['is_deleted'] !== null && in_array((int)$data['is_deleted'], [0, 1], true)) {
+            $condition[] = ['is_deleted', '=', (int)$data['is_deleted']];
+        }
+
         if (isset($data['store_name']) && $data['store_name'] != '') {
             $condition[] = ['store_name', 'like', '%' . $data['store_name'] . '%'];
         }
@@ -178,8 +186,19 @@ class TblStoreService extends BaseAdminService
             throw new CommonException('该店铺已审核，不能重复审核');
         }
 
-        // 审核通过
+        // 审核通过：须保证关联商户已审核通过且未删除（用户合并入驻等场景）
         if ($data['apply_status'] == TblStoreEnum::APPLY_STATUS_APPROVED) {
+            $merchantInfo = (new MerchantDao())->getMerchantInfo([['id', '=', $store_info['merchant_id']]]);
+            if (empty($merchantInfo)) {
+                throw new CommonException('关联商户不存在，无法通过店铺审核');
+            }
+            if ((int) ($merchantInfo['is_deleted'] ?? 0) === 1) {
+                throw new CommonException('关联商户已删除，无法通过店铺审核');
+            }
+            if ((int) $merchantInfo['apply_status'] !== MerchantEnum::APPLY_STATUS_PASS) {
+                throw new CommonException('请先审核通过关联商户后，再通过店铺审核');
+            }
+
             $update_data = [
                 'apply_status' => TblStoreEnum::APPLY_STATUS_APPROVED,
                 'audit_time' => time(),
@@ -202,5 +221,63 @@ class TblStoreService extends BaseAdminService
         // 更新店铺信息
         $result = (new TblStoreDao())->updateStore([['id', '=', $data['id']]], $update_data);
         return $result;
+    }
+
+    /**
+     * 软删除店铺
+     *
+     * @param int $id 店铺ID
+     * @return int 受影响的行数
+     */
+    public function softDeleteTblStore(int $id)
+    {
+        $dao = new TblStoreDao();
+        $store_info = $dao->getStoreInfoById($id);
+        if (empty($store_info)) {
+            throw new CommonException('店铺不存在');
+        }
+        if ($store_info['is_deleted'] == 1) {
+            throw new CommonException('店铺已被删除');
+        }
+        $update_data = [
+            'is_deleted' => 1,
+            'deleted_at' => time(),
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 0],
+        ];
+        return $dao->updateStore($condition, $update_data);
+    }
+
+    /**
+     * 恢复店铺
+     *
+     * @param int $id 店铺ID
+     * @return int 受影响的行数
+     */
+    public function restoreTblStore(int $id)
+    {
+        $dao = new TblStoreDao();
+        $store_info = $dao->getStoreInfoById($id);
+        if (empty($store_info)) {
+            throw new CommonException('店铺不存在');
+        }
+        if ($store_info['is_deleted'] != 1) {
+            throw new CommonException('店铺未被删除，无需恢复');
+        }
+        $update_data = [
+            'is_deleted' => 0,
+            'deleted_at' => null,
+        ];
+        $condition = [
+            ['id', '=', $id],
+            ['is_deleted', '=', 1],
+        ];
+        $ret = $dao->updateStore($condition, $update_data);
+        if ($ret) {
+            KvManager::cache()->clear(CacheKeyManager::STORE_TAG);
+        }
+        return $ret;
     }
 }
