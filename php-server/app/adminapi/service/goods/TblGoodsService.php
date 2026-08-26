@@ -9,6 +9,7 @@ use app\deshang\service\goods\DeshangTblGoodsService;
 use app\common\enum\goods\TblGoodsEnum;
 
 use app\common\dao\goods\TblGoodsDao;
+use app\common\dao\goods\TblGoodsCategoryRelDao;
 use app\common\dao\store\TblStoreDao;
 use app\common\dao\merchant\MerchantDao;
 
@@ -89,6 +90,18 @@ class TblGoodsService extends BaseAdminService
             $condition[] = ['store_id', 'in', $storeIds];
         }
 
+        // 商品分类搜索
+        if (isset($data['category_id']) && !empty($data['category_id'])) {
+            $goods_ids = (new TblGoodsCategoryRelDao())->getGoodsCategoryRelColumn(
+                [['category_id', '=', $data['category_id']]],
+                'goods_id'
+            );
+            if (count($goods_ids) > 0) {
+                $condition[] = ['id', 'in', $goods_ids];
+            } else {
+                $condition[] = ['id', '=', -1];
+            }
+        }
 
         $result = (new TblGoodsDao())->getWithRelGoodsPages($condition);
         return $result;

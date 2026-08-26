@@ -1,6 +1,12 @@
 <?php
 // 安装程序入口文件
 
+// 大量 SQL 导入易触发默认 30s 超时，延长至 5 分钟
+if (function_exists('set_time_limit')) {
+    @set_time_limit(300);
+}
+@ini_set('max_execution_time', '300');
+
 // 检查是否已安装
 if (file_exists('./install.lock')) {
     // 如果是访问第5步（安装完成页面），允许访问

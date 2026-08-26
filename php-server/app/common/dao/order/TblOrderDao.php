@@ -137,15 +137,52 @@ class TblOrderDao extends BaseDao
                     'orderDelivery' => function ($query) {
                         $query->append(['delivery_status_desc']);
                     },
-                    // 'orderAddress' => function ($query) {
-                    //     $query->field('*');
-                    // },
+                    'orderAddress' => function ($query) {
+                        $query->field('id,order_id,reciver_name,reciver_mobile,reciver_address');
+                    },
                 ]
             )
             ->append(['order_status_desc', 'delivery_method_desc', 'invoice_status_desc'])
             ->field($field)
             ->order($order);
         return $this->getPaginate($result);
+    }
+
+    /**
+     * 获取带关联的订单列表（与 getWithRelOrderPages 关联一致，不分页）
+     *
+     * @param array $condition 查询条件
+     * @param string $field 查询字段，默认为所有字段
+     * @param string $order 排序规则，默认按ID降序
+     * @return array 订单列表
+     */
+    public function getWithRelOrderList(array $condition, string $field = '*', string $order = 'id desc'): array
+    {
+        return $this->model->where($condition)
+            ->with(
+                [
+                    'store' => function ($query) {
+                        $query->field('id,store_name,platform,store_latitude,store_longitude');
+                    },
+                    'user' => function ($query) {
+                        $query->field('id,username,nickname,avatar');
+                    },
+                    'orderGoodsList' => function ($query) {
+                        $query->append(['promotion_type_desc']);
+                    },
+                    'orderDelivery' => function ($query) {
+                        $query->append(['delivery_status_desc']);
+                    },
+                    'orderAddress' => function ($query) {
+                        $query->field('id,order_id,reciver_name,reciver_mobile,reciver_address');
+                    },
+                ]
+            )
+            ->append(['order_status_desc', 'delivery_method_desc', 'invoice_status_desc'])
+            ->field($field)
+            ->order($order)
+            ->select()
+            ->toArray();
     }
 
 

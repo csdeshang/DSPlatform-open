@@ -11,11 +11,16 @@ use app\common\dao\order\TblOrderLogDao;
 use app\common\enum\trade\TradePayEnum;
 use app\common\model\trade\TradePayLogModel;
 
+use app\deshang\exceptions\CommonException;
 use app\deshang\utils\SearchHelper;
+use app\deshang\utils\ExcelExporter;
+use app\common\enum\order\TblOrderEnum;
 
 
 class TblOrderService extends BaseAdminService
 {
+    /** 单次导出最大条数 */
+    public const EXPORT_MAX_ROWS = 5000;
 
 
     public function __construct()
@@ -25,11 +30,9 @@ class TblOrderService extends BaseAdminService
     }
 
     /**
-     * 获取订单分页
-     * @param array $params 查询参数
-     * @return array
+     * 构建订单列表/导出共用查询条件
      */
-    public function getTblOrderPages(array $data): array
+    public function buildOrderCondition(array $data): array
     {
         $condition = [];
         if (isset($data['platform']) && $data['platform'] != '') {
@@ -128,8 +131,123 @@ class TblOrderService extends BaseAdminService
             $condition[] = ['pay_amount', '<=', $data['pay_amount_max']];
         }
 
+        return $condition;
+    }
+
+    /**
+     * 获取订单分页
+     * @param array $params 查询参数
+     * @return array
+     */
+    public function getTblOrderPages(array $data): array
+    {
+        $condition = $this->buildOrderCondition($data);
+
         $result = $this->dao->getWithRelOrderPages($condition);
         return $result;
+    }
+
+    /**
+     * 导出订单为 Excel（筛选条件与列表一致）
+     */
+    public function exportTblOrders(array $data): void
+    {
+        $condition = $this->buildOrderCondition($data);
+        $count = $this->dao->getOrderCount($condition);
+
+        if ($count <= 0) {
+            throw new CommonException('暂无数据可导出');
+        }
+        if ($count > self::EXPORT_MAX_ROWS) {
+            throw new CommonException('导出数量超过' . self::EXPORT_MAX_ROWS . '条，请缩小筛选范围后再导出');
+        }
+
+        $list = $this->dao->getWithRelOrderList($condition);
+
+        $headers = [
+            '订单ID',
+            '订单号',
+            '平台',
+            '店铺',
+            '订单状态',
+            '买家账号',
+            '买家昵称',
+            '收货人',
+            '收货手机',
+            '收货地址',
+            '商品明细',
+            '商品金额',
+            '运费',
+            '优惠金额',
+            '订单金额',
+            '实付金额',
+            '支付方式',
+            '支付单号',
+            '交易号',
+            '交付方式',
+            '开票状态',
+            '退款状态',
+            '退款金额',
+            '用户备注',
+            '店铺备注',
+            '下单时间',
+            '支付时间',
+            '发货时间',
+            '完成时间',
+        ];
+
+        $rows = [];
+        foreach ($list as $order) {
+            $goodsParts = [];
+            foreach ($order['orderGoodsList'] ?? [] as $goods) {
+                $name = $goods['goods_name'] ?? '';
+                $sku = !empty($goods['sku_name']) ? ('[' . $goods['sku_name'] . ']') : '';
+                $num = $goods['goods_num'] ?? 0;
+                $price = $goods['pay_price'] ?? '';
+                $goodsParts[] = "{$name}{$sku} x{$num} ¥{$price}";
+            }
+
+            $address = $order['orderAddress'] ?? [];
+            $refundStatus = isset($order['refund_status'])
+                ? TblOrderEnum::getOrderRefundStatusDesc($order['refund_status'])
+                : '';
+
+            $rows[] = [
+                $order['id'] ?? '',
+                $order['order_sn'] ?? '',
+                $order['platform'] ?? '',
+                $order['store']['store_name'] ?? '',
+                $order['order_status_desc'] ?? '',
+                $order['user']['username'] ?? '',
+                $order['user']['nickname'] ?? '',
+                $address['reciver_name'] ?? '',
+                $address['reciver_mobile'] ?? '',
+                $address['reciver_address'] ?? '',
+                implode('；', $goodsParts),
+                $order['goods_amount'] ?? '',
+                $order['shipping_amount'] ?? '',
+                $order['discount_amount'] ?? '',
+                $order['order_amount'] ?? '',
+                $order['pay_amount'] ?? '',
+                $order['pay_channel'] ?? '',
+                $order['out_trade_no'] ?? '',
+                $order['trade_no'] ?? '',
+                $order['delivery_method_desc'] ?? '',
+                $order['invoice_status_desc'] ?? '',
+                $refundStatus,
+                $order['refund_amount'] ?? '',
+                $order['user_remark'] ?? '',
+                $order['store_remark'] ?? '',
+                $order['add_time'] ?? '',
+                $order['payment_time'] ?? '',
+                $order['delivery_time'] ?? '',
+                $order['finnshed_time'] ?? '',
+            ];
+        }
+
+        $platform = !empty($data['platform']) ? $data['platform'] : 'all';
+        $filename = '订单导出_' . $platform . '_' . date('Ymd_His') . '.xlsx';
+        ExcelExporter::download($headers, $rows, $filename);
     }
 
 

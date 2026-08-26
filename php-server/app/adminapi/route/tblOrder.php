@@ -12,6 +12,7 @@ Route::group('tbl-order', function () {
     // 多平台通用 订单分页
     // orders/pages (2段) 必须在 orders/:id (2段) 前面 否则 GET /orders/pages 会被 orders/:id 匹配
     Route::get('orders/pages', 'tblOrder.TblOrder/getTblOrderPages');
+    Route::get('orders/export', 'tblOrder.TblOrder/exportTblOrders');
     // 根据订单id 获取订单信息
     Route::get('orders/:id', 'tblOrder.TblOrder/getTblOrderInfo');
 

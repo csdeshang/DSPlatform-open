@@ -226,9 +226,13 @@ INSERT INTO `#__admin_menu` (`id`, `pid`, `path`, `name`, `component`, `title`, 
 (151, 15, 'admin/behavior/logs', 'admin_behavior_logs', 'pages-admin/main/views/user/behavior/logs', '会员行为', 'element Bell', '1212', 'menu', 255, 1, 1, 1758896949, 1758896965),
 (152, 7, 'admin/system/express/provider', 'admin_system_express_provider', 'pages-admin/main/views/system/expressProvider/provider-list', '物流接口', 'element AddLocation', '111', 'menu', 255, 1, 1, 1758896949, 1758896965),
 (153, 29, 'admin/system/task-queue', 'admin_system_task-queue', 'pages-admin/main/views/system/task-queue/index', '消息队列', 'element ChatLineRound', '11', 'menu', 255, 1, 1, 1761827100, 1761827237),
-(154, 40, 'admin/editable/pc/edit', 'admin_editable_pc_edit', 'pages-admin/main/views/editable/pc/edit', 'PC装修编辑', 'element EditPen', '111', 'menu', 255, 1, 1, 1767452214, 1767452214);
-
-
+(154, 40, 'admin/editable/pc/edit', 'admin_editable_pc_edit', 'pages-admin/main/views/editable/pc/edit', 'PC装修编辑', 'element EditPen', '111', 'menu', 255, 0, 1, 1767452214, 1767452214),
+(155, 113, 'admin/wechat/web', 'admin_wechat_web', 'pages-admin/main/views/wechat/web/index', '网站应用(Web)', 'element AlarmClock', '1111', 'menu', 255, 1, 1, 1769830896, 1769830896),
+(156, 113, 'admin/wechat/app', 'admin_wechat_app', 'pages-admin/main/views/wechat/app/index', '移动应用(App)', 'element Basketball', '111', 'menu', 255, 1, 1, 1769830943, 1769830943),
+(157, 27, 'admin_mall/order/invoice', 'admin_mall_order_invoice', 'pages-admin/platform/mall/views/order/invoice/list', '开票申请查询', 'element Tickets', '11111111112', 'menu', 255, 1, 1, 1770000001, 1770000001),
+(158, 83, 'admin/food/order/invoice', 'admin_food_order_invoice', 'pages-admin/platform/food/views/order/invoice/list', '开票申请查询', 'element Tickets', '11111111112', 'menu', 255, 1, 1, 1770000002, 1770000002),
+(159, 94, 'admin/house/order/invoice', 'admin_house_order_invoice', 'pages-admin/platform/house/views/order/invoice/list', '开票申请查询', 'element Tickets', '11111111112', 'menu', 255, 1, 1, 1770000003, 1770000003),
+(160, 105, 'admin/kms/order/invoice', 'admin_kms_order_invoice', 'pages-admin/platform/kms/views/order/invoice/list', '开票申请查询', 'element Tickets', '11111111112', 'menu', 255, 1, 1, 1770000004, 1770000004);
 
 
 
@@ -858,6 +862,12 @@ INSERT INTO `#__sys_config` (`id`, `config_type`, `config_key`, `config_value`, 
 (410, 'points', 'points_review_enabled', '1', '是否开启', 1, ''),
 (411, 'points', 'points_invite_amount', '10', '邀请注册', 0, ''),
 (412, 'points', 'points_invite_enabled', '1', '是否开启', 0, ''),
+(420, 'points', 'points_sign_enabled', '1', '是否开启签到积分', 1, ''),
+(421, 'points', 'points_sign_amount', '10', '单次签到基础积分', 1, ''),
+(422, 'points', 'points_sign_streak_enabled', '1', '是否开启连续签到奖励', 1, ''),
+(423, 'points', 'points_sign_streak_after_days', '3', '连续签到满几天起享受倍数', 1, ''),
+(424, 'points', 'points_sign_streak_multiplier', '1.5', '连续签到奖励倍数', 1, ''),
+(425, 'points', 'points_sign_streak_max_days', '7', '最大连续天数(超过按该天数算)', 1, ''),
 (501, 'goods', 'goods_need_audit', '0', '商品是否需要审核', 1, ''),
 (502, 'goods', 'goods_category_select_limit', '10', '商品分类选择限制', 1, ''),
 (601, 'email', 'email_is_enabled', '0', '是否开启邮件服务', 1, ''),
@@ -1495,7 +1505,7 @@ CREATE TABLE `#__tbl_order` (
   `order_amount` decimal(20,4) NOT NULL DEFAULT '0.000000' COMMENT '订单总价格',
   `pay_amount` decimal(20,4) NOT NULL COMMENT '支付价格',
   `service_amount` decimal(20,4) NOT NULL DEFAULT '0.000000' COMMENT '平台服务费,确认收货后扣除',
-  `invoice_info` varchar(255) DEFAULT NULL COMMENT '订单发票信息',
+  `invoice_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '开票状态:0未申请 1待处理 2处理中 3已开票 4已驳回 5已作废',
   `is_evaluate` tinyint(4) DEFAULT '0' COMMENT '评价状态 0：未评价 1：已评价',
   `refunding_count` tinyint(4) DEFAULT '0' COMMENT '正在退款中的数量',
   `refund_status` tinyint(4) DEFAULT '0' COMMENT '退款状态 0:无退款 1:部分退款 2:全部退款(已完成)',
@@ -1721,6 +1731,67 @@ CREATE TABLE `#__tbl_order_refund_log` (
   PRIMARY KEY (`id`),
   KEY `idx_refund_id` (`refund_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='退款日志表';
+
+
+DROP TABLE IF EXISTS `#__tbl_order_invoice`;
+CREATE TABLE `#__tbl_order_invoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '发票申请自增ID',
+  `platform` varchar(20) NOT NULL COMMENT '应用类型 与订单一致',
+  `order_id` int(11) NOT NULL COMMENT '订单ID',
+  `order_sn` varchar(32) NOT NULL COMMENT '订单编号冗余便于查询',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `merchant_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户ID',
+  `store_id` int(11) NOT NULL COMMENT '店铺ID',
+  `invoice_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '抬头类型 1:个人/非企业单位 2:企业',
+  `invoice_kind` tinyint(4) NOT NULL DEFAULT '1' COMMENT '发票种类 1:普通发票 2:增值税专用发票(按资质开通)',
+  `invoice_title` varchar(128) NOT NULL DEFAULT '' COMMENT '发票抬头',
+  `tax_number` varchar(32) NOT NULL DEFAULT '' COMMENT '纳税人识别号(企业必填时)',
+  `register_address` varchar(255) DEFAULT NULL COMMENT '注册地址(专票等场景)',
+  `register_phone` varchar(32) DEFAULT NULL COMMENT '注册电话(专票等场景)',
+  `bank_name` varchar(64) DEFAULT NULL COMMENT '开户银行',
+  `bank_account` varchar(64) DEFAULT NULL COMMENT '银行账号',
+  `invoice_amount` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '申请开票金额(通常<=订单可开金额)',
+  `invoice_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1待处理 2处理中 3已开票 4已驳回 5已作废(0为未申请)',
+  `apply_remark` varchar(255) DEFAULT NULL COMMENT '用户申请说明',
+  `reject_reason` varchar(255) DEFAULT NULL COMMENT '驳回原因',
+  `reject_time` int(11) NOT NULL DEFAULT '0' COMMENT '驳回时间',
+  `void_reason` varchar(255) DEFAULT NULL COMMENT '作废原因(店铺)',
+  `void_time` int(11) NOT NULL DEFAULT '0' COMMENT '作废时间',
+  `issue_time` int(11) NOT NULL DEFAULT '0' COMMENT '开票完成时间',
+  `issue_remark` varchar(255) DEFAULT NULL COMMENT '完成开票备注(给买家的说明，如已发送至邮箱)',
+  `invoice_file_url` varchar(512) DEFAULT NULL COMMENT '电子发票PDF/OFD等下载地址或路径',
+  `invoice_no` varchar(64) DEFAULT NULL COMMENT '发票代码/号码或数电票号码(以对接方为准存)',
+  `out_invoice_no` varchar(64) DEFAULT NULL COMMENT '业务侧/第三方开票流水号(防重对接)',
+  `receiver_email` varchar(128) DEFAULT NULL COMMENT '收票邮箱',
+  `receiver_mobile` varchar(20) DEFAULT NULL COMMENT '收票手机',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `update_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_platform` (`platform`),
+  KEY `idx_order_id` (`order_id`),
+  KEY `idx_order_sn` (`order_sn`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_store_id` (`store_id`),
+  KEY `idx_merchant_id` (`merchant_id`),
+  KEY `idx_invoice_status` (`invoice_status`),
+  KEY `idx_create_at` (`create_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单发票申请表';
+
+
+DROP TABLE IF EXISTS `#__tbl_order_invoice_log`;
+CREATE TABLE `#__tbl_order_invoice_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` int(11) NOT NULL COMMENT '发票申请ID',
+  `invoice_status` tinyint(4) NOT NULL COMMENT '当时状态(1-5为申请流程)',
+  `message` varchar(255) DEFAULT NULL COMMENT '日志说明',
+  `create_role` varchar(10) DEFAULT NULL COMMENT 'user/store/system',
+  `create_uid` int(11) NOT NULL DEFAULT '0' COMMENT '操作人ID(系统可为0)',
+  `create_at` int(11) NOT NULL COMMENT '创建时间',
+  `extra` varchar(512) DEFAULT NULL COMMENT '扩展JSON或备注',
+  PRIMARY KEY (`id`),
+  KEY `idx_invoice_id` (`invoice_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单发票申请日志表';
+
 
 
 DROP TABLE IF EXISTS `#__tbl_store`;
@@ -2212,6 +2283,8 @@ CREATE TABLE `#__user` (
   `points` int(11) NOT NULL DEFAULT '0' COMMENT '会员积分',
   `points_in` int(11) NOT NULL DEFAULT '0' COMMENT '积分收入总额',
   `points_out` int(11) NOT NULL DEFAULT '0' COMMENT '积分支出总额',
+  `sign_streak` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '连续签到天数',
+  `sign_last_date` date DEFAULT NULL COMMENT '最后签到日期',
   `balance` decimal(20,4) NOT NULL DEFAULT '0.00000000' COMMENT '预存款可用金额',
   `balance_in` decimal(20,4) NOT NULL DEFAULT '0.000000' COMMENT '收入总额',
   `balance_out` decimal(20,4) NOT NULL DEFAULT '0.000000' COMMENT '支出总额',
@@ -2396,7 +2469,8 @@ CREATE TABLE `#__user_identity` (
   `wx_event_openid` VARCHAR(32)   COMMENT '微信公众号事件openid' ,
   `wx_oauth_openid` VARCHAR(32)   COMMENT '微信网页授权,用于支付,多个用户可关联同一个openid' ,
   `wx_mini_openid` VARCHAR(32)   COMMENT '小程序' ,
-  `wx_app_openid` VARCHAR(32)   COMMENT 'APP' ,
+  `wx_web_openid` VARCHAR(32)   COMMENT '微信开放平台网站应用openid' ,
+  `wx_app_openid` VARCHAR(32)   COMMENT '微信开放平台移动应用openid' ,
   `wx_unionid` VARCHAR(32)   COMMENT '微信unionid,用于账户绑定唯一标识' ,
   `create_at` int(11) DEFAULT NULL,
   `update_at` int(11) DEFAULT NULL,
@@ -2408,6 +2482,7 @@ CREATE TABLE `#__user_identity` (
   KEY `idx_wx_event_openid` (`wx_event_openid`),
   KEY `idx_wx_oauth_openid` (`wx_oauth_openid`),
   KEY `idx_wx_mini_openid` (`wx_mini_openid`),
+  KEY `idx_wx_web_openid` (`wx_web_openid`),
   KEY `idx_wx_app_openid` (`wx_app_openid`),
   KEY `idx_create_at` (`create_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户关联身份信息表';
@@ -2494,6 +2569,30 @@ CREATE TABLE `#__user_withdrawal_log` (
 
 
 
+DROP TABLE IF EXISTS `#__user_invoice`;
+CREATE TABLE `#__user_invoice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `title_name` varchar(64) DEFAULT NULL COMMENT '本地备注名 如:公司抬头/个人',
+  `invoice_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '抬头类型 1:个人/非企业单位 2:企业',
+  `invoice_kind` tinyint(4) NOT NULL DEFAULT '1' COMMENT '发票种类 1:普通发票 2:增值税专用发票(按资质)',
+  `invoice_title` varchar(128) NOT NULL DEFAULT '' COMMENT '发票抬头',
+  `tax_number` varchar(32) NOT NULL DEFAULT '' COMMENT '纳税人识别号(企业常用)',
+  `register_address` varchar(255) DEFAULT NULL COMMENT '注册地址(专票等)',
+  `register_phone` varchar(32) DEFAULT NULL COMMENT '注册电话(专票等)',
+  `bank_name` varchar(64) DEFAULT NULL COMMENT '开户银行',
+  `bank_account` varchar(64) DEFAULT NULL COMMENT '银行账号',
+  `receiver_email` varchar(128) DEFAULT NULL COMMENT '收票邮箱',
+  `receiver_mobile` varchar(20) DEFAULT NULL COMMENT '收票手机',
+  `is_default` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否默认 0:否 1:是',
+  `create_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_is_default` (`is_default`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户常用开票信息';
+
+
 DROP TABLE IF EXISTS `#__wechat_setting`;
 CREATE TABLE `#__wechat_setting` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2501,6 +2600,8 @@ CREATE TABLE `#__wechat_setting` (
   `wechat_official_setting` text COMMENT '微信公众号配置json',
   `wechat_official_menu` text COMMENT '微信公众号菜单json',
   `wechat_mini_setting` text COMMENT '微信小程序配置json',
+  `wechat_web_setting` text COMMENT '微信开放平台-网站应用配置json(PC扫码登录)',
+  `wechat_app_setting` text COMMENT '微信开放平台-移动应用配置json(APP内微信登录)',
   `create_at` int(11) DEFAULT NULL,
   `update_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),

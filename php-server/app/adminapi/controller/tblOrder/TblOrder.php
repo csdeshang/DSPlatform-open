@@ -183,6 +183,40 @@ class TblOrder extends BaseAdminController
 
     /**
      * @OA\Get(
+     *     path="/adminapi/tbl-order/orders/export",
+     *     summary="导出订单 Excel（筛选条件与列表一致）",
+     *     tags={"admin-api/tblOrder/TblOrder"},
+     *     @OA\Response(response=200, description="xlsx 文件流")
+     * )
+     */
+    public function exportTblOrders()
+    {
+        $data = array(
+            'platform' => input('param.platform'),
+            'user_id' => input('param.user_id'),
+            'username' => input('param.username'),
+            'store_id' => input('param.store_id'),
+            'merchant_name' => input('param.merchant_name'),
+            'store_name' => input('param.store_name'),
+            'goods_name' => input('param.goods_name'),
+            'order_sn' => input('param.order_sn'),
+            'order_id' => input('param.order_id'),
+            'out_trade_no' => input('param.out_trade_no'),
+            'trade_no' => input('param.trade_no'),
+            'delivery_method' => input('param.delivery_method'),
+            'order_status' => input('param.order_status'),
+            'is_evaluate' => input('param.is_evaluate'),
+            'refund_status' => input('param.refund_status'),
+            'is_refunding' => input('param.is_refunding'),
+            'pay_amount_min' => input('param.pay_amount_min'),
+            'pay_amount_max' => input('param.pay_amount_max'),
+        );
+
+        (new TblOrderService())->exportTblOrders($data);
+    }
+
+    /**
+     * @OA\Get(
      *     path="/adminapi/tbl-order/orders/{id}",
      *     summary="获取订单详情",
      *     tags={"admin-api/tblOrder/TblOrder"},

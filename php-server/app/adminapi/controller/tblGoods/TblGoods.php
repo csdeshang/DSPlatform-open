@@ -51,6 +51,13 @@ class TblGoods extends BaseAdminController
      *         description="店铺名称",
      *         @OA\Schema(type="string")
      *     ),
+     *     @OA\Parameter(
+     *         name="category_id",
+     *         in="query",
+     *         required=false,
+     *         description="商品分类ID",
+     *         @OA\Schema(type="integer")
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="操作成功",
@@ -70,6 +77,7 @@ class TblGoods extends BaseAdminController
             'goods_name' => input('param.goods_name'),
             'is_distributor_goods' => input('param.is_distributor_goods'),
             'store_name' => input('param.store_name'),
+            'category_id' => input('param.category_id', 0),
         );
 
         $this->validate($data, 'app\adminapi\controller\tblGoods\validate\TblGoodsValidate.pages');
