@@ -104,7 +104,7 @@ const handleAddRule = () => {
 }
 
 // 编辑规则
-const handleEditRule = (row) => {
+const handleEditRule = (row: any) => {
     feeRuleFormRef.value.openDialog(row);
 }
 

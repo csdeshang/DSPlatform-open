@@ -36,7 +36,8 @@
                 </el-form-item>
 
                 <el-form-item label="平台商品">
-                    <el-radio-group v-model="store.selectedElement.settings.goodsSetting.platform">
+                    <el-radio-group v-model="store.selectedElement.settings.goodsSetting.platform"
+                        @change="handlePlatformChange">
                         <el-radio label="all" border value="" class="mb-[10px]">全部</el-radio>
                         <el-radio v-for="item in platformList" :key="item.id" :label="item.platform"
                             :value="item.platform" border class="mb-[10px]">
@@ -45,17 +46,21 @@
                     </el-radio-group>
                 </el-form-item>
 
-                <!--
-                <el-form-item label="商品来源">
-                    <el-radio-group v-model="store.selectedElement.settings.goodsSetting.source">
-                        <el-radio label="all" value="all">全部</el-radio>
-                        <el-radio label="select" value="select">自选</el-radio>
-                        <el-radio label="category" value="category">分类</el-radio>
-                        <el-radio label="brand" value="brand">品牌</el-radio>
-                    </el-radio-group>
+                <el-form-item label="商品分类">
+                    <el-tree-select
+                        v-model="store.selectedElement.settings.goodsSetting.category_id"
+                        :data="categoryList"
+                        node-key="id"
+                        :props="{ label: 'name', children: 'children' }"
+                        :placeholder="categoryPlaceholder"
+                        :disabled="!currentPlatform"
+                        clearable
+                        check-strictly
+                        filterable
+                        class="w-[240px]"
+                        @change="handleCategoryChange"
+                    />
                 </el-form-item>
-                -->
-
 
 
             </el-form>
@@ -72,10 +77,11 @@
 </template>
 
 <script setup>
-import { watch, ref } from 'vue';
+import { watch, ref, computed } from 'vue';
 import BaseStyles from './base-styles.vue';
 import useEditableStore from '@/stores/modules/editable';
 import { getSysPlatformList } from '@/pages-admin/main/api/system/SysPlatform';
+import { getTblGoodsCategoryTree } from '@/pages-admin/main/api/tbl-goods/tblGoodsCategory';
 import UniappLink from './editors/uniapp-link/index.vue'
 
 // 获取状态管理
@@ -83,31 +89,69 @@ const store = useEditableStore();
 
 // 平台列表
 const platformList = ref([])
-// 获取平台列表 store 类型
+const categoryList = ref([])
+
+const currentPlatform = computed(() => {
+    const platform = store.selectedElement?.settings?.goodsSetting?.platform
+    if (!platform || platform === 'all') {
+        return ''
+    }
+    return platform
+})
+
+const categoryPlaceholder = computed(() =>
+    currentPlatform.value ? '全部' : '请先选择平台'
+)
+
 const fetchSysPlatformList = async () => {
     const res = await getSysPlatformList({ scene: 'store' })
-    platformList.value = res.data
+    platformList.value = res.data || []
 }
 fetchSysPlatformList()
+
+const fetchCategoryList = async (platform = '') => {
+    if (!platform) {
+        categoryList.value = []
+        return
+    }
+    try {
+        const res = await getTblGoodsCategoryTree({ platform })
+        categoryList.value = res.data || []
+    } catch (error) {
+        console.error('获取商品分类失败:', error)
+        categoryList.value = []
+    }
+}
+
+const handleCategoryChange = (val) => {
+    if (!val && store.selectedElement?.settings?.goodsSetting) {
+        store.selectedElement.settings.goodsSetting.category_id = undefined
+    }
+}
+
+const handlePlatformChange = () => {
+    if (store.selectedElement?.settings?.goodsSetting) {
+        store.selectedElement.settings.goodsSetting.category_id = undefined
+    }
+    fetchCategoryList(currentPlatform.value)
+}
+
+watch(currentPlatform, (platform) => {
+    fetchCategoryList(platform)
+}, { immediate: true })
 
 // 初始化数据
 const initialFormData = {
     // 商品设置
     goodsSetting: {
         // 平台 all:全部 platform:平台
-        platform: 'all',
+        platform: '',
+        // 商品分类ID
+        category_id: undefined,
         // 排序  default 默认  price 价格  sales 销量  new 新品  hot 热销  recommend 推荐
         sort: 'default',
         // 显示数量
         nums: 10,
-        // 商品来源  all 全部  select 自选  category 分类  brand 品牌
-        source: 'all',
-        // 自选
-        goods_ids: [],
-        // 分类
-        category_ids: [],
-        // 品牌
-        brand_ids: [],
 
         // 是否显示头部标题
         is_show_header_title: false,

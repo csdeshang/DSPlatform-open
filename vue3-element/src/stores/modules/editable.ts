@@ -95,7 +95,7 @@ const useEditableStore = defineStore('editable', {
         },
 
         // 选择元素
-        selectElement(index) {
+        selectElement(index: number) {
             this.pageConfig.selectedElementIndex = index;
         },
 
@@ -105,7 +105,7 @@ const useEditableStore = defineStore('editable', {
         },
 
         // 移动元素
-        moveElement(index, direction) {
+        moveElement(index: number, direction: number) {
             const newIndex = index + direction;
             if (newIndex >= 0 && newIndex < this.pageConfig.elementsConfig.length) {
                 const element = this.pageConfig.elementsConfig.splice(index, 1)[0];
@@ -115,14 +115,14 @@ const useEditableStore = defineStore('editable', {
         },
 
         // 复制元素
-        duplicateElement(index) {
+        duplicateElement(index: number) {
             const element = JSON.parse(JSON.stringify(this.pageConfig.elementsConfig[index]));
             this.pageConfig.elementsConfig.splice(index + 1, 0, element);
             this.pageConfig.selectedElementIndex = index + 1;
         },
 
         // 删除元素
-        removeElement(index) {
+        removeElement(index: number) {
             this.pageConfig.elementsConfig.splice(index, 1);
             if (this.pageConfig.elementsConfig.length === 0 || this.pageConfig.selectedElementIndex >= this.pageConfig.elementsConfig.length) {
                 this.pageConfig.selectedElementIndex = null;
@@ -130,7 +130,7 @@ const useEditableStore = defineStore('editable', {
         },
 
         // 加载页面数据
-        async loadPageData(id) {
+        async loadPageData(id: number) {
             this.loading = true;
             try {
                 const response = await getEditablePageInfo(id);
@@ -222,7 +222,7 @@ const useEditableStore = defineStore('editable', {
         },
 
         // 设置预览页面准备状态
-        setPreviewReady(ready) {
+        setPreviewReady(ready: boolean) {
             this.previewReady = ready;
         },
 

@@ -14,9 +14,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { getSysErrorLogsInfo } from '@/pages-admin/main/api/system/sysErrorLogs';
+import type { SysErrorLogDetailItem } from '@/pages-admin/main/api/system/sysErrorLogs.model';
 
 const dialogVisible = ref(false);
-const logDetail = ref([]);
+const logDetail = ref<SysErrorLogDetailItem[]>([]);
 const loading = ref(false);
 let popTitle: string = '';
 

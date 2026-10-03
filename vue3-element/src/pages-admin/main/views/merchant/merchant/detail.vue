@@ -329,6 +329,7 @@
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { getMerchantInfo, updateMerchant } from '@/pages-admin/main/api/merchant/merchant'
+import type { Merchant } from '@/pages-admin/main/api/merchant/merchant.model'
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 import DetailStoreList from './detail-store-list.vue'
 import TblStoreAdd from '@/pages-admin/components/tbl-store/store/add.vue'
@@ -344,7 +345,28 @@ const loading = ref(false)
 const isEditMode = ref(false) // 控制编辑模式
 let popTitle: string = ''
 
-const merchantInfo = reactive({})
+const merchantInfo = reactive<Merchant>({
+    id: 0,
+    name: '',
+    balance: 0,
+    balance_in: 0,
+    balance_out: 0,
+    create_at: '',
+    update_at: '',
+    contact_name: '',
+    contact_phone: '',
+    contact_address: '',
+    is_enabled: 0,
+    is_allow_payment: 0,
+    allowed_store_count: 1,
+    sort: 0,
+    apply_status: 0,
+    apply_status_desc: '',
+    apply_time: '',
+    apply_remark: '',
+    audit_remark: '',
+    audit_time: '',
+})
 
 // 初始化表单数据 - 更新包含所有可编辑字段
 const initialFormData = {

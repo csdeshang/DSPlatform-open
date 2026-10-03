@@ -184,12 +184,12 @@ const sideWidth = computed({
 })
 
 // 切换布局
-const changeLayout = (layout) => {
+const changeLayout = (layout: string) => {
     currentLayout.value = layout
 }
 
 // 切换主题
-const changeTheme = (theme) => {
+const changeTheme = (theme: string) => {
     // 移除所有主题类
     document.documentElement.classList.remove('dark', 'theme-blue', 'theme-green', 'theme-orange', 'theme-purple', 'theme-black')
     
@@ -210,7 +210,7 @@ const changeTheme = (theme) => {
 }
 
 // 获取布局预览样式
-const getLayoutPreviewStyle = (layout) => {
+const getLayoutPreviewStyle = (layout: string) => {
     // 使用当前主题的颜色
     const theme = currentTheme.value
     const styles = getThemeColors(theme)
@@ -223,7 +223,7 @@ const getLayoutPreviewStyle = (layout) => {
 }
 
 // 获取主题预览样式
-const getThemePreviewStyle = (theme) => {
+const getThemePreviewStyle = (theme: string) => {
     const styles = getThemeColors(theme)
     
     return {
@@ -234,7 +234,7 @@ const getThemePreviewStyle = (theme) => {
 }
 
 // 获取主题颜色
-const getThemeColors = (theme) => {
+const getThemeColors = (theme: string) => {
     const styles = {
         light: {
             header: '#ffffff',
@@ -273,7 +273,7 @@ const getThemeColors = (theme) => {
         }
     }
     
-    return styles[theme] || styles.light
+    return styles[theme as keyof typeof styles] || styles.light
 }
 
 // 重置主题配置

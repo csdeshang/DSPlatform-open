@@ -79,13 +79,13 @@ const {
 })
 
 // 行点击事件处理
-const handleRowClick = (row) => {
+const handleRowClick = (row: any) => {
     selectedRowId.value = row.id
     handleSelect(row)
 }
 
 // 选择处理
-const handleSelect = (row) => {
+const handleSelect = (row: any) => {
     // 构建发送到父组件的数据结构
     const selectData = {
         id: row.id,
@@ -93,7 +93,7 @@ const handleSelect = (row) => {
         name: row.title,  // 为兼容index.vue的处理逻辑
         desc: row.description || '',
         image: row.image || '',
-        link: `/pages/article/detail?id=${row.id}`
+        link: `/shared/pages/system/article/detail?id=${row.id}`
     }
 
     emit('select', selectData)

@@ -21,7 +21,7 @@ import AttachmentManageIndex from '@/components/attachment/manage/index.vue'
 
 import { formatFileUrl } from '@/utils/util'
 
-import { IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
+import { IEditorConfig, IToolbarConfig, type IDomEditor } from '@wangeditor/editor'
 
 const props = defineProps({
     modelValue: {
@@ -117,23 +117,23 @@ const handleAttachmentSelect = (data: Record<string, any>) => {
 }
 
 // 编辑器创建完成时的回调
-const handleCreated = (editor) => {
+const handleCreated = (editor: IDomEditor) => {
     editorRef.value = editor
 }
 
 // 编辑器内容变化时的回调
-const handleChange = (editor) => {
+const handleChange = (editor: IDomEditor) => {
     // 触发事件，将内容传递给父组件
     emit('update:modelValue', valueHtml.value);
 }
 
 // 编辑器聚焦时的回调
-const handleFocus = (editor) => {
+const handleFocus = (editor: IDomEditor) => {
     // console.log('编辑器聚焦', editor)
 }
 
 // 编辑器失焦时的回调
-const handleBlur = (editor) => {
+const handleBlur = (editor: IDomEditor) => {
     // console.log('编辑器失焦', editor)
 }
 
@@ -156,7 +156,7 @@ defineExpose({
     getEditor: () => editorRef.value,
     getHtml: () => editorRef.value?.getHtml() || '',
     getText: () => editorRef.value?.getText() || '',
-    setHtml: (html) => {
+    setHtml: (html: string) => {
         if (editorRef.value) {
             editorRef.value.setHtml(html)
         }

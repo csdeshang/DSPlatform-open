@@ -46,12 +46,13 @@ import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { modifyMerchantBalance } from '@/pages-admin/main/api/merchant/merchantBalance'
 import { getMerchantInfo } from '@/pages-admin/main/api/merchant/merchant'
+import type { Merchant } from '@/pages-admin/main/api/merchant/merchant.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const merchantInfo = reactive({})
+const merchantInfo = reactive<Merchant>({})
 
 /**
 * 表单数据
@@ -67,8 +68,8 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const adjustedBalance = computed<string>(() => {
-    const current = parseFloat(merchantInfo.balance)
-    const amount = parseFloat(formData.change_amount || 0)
+    const current = merchantInfo.balance ?? 0
+    const amount = formData.change_amount || 0
     const result = formData.change_mode === 1 ? current + amount : current - amount
     return result.toFixed(2)
 })
@@ -87,7 +88,7 @@ const formRules = computed(() => {
                     if (value <= 0) {
                         return Promise.reject('调整金额必须大于0')
                     }
-                    if (formData.change_mode === 2 && value > parseFloat(merchantInfo.balance)) {
+                    if (formData.change_mode === 2 && value > (merchantInfo.balance ?? 0)) {
                         return Promise.reject('调整金额不能超过当前余额')
                     }
                     return Promise.resolve()

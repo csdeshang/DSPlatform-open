@@ -39,6 +39,12 @@ import { ref, watch } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
 import UniappLink from './uniapp-link/index.vue'
 
+interface TextNavItem {
+    id: string
+    title: string
+    link: string
+}
+
 const props = defineProps({
     modelValue: {
         type: Array,
@@ -52,14 +58,16 @@ const emit = defineEmits(['update:modelValue']);
 // 生成唯一ID
 const generateId = () => `nav_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 // 创建默认导航项
-const createDefaultNavItem = () => ({
+const createDefaultNavItem = (): TextNavItem => ({
     id: generateId(),
     title: '文本标题',
     link: ''
 });
 
 // 用于同步 
-const textList = ref(props.modelValue.length > 0 ? props.modelValue : [createDefaultNavItem()]);
+const textList = ref<TextNavItem[]>(
+    props.modelValue.length > 0 ? (props.modelValue as TextNavItem[]) : [createDefaultNavItem()]
+);
 
 // 添加导航项
 function addText() {
@@ -68,7 +76,7 @@ function addText() {
 }
 
 // 移除导航项
-function removeText(id) {
+function removeText(id: string) {
     if (textList.value.length > 1) {
         textList.value = textList.value.filter(item => item.id !== id);
     }
@@ -84,7 +92,7 @@ watch(textList, (newVal) => {
 // 监听 props.modelValue 变化并同步到本地
 watch(() => props.modelValue, (newVal) => {
     if (newVal.length > 0) {
-        textList.value = newVal;
+        textList.value = newVal as TextNavItem[];
     } else {
         textList.value = [createDefaultNavItem()]; // 确保有默认项
     }

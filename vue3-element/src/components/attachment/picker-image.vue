@@ -88,8 +88,8 @@ const props = defineProps({
 })
 
 
-const imagesList: Record<string, any> = reactive({
-    data: []
+const imagesList = reactive({
+    data: [] as string[]
 })
 
 // 图片预览相关
@@ -120,7 +120,7 @@ const handleChange = () => {
 }
 
 // 处理预览
-const handlePreview = (index) => {
+const handlePreview = (index: number) => {
     if (props.type === 'image') {
         currentPreviewIndex.value = index;
         showImageViewer.value = true;

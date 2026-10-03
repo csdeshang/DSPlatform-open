@@ -1,22 +1,23 @@
 <template>
- 
-    <el-sub-menu v-if="route.children" :index="route.name">
-        <template #title>
+    <template v-if="route.meta.show">
+        <el-sub-menu v-if="visibleChildren.length" :index="route.name">
+            <template #title>
+                <Icon :icon="route.meta.icon" :size="20"/>
+                <span>{{ route.meta.title }}</span>
+            </template>
+            <sidebar-menu-item v-for="item in visibleChildren" :key="item.path" :route="item" />
+        </el-sub-menu>
+        <el-menu-item v-else :index="route.name" @click="router.push({ name: route.name })">
             <Icon :icon="route.meta.icon" :size="20"/>
-            <span>{{ route.meta.title }}</span>
-        </template>
-        <sidebar-menu-item v-for="item in route.children" :key="item.path" :route="item" />
-    </el-sub-menu>
-    <el-menu-item v-else :index="route.name" @click="router.push({ name: route.name })">
-        <Icon :icon="route.meta.icon" :size="20"/>
-        <template #title>
-            <span>{{ route.meta.title }}</span>
-        </template>
-    </el-menu-item>
-
+            <template #title>
+                <span>{{ route.meta.title }}</span>
+            </template>
+        </el-menu-item>
+    </template>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRouter } from "vue-router";
 
 const router = useRouter()
@@ -32,6 +33,9 @@ const props = defineProps({
     },
 })
 
+const visibleChildren = computed(() =>
+    (props.route.children || []).filter((item: any) => item.meta?.show)
+)
 
 </script>
 

@@ -5,7 +5,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formatImageUrl(technicianInfo.avatar, ThumbnailPresets.small)" />
+                            <el-avatar :size="80" :src="formatImageUrl(technicianInfo.avatar ?? '', ThumbnailPresets.small)" />
                         </div>
                         <div class="info">
                             <div class="name">

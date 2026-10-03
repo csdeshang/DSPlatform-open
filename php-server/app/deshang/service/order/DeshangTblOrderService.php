@@ -284,20 +284,16 @@ class DeshangTblOrderService  extends BaseDeshangService
             $actions[] = 'cancel';
         }
 
-        // 订单状态是已发货 
+        // 订单状态是已发货
         if ($order_info['order_status'] == TblOrderEnum::ORDER_STATUS_ACCEPTED) {
-            // 没有正在退款的订单，才能确认收货
-            if ($order_info['refunding_count'] == 0) {
-                $actions[] = 'confirm';
-            }
+            // 系统 confirm：定时自动确认、退款流程静默完成订单；不受 refunding_count 限制。
+            // 定时任务 Minutes 仍通过 refunding_count=0 过滤，避免退款中自动确认。
+            $actions[] = 'confirm';
         }
 
         // 订单状态是已确认(针对外卖)
         if ($order_info['order_status'] == TblOrderEnum::ORDER_STATUS_CONFIRMED) {
-            // 没有正在退款的订单，才能确认收货
-            if ($order_info['refunding_count'] == 0) {
-                $actions[] = 'confirm';
-            }
+            $actions[] = 'confirm';
         }
 
         // 订单状态是已完成

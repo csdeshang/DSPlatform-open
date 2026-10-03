@@ -9,7 +9,7 @@ export interface MenuItem {
   title: string
   icon?: string
   permissions?: string[]
-  is_show?: boolean  // 使用 is_show 替代 hidden
+  is_show?: number | boolean
   is_enabled?: boolean
   keepAlive?: boolean
   sort?: number
@@ -61,7 +61,7 @@ export function transformMenuToRoutes(menus: MenuItem[], firstRoute = true): Rou
         title: menu.title,
         icon: menu.icon,
         permissions: menu.permissions,
-        show: menu.is_show !== undefined ? menu.is_show : true,
+        show: menu.is_show === undefined ? true : menu.is_show == 1,
         keepAlive: menu.keepAlive || false,
         type: menu.type
       }

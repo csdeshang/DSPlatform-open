@@ -133,7 +133,7 @@
                 <el-table-column label="操作" min-width="150" fixed="right">
                     <template #default="{ row }">
                         <div class="flex flex-row">
-                            <el-dropdown @command="(command) => handleMore(command, row)">
+                            <el-dropdown @command="(command: string) => handleMore(command, row)">
                                 <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
                                 <template #dropdown>
                                     <el-dropdown-menu>

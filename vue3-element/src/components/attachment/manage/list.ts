@@ -15,6 +15,7 @@ import {
     updateBatchAttachmentFile,
 
 } from '@/api/attachment'
+import type { AttachmentFile } from '@/api/attachment.model'
 
 export function useAttachmentCate(type: string) {
 
@@ -122,7 +123,7 @@ export function useAttachmentFile(
         page_size: page_size,
         total: 0,
         loading: true,
-        data: [],
+        data: [] as AttachmentFile[],
         searchParam: {
             cid: current_cid,
             type: type,
@@ -248,7 +249,7 @@ export function useAttachmentFile(
 
     // 获取当前选中文件的下标
     const getFileIndex = (id: any) => {
-        let index = selectedFileIndex.indexOf(id);
+        const index = selectedFileIndex.indexOf(id);
         if (index == -1) return 0;
         return index + 1;
     }

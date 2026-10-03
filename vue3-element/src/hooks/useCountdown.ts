@@ -117,9 +117,6 @@ export function useCountdown(options: CountdownOptions = {}) {
         }
 
         try {
-            if (showLoading) {
-                uni.showLoading({ title: '发送中...' });
-            }
 
             const result = await sendFunction();
 
@@ -136,10 +133,6 @@ export function useCountdown(options: CountdownOptions = {}) {
         } catch (error) {
             console.error('发送验证码失败:', error);
             return { success: false, message: '网络错误，请稍后再试', error };
-        } finally {
-            if (showLoading) {
-                uni.hideLoading();
-            }
         }
     };
 

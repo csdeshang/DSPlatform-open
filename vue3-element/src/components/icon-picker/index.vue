@@ -381,7 +381,7 @@ const getIconName = computed(() => {
 });
 
 // 选择图标
-const selectIcon = (icon) => {
+const selectIcon = (icon: string) => {
   selectedIcon.value = icon;
   
   // 如果不需要预览，直接选择

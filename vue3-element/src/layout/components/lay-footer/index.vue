@@ -4,20 +4,17 @@
       <div class="flex flex-col items-center">
         <!-- 链接区域 -->
         <div class="flex space-x-8 mb-4">
-          <a href="#" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
+          <a href="https://www.csdeshang.com" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
             官网
           </a>
-          <a href="#" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
-            社区
-          </a>
-          <a href="#" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
+          <a href="https://help.dsplatform.csdeshang.com" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
             文档
           </a>
         </div>
         
         <!-- 版权信息 -->
         <div class="text-gray-500 text-sm">
-          Copyright © {{ currentYear }} 版权所有
+          Copyright © {{ currentYear }} 长沙德尚网络科技有限公司 版权所有
         </div>
       </div>
     </div>

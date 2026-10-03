@@ -14,9 +14,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { getSysAccessLogsInfo } from '@/pages-admin/main/api/system/sysAccessLogs';
+import type { SysAccessLogDetailItem } from '@/pages-admin/main/api/system/sysAccessLogs.model';
 
 const dialogVisible = ref(false);
-const logDetail = ref([]);
+const logDetail = ref<SysAccessLogDetailItem[]>([]);
 const loading = ref(false);
 let popTitle: string = '';
 

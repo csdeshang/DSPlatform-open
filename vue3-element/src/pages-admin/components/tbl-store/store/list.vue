@@ -64,7 +64,7 @@
                             <el-button type="primary" link @click="handleDtail(row.id)">详情</el-button>
                             <el-button type="primary" link @click="handleAudit(row)"
                                 v-if="row.apply_status != 1">审核</el-button>
-                            <el-dropdown class="ml-[10px]" @command="(command) => handleMore(command, row)">
+                            <el-dropdown class="ml-[10px]" @command="(command: string) => handleMore(command, row)">
                                 <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
                                 <template #dropdown>
                                     <el-dropdown-menu>

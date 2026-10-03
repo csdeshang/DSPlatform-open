@@ -5,7 +5,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formatImageUrl(userInfo.avatar, ThumbnailPresets.small, 'avatar')" />
+                            <el-avatar :size="80" :src="formatImageUrl(userInfo.avatar ?? '', ThumbnailPresets.small, 'avatar')" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -404,6 +404,7 @@ import { computed, reactive, ref } from 'vue';
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
 
 import { getUserInfo, updateUser } from '@/pages-admin/main/api/user/user'
+import type { User } from '@/pages-admin/main/api/user/user.model'
 import DetailStoreList from './detail-store-list.vue'
 import DetailPayLog from './detail-pay-log.vue'
 import DetailBalanceLog from './detail-balance-log.vue'
@@ -423,7 +424,7 @@ let popTitle: string = ''
 const isEditMode = ref(false)
 const tabSelected = ref('user')
 
-const userInfo = reactive({
+const userInfo = reactive<User>({
     id: 0,
     username: '',
     avatar: '',
@@ -494,9 +495,9 @@ const idcardStatusTagMap: Record<number, string> = {
     2: 'danger',
     3: 'success'
 }
-const idcardStatusText = computed(() => idcardStatusMap[userInfo.idcard_status] ?? '未知')
-const idcardStatusTagType = computed(() => idcardStatusTagMap[userInfo.idcard_status] ?? 'info')
-const hasIdcardInfo = computed(() => [1, 2, 3].includes(userInfo.idcard_status) && (userInfo.idcard_name || userInfo.idcard_number || userInfo.idcard_image1 || userInfo.idcard_image2 || userInfo.idcard_image3))
+const idcardStatusText = computed(() => idcardStatusMap[userInfo.idcard_status ?? 0] ?? '未知')
+const idcardStatusTagType = computed(() => idcardStatusTagMap[userInfo.idcard_status ?? 0] ?? 'info')
+const hasIdcardInfo = computed(() => [1, 2, 3].includes(userInfo.idcard_status ?? 0) && (userInfo.idcard_name || userInfo.idcard_number || userInfo.idcard_image1 || userInfo.idcard_image2 || userInfo.idcard_image3))
 
 // 表单验证规则
 const formRules = computed(() => {

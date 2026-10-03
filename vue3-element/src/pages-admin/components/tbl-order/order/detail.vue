@@ -40,7 +40,7 @@
                             <div class="item">
                                 <div class="item-title">收款方:</div>
                                 <div class="item-content">
-                                    {{ orderInfo.pay_merchant_id == 0 ? '平台收款' : '商户收款' }}
+                                    {{ (orderInfo.pay_merchant_id ?? 0) == 0 ? '平台收款' : '商户收款' }}
                                 </div>
                             </div>
                         </el-col>
@@ -79,22 +79,22 @@
                                 <el-row :gutter="20">
                                     <el-col :span="12">
                                         <el-form-item label="用户ID" prop="id">
-                                            <div class="form-text">{{ orderInfo.user.id }}</div>
+                                            <div class="form-text">{{ orderInfo.user?.id }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="用户名" prop="username">
-                                            <div class="form-text">{{ orderInfo.user.username }}</div>
+                                            <div class="form-text">{{ orderInfo.user?.username }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="用户昵称" prop="nickname">
-                                            <div class="form-text">{{ orderInfo.user.nickname }}</div>
+                                            <div class="form-text">{{ orderInfo.user?.nickname }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="用户手机" prop="mobile">
-                                            <div class="form-text">{{ orderInfo.user.mobile }}</div>
+                                            <div class="form-text">{{ orderInfo.user?.mobile }}</div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -109,23 +109,23 @@
                                 <el-row :gutter="20">
                                     <el-col :span="12">
                                         <el-form-item label="收货人" prop="reciver_name">
-                                            <div class="form-text">{{ orderInfo.orderAddress.reciver_name }}</div>
+                                            <div class="form-text">{{ orderInfo.orderAddress?.reciver_name }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="收货人手机" prop="reciver_mobile">
-                                            <div class="form-text">{{ orderInfo.orderAddress.reciver_mobile }}</div>
+                                            <div class="form-text">{{ orderInfo.orderAddress?.reciver_mobile }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="收货地址" prop="reciver_address">
-                                            <div class="form-text">{{ orderInfo.orderAddress.reciver_address }}</div>
+                                            <div class="form-text">{{ orderInfo.orderAddress?.reciver_address }}</div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                             </div>
                         </div>
-                        <div class="section-bd-block" v-if="orderInfo.pay_merchant_id > 0">
+                        <div class="section-bd-block" v-if="(orderInfo.pay_merchant_id ?? 0) > 0">
                             <div class="section-bd-block-title">
                                 收款商户信息
                             </div>
@@ -133,22 +133,22 @@
                                 <el-row :gutter="20">
                                     <el-col :span="12">
                                         <el-form-item label="商户ID：" prop="id">
-                                            <div class="form-text">{{ orderInfo.payMerchant.id }}</div>
+                                            <div class="form-text">{{ orderInfo.payMerchant?.id }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="商户名称" prop="name">
-                                            <div class="form-text">{{ orderInfo.payMerchant.name }}</div>
+                                            <div class="form-text">{{ orderInfo.payMerchant?.name }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="联系人" prop="contact_name">
-                                            <div class="form-text">{{ orderInfo.payMerchant.contact_name }}</div>
+                                            <div class="form-text">{{ orderInfo.payMerchant?.contact_name }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="联系电话" prop="contact_phone">
-                                            <div class="form-text">{{ orderInfo.payMerchant.contact_phone }}</div>
+                                            <div class="form-text">{{ orderInfo.payMerchant?.contact_phone }}</div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -252,12 +252,12 @@
 
                                     <el-col :span="12">
                                         <el-form-item label="评价状态" prop="is_evaluate">
-                                            <div class="form-text">{{ orderInfo.is_evaluate }}</div>
+                                            <div class="form-text">{{ orderInfo.is_evaluate ? '已评价' : '未评价' }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="删除状态" prop="is_deleted">
-                                            <div class="form-text">{{ orderInfo.is_deleted }}</div>
+                                            <div class="form-text">{{ orderInfo.is_deleted ? '已删除' : '未删除' }}</div>
                                         </el-form-item>
                                     </el-col>
 
@@ -332,57 +332,57 @@
                             </div>
                             <div class="section-bd-block-content">
                                 <el-row :gutter="20">
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.pay_amount > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.pay_amount ?? 0) > 0">
                                         <el-form-item label="订单实付金额" prop="pay_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.pay_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.pay_amount }}</div>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.distributor_amount > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.distributor_amount ?? 0) > 0">
                                         <el-form-item label="分销金额" prop="distributor_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.distributor_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.distributor_amount }}</div>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="12">
                                         <el-form-item label="平台抽成金额(店铺)" prop="store_sys_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.store_sys_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.store_sys_amount }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="店铺实际收入" prop="store_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.store_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.store_amount }}</div>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.rider_amount > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.rider_amount ?? 0) > 0">
                                         <el-form-item label="骑手实际收入" prop="rider_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.rider_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.rider_amount }}</div>
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.rider_sys_amount > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.rider_sys_amount ?? 0) > 0">
                                         <el-form-item label="平台抽成金额(骑手)" prop="rider_sys_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.rider_sys_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.rider_sys_amount }}</div>
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.technician_amount > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.technician_amount ?? 0) > 0">
                                         <el-form-item label="师傅实际收入" prop="technician_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.technician_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.technician_amount }}</div>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.technician_service_fee > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.technician_service_fee ?? 0) > 0">
                                         <el-form-item label="师傅服务费" prop="technician_service_fee">
-                                            <div class="form-text">{{ orderInfo.orderFinance.technician_service_fee }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.technician_service_fee }}</div>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="12" v-if="orderInfo.orderFinance.technician_trip_fee > 0">
+                                    <el-col :span="12" v-if="(orderInfo.orderFinance?.technician_trip_fee ?? 0) > 0">
                                         <el-form-item label="师傅路程费" prop="technician_trip_fee">
-                                            <div class="form-text">{{ orderInfo.orderFinance.technician_trip_fee }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.technician_trip_fee }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="退款金额" prop="refund_amount">
-                                            <div class="form-text">{{ orderInfo.orderFinance.refund_amount }}</div>
+                                            <div class="form-text">{{ orderInfo.orderFinance?.refund_amount }}</div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -402,92 +402,92 @@
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="交付状态" prop="status_desc">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.delivery_status_desc }}
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.delivery_status_desc }}
                                             </div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
 
                                 <!-- 快递交付 -->
-                                <el-row :gutter="20" v-if="orderInfo.orderDelivery.delivery_method == 'express'">
+                                <el-row :gutter="20" v-if="orderInfo.orderDelivery?.delivery_method == 'express'">
                                     <el-col :span="12">
                                         <el-form-item label="快递类型" prop="express_type">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.express_type }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.express_type }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="快递公司" prop="express_company">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.express_company }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.express_company }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="快递单号" prop="express_number">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.express_number }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.express_number }}</div>
                                         </el-form-item>
                                     </el-col>
 
                                 </el-row>
 
                                 <!-- 骑手配送 -->
-                                <el-row :gutter="20" v-if="orderInfo.orderDelivery.delivery_method == 'rider'">
+                                <el-row :gutter="20" v-if="orderInfo.orderDelivery?.delivery_method == 'rider'">
                                     <el-col :span="12">
                                         <el-form-item label="骑手ID" prop="rider_id">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.rider_id }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.rider_id }}</div>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="12">
                                         <el-form-item label="配送总费用" prop="rider_total_fee">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.rider_total_fee }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.rider_total_fee }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="平台抽佣比例" prop="rider_fee_rate">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.rider_fee_rate }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.rider_fee_rate }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="骑手实际配送费" prop="rider_fee">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.rider_fee }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.rider_fee }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="骑手费用说明" prop="rider_fee_desc">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.rider_fee_desc }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.rider_fee_desc }}</div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
 
                                 <!-- 上门服务 -->
-                                <el-row :gutter="20" v-if="orderInfo.orderDelivery.delivery_method == 'technician'">
+                                <el-row :gutter="20" v-if="orderInfo.orderDelivery?.delivery_method == 'technician'">
                                     <el-col :span="12">
                                         <el-form-item label="师傅ID" prop="technician_id">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.technician_id }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.technician_id }}</div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="预约时间" prop="technician_appt_time">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.technician_appt_time }}
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.technician_appt_time }}
                                             </div>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="12">
                                         <el-form-item label="服务时长" prop="technician_duration">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.technician_duration }}
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.technician_duration }}
                                             </div>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="12">
                                         <el-form-item label="店铺抽佣比例" prop="technician_fee_rate">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.technician_fee_rate }}
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.technician_fee_rate }}
                                             </div>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="12">
                                         <el-form-item label="师傅实际收入" prop="technician_fee">
-                                            <div class="form-text">{{ orderInfo.orderDelivery.technician_fee }}</div>
+                                            <div class="form-text">{{ orderInfo.orderDelivery?.technician_fee }}</div>
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
@@ -572,8 +572,9 @@
 
 <script lang="ts" setup>
 
-import { computed, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { getTblOrderInfo } from '@/pages-admin/main/api/tbl-order/tblOrder'
+import type { TblOrder } from '@/pages-admin/main/api/tbl-order/tblOrder.model'
 import DetailGoods from './detail-goods.vue'
 import DetailLog from './detail-log.vue'
 import DetailPayLog from './detail-pay-log.vue'
@@ -587,12 +588,13 @@ const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const orderInfo = reactive({
+const orderInfo = reactive<TblOrder>({
     user: {},
     store: {},
     payMerchant: {},
     orderAddress: {},
     orderDelivery: {},
+    orderFinance: {},
 })
 
 

@@ -285,8 +285,8 @@ onMounted(async () => {
 
   // 从URL获取页面ID
   const pageId = route.query.id;
-  if (pageId) {
-    await editableStore.loadPageData(pageId);
+  if (pageId && !Array.isArray(pageId)) {
+    await editableStore.loadPageData(Number(pageId));
   } else {
     ElMessage.error('未指定页面ID，无法加载页面');
   }

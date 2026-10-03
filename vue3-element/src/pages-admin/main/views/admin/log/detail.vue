@@ -14,9 +14,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { getAdminLogInfo } from '@/pages-admin/main/api/admin/adminLog';
+import type { AdminLogDetailItem } from '@/pages-admin/main/api/admin/adminLog.model';
 
 const dialogVisible = ref(false);
-const logDetail = ref([]);
+const logDetail = ref<AdminLogDetailItem[]>([]);
 const loading = ref(false);
 let popTitle: string = '';
 

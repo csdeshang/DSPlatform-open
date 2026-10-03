@@ -35,7 +35,7 @@ export function updateEditablePage(params: Record<string, any>) {
  * @param id
  * @returns
  */
-export function getEditablePageInfo(id: string) {
+export function getEditablePageInfo(id: number) {
     return request.get(`${API_BASE_URLS.ADMIN}/editable/editables/${id}`)
 }
 
@@ -45,7 +45,7 @@ export function getEditablePageInfo(id: string) {
  * @param id
  * @returns
  */
-export function deleteEditablePage(id: string) {
+export function deleteEditablePage(id: number) {
     return request.delete(`${API_BASE_URLS.ADMIN}/editable/editables/${id}`)
 }
 

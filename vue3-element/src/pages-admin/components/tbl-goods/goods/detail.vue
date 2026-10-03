@@ -12,7 +12,7 @@
                 <div class="section-hd-top">
                     <div class="section-hd-top-left">
                         <div class="avatar">
-                            <el-avatar :size="80" :src="formatImageUrl(goodsDetail.cover_image, ThumbnailPresets.medium, 'goods')" />
+                            <el-avatar :size="80" :src="formatImageUrl(goodsDetail.cover_image ?? '', ThumbnailPresets.medium, 'goods')" />
                         </div>
                         <div class="info">
                             <div class="name">
@@ -264,6 +264,7 @@
 import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { getTblGoodsInfo, updateTblGoods } from '@/pages-admin/main/api/tbl-goods/tblGoods'
+import type { TblGoods } from '@/pages-admin/main/api/tbl-goods/tblGoods.model'
 import DetailOrderGoods from './detail-order-goods.vue'
 import DetailDistributorOrder from './detail-distributor-order.vue'
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
@@ -275,7 +276,7 @@ const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const goodsDetail = reactive({})
+const goodsDetail = reactive<TblGoods>({})
 
 // 初始化表单数据
 const initialFormData = {

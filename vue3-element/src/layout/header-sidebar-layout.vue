@@ -24,7 +24,7 @@ const themeConfigStore = useThemeConfigStore()
 const userInfoStore = useUserInfoStore()
 
 // 根据当前路由查找对应的顶部菜单
-const findTopMenuByPath = (path) => {
+const findTopMenuByPath = (path: string) => {
   const menuRoutes = userInfoStore.menuRoutes
   
   for (const topRoute of menuRoutes) {

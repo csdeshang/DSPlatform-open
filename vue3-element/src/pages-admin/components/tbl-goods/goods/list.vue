@@ -10,6 +10,20 @@
                 <el-form-item label="店铺名">
                     <el-input v-model="searchParams.store_name" placeholder="输入店铺名" clearable />
                 </el-form-item>
+                <el-form-item label="商品分类">
+                    <el-tree-select
+                        v-model="searchParams.category_id"
+                        :data="categoryList"
+                        node-key="id"
+                        :props="{ label: 'name', children: 'children' }"
+                        placeholder="全部"
+                        clearable
+                        check-strictly
+                        filterable
+                        class="w-[240px]"
+                        @change="handleCategoryChange"
+                    />
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="resetPage">查询</el-button>
                     <el-button @click="resetSearchParams">重置</el-button>
@@ -52,7 +66,7 @@
                     <template #default="{ row }">
                         <div class="flex flex-row flex-wrap justify-end gap-x-0">
                             <el-button type="primary" link @click="handleDtail(row)">详情</el-button>
-                            <el-dropdown class="ml-[6px]" @command="(command) => handleMore(command, row)">
+                            <el-dropdown class="ml-[6px]" @command="(command: string) => handleMore(command, row)">
                                 <el-button type="primary" link>更多<el-icon><arrow-down /></el-icon></el-button>
                                 <template #dropdown>
                                     <el-dropdown-menu>
@@ -89,7 +103,7 @@
 
 <script lang="ts" setup>
 
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
@@ -98,6 +112,7 @@ import { openGoodsPreview } from '@/utils/goods-preview'
 import { ArrowDown } from '@element-plus/icons-vue'
 import { usePagination } from '@/hooks/usePagination'
 import { getTblGoodsPages, updateTblGoodsSysRecommend, softDeleteTblGoods, restoreTblGoods } from '@/pages-admin/main/api/tbl-goods/tblGoods'
+import { getTblGoodsCategoryTree } from '@/pages-admin/main/api/tbl-goods/tblGoodsCategory'
 import TblGoodsDetail from './detail.vue'
 import EditSysStatus from './editSysStatus.vue'
 
@@ -116,9 +131,30 @@ const props = defineProps({
 const searchParams = reactive({
     goods_name: '',
     store_name: '',
+    category_id: undefined as number | undefined,
     platform: props.platform,
     tab_selected: 'all'
 })
+
+const categoryList = ref<any[]>([])
+
+const fetchCategoryList = () => {
+    getTblGoodsCategoryTree({ platform: props.platform }).then(res => {
+        categoryList.value = res.data || []
+    }).catch(() => {
+        categoryList.value = []
+    })
+}
+
+onMounted(() => {
+    fetchCategoryList()
+})
+
+const handleCategoryChange = (val: number | null) => {
+    if (!val) {
+        searchParams.category_id = undefined
+    }
+}
 
 // 切换列表 Tab
 const handleTabChange = (name: any) => {

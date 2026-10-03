@@ -1,6 +1,6 @@
 <template>
     <el-dialog v-model="dialogVisible" title="调整师傅余额" width="500px" :before-close="closeDialog">
-        <el-form ref="formRef" :model="formData" :rules="rules" label-width="100px">
+        <el-form ref="formRef" :model="formData" :rules="formRules" label-width="100px">
             <el-form-item label="师傅信息">
                 <div class="text-gray-600">
                     <div>姓名：{{ technicianInfo.name }}</div>
@@ -45,7 +45,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, computed } from 'vue'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { type FormInstance } from 'element-plus'
 import { modifyTechnicianBalance } from '@/pages-admin/main/api/technician/technicianBalance'
 
 const dialogVisible = ref(false)
@@ -65,39 +65,40 @@ const formData = reactive({
     change_desc: ''
 })
 
-const rules: FormRules = {
-    change_type: [
-        { required: true, message: '请选择调整类型', trigger: 'change' }
-    ],
-    change_amount: [
-        { required: true, message: '请输入调整金额', trigger: 'blur' },
-        {
-            validator: (rule: any, value: number) => {
-                if (value <= 0) {
-                    return Promise.reject('调整金额必须大于0')
-                }
-                if (formData.change_type === 2 && value > parseFloat(technicianInfo.balance)) {
-                    return Promise.reject('调整金额不能超过当前余额')
-                }
-                return Promise.resolve()
-            },
-            trigger: 'blur'
-        }
-    ],
-    change_desc: [
-        { required: true, message: '请输入调整说明', trigger: 'blur' },
-        { min: 2, max: 200, message: '调整说明长度在2到200个字符', trigger: 'blur' }
-    ]
-}
+const formRules = computed(() => {
+    return {
+        change_type: [
+            { required: true, message: '请选择调整类型', trigger: 'change' }
+        ],
+        change_amount: [
+            { required: true, message: '请输入调整金额', trigger: 'blur' },
+            {
+                validator: (rule: any, value: number) => {
+                    if (value <= 0) {
+                        return Promise.reject('调整金额必须大于0')
+                    }
+                    if (formData.change_type === 2 && value > (technicianInfo.balance ?? 0)) {
+                        return Promise.reject('调整金额不能超过当前余额')
+                    }
+                    return Promise.resolve()
+                },
+                trigger: 'blur'
+            }
+        ],
+        change_desc: [
+            { required: true, message: '请输入调整说明', trigger: 'blur' },
+            { min: 2, max: 200, message: '调整说明长度在2到200个字符', trigger: 'blur' }
+        ]
+    }
+})
 
 const emit = defineEmits<{
     complete: []
 }>()
 
 const adjustedBalance = computed<string>(() => {
-    if (!technicianInfo.balance) return '0.00'
-    const current = parseFloat(technicianInfo.balance)
-    const amount = parseFloat(formData.change_amount || 0)
+    const current = technicianInfo.balance ?? 0
+    const amount = formData.change_amount || 0
     const result = formData.change_type === 1 ? current + amount : current - amount
     return result.toFixed(2)
 })

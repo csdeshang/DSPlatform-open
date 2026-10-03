@@ -49,12 +49,13 @@
 import { computed, reactive, ref } from 'vue';
 import { formatImageUrl } from '@/utils/image'
 import { getUserInfo, auditUserIdcard } from '@/pages-admin/main/api/user/user'
+import type { User } from '@/pages-admin/main/api/user/user.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const userInfo = reactive({})
+const userInfo = reactive<User>({})
 
 const canAudit = computed(() => userInfo.idcard_status === 1)
 const auditTip = computed(() => {

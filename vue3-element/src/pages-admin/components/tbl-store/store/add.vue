@@ -42,6 +42,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 
 import MerchantSelect from '@/pages-admin/components/merchant/select.vue'
 import { getSysPlatformList } from '@/pages-admin/main/api/system/SysPlatform'
+import type { SysPlatform } from '@/pages-admin/main/api/system/SysPlatform.model'
 
 import { createMallStore } from '@/pages-admin/platform/mall/api/store/store'
 import { createFoodStore } from '@/pages-admin/platform/food/api/store/store'
@@ -68,7 +69,7 @@ const merchantInfo = ref({
     id: ''
 })
 
-const platformList = ref([])
+const platformList = ref<SysPlatform[]>([])
 
 const dialogVisible = ref(false)
 const loading = ref(false)

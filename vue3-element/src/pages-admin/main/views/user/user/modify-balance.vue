@@ -46,12 +46,13 @@ import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { modifyUserBalance } from '@/pages-admin/main/api/user/userBalance'
 import { getUserInfo } from '@/pages-admin/main/api/user/user'
+import type { User } from '@/pages-admin/main/api/user/user.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const userInfo = reactive({})
+const userInfo = reactive<User>({})
 
 /**
 * 表单数据
@@ -67,8 +68,8 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const adjustedBalance = computed<string>(() => {
-    const current = parseFloat(userInfo.balance)
-    const amount = parseFloat(formData.change_amount || 0)
+    const current = userInfo.balance ?? 0
+    const amount = formData.change_amount || 0
     const result = formData.change_mode === 1 ? current + amount : current - amount
     return result.toFixed(2)
 })
@@ -80,21 +81,21 @@ const formRules = computed(() => {
         change_mode: [
             { required: true, message: '请选择调整类型', trigger: 'change' }
         ],
-        // change_amount: [
-        //     { required: true, message: '请输入调整金额', trigger: 'blur' },
-        //     {
-        //         validator: (rule: any, value: number) => {
-        //             if (value <= 0) {
-        //                 return Promise.reject('调整金额必须大于0')
-        //             }
-        //             if (formData.change_mode === 2 && value > parseFloat(userInfo.balance)) {
-        //                 return Promise.reject('调整金额不能超过当前余额')
-        //             }
-        //             return Promise.resolve()
-        //         },
-        //         trigger: 'blur'
-        //     }
-        // ]
+        change_amount: [
+            { required: true, message: '请输入调整金额', trigger: 'blur' },
+            {
+                validator: (rule: any, value: number) => {
+                    if (value <= 0) {
+                        return Promise.reject('调整金额必须大于0')
+                    }
+                    if (formData.change_mode === 2 && value > (userInfo.balance ?? 0)) {
+                        return Promise.reject('调整金额不能超过当前余额')
+                    }
+                    return Promise.resolve()
+                },
+                trigger: 'blur'
+            }
+        ]
     }
 })
 

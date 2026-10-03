@@ -369,6 +369,7 @@ import { ElMessage } from 'element-plus';
 import { getStatUserOverview } from '@/pages-admin/main/api/stat/statUser';
 import { getStatMerchantOverview } from '@/pages-admin/main/api/stat/statMerchant';
 import { getSystemInfo } from '@/pages-admin/main/api/system/sysInfo';
+import type { SystemInfo } from '@/pages-admin/main/api/system/sysInfo.model';
 import router from '@/router';
 import Icon from '@/components/icon/index.vue';
 
@@ -423,7 +424,7 @@ const merchantStats = reactive({
 });
 
 // 系统信息
-const systemInfo = reactive({
+const systemInfo = reactive<SystemInfo>({
   environment: {},
   version: {}
 });

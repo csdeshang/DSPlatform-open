@@ -46,14 +46,13 @@ import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { modifyRiderBalance } from '@/pages-admin/main/api/rider/riderBalance'
 import { getRiderInfo } from '@/pages-admin/main/api/rider/rider'
+import type { Rider } from '@/pages-admin/main/api/rider/rider.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const riderInfo = reactive({
-    
-})
+const riderInfo = reactive<Rider>({})
 
 /**
 * 表单数据
@@ -69,9 +68,8 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const adjustedBalance = computed<string>(() => {
-    if (!riderInfo.balance) return '0.00'
-    const current = parseFloat(riderInfo.balance)
-    const amount = parseFloat(formData.change_amount || 0)
+    const current = riderInfo.balance ?? 0
+    const amount = formData.change_amount || 0
     const result = formData.change_mode === 1 ? current + amount : current - amount
     return result.toFixed(2)
 })
@@ -90,7 +88,7 @@ const formRules = computed(() => {
                     if (value <= 0) {
                         return Promise.reject('调整金额必须大于0')
                     }
-                    if (formData.change_mode === 2 && value > parseFloat(riderInfo.balance)) {
+                    if (formData.change_mode === 2 && value > (riderInfo.balance ?? 0)) {
                         return Promise.reject('调整金额不能超过当前余额')
                     }
                     return Promise.resolve()

@@ -48,12 +48,13 @@ import { modifyDistributorBalance } from '@/pages-admin/main/api/distributor/dis
 
 // 分销商与会员是同一套用户系统
 import { getUserInfo } from '@/pages-admin/main/api/user/user'
+import type { User } from '@/pages-admin/main/api/user/user.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const userInfo = reactive({})
+const userInfo = reactive<User>({})
 
 /**
 * 表单数据
@@ -69,8 +70,8 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const adjustedBalance = computed<string>(() => {
-    const current = parseFloat(userInfo.distributor_balance)
-    const amount = parseFloat(formData.change_amount || 0)
+    const current = userInfo.distributor_balance ?? 0
+    const amount = formData.change_amount || 0
     const result = formData.change_mode === 1 ? current + amount : current - amount
     return result.toFixed(2)
 })
@@ -89,7 +90,7 @@ const formRules = computed(() => {
                     if (value <= 0) {
                         return Promise.reject('调整金额必须大于0')
                     }
-                    if (formData.change_mode === 2 && value > parseFloat(userInfo.distributor_balance)) {
+                    if (formData.change_mode === 2 && value > (userInfo.distributor_balance ?? 0)) {
                         return Promise.reject('调整金额不能超过当前余额')
                     }
                     return Promise.resolve()

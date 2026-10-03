@@ -46,7 +46,7 @@ const routes = computed(() => userInfoStore.menuRoutes)
 
 // 只获取一级菜单
 const topLevelRoutes = computed(() => {
-  return routes.value.filter(route => route.meta && route.meta.title)
+  return routes.value.filter(route => route.meta?.show && route.meta?.title)
 })
 
 // 当前激活的菜单
@@ -66,7 +66,7 @@ const activeMenu = computed(() => {
 })
 
 // 根据路径查找对应的顶部菜单
-const findTopMenuByPath = (path) => {
+const findTopMenuByPath = (path: string) => {
   for (const topRoute of topLevelRoutes.value) {
     if (path === topRoute.path) {
       return topRoute.name
@@ -86,7 +86,7 @@ const findTopMenuByPath = (path) => {
 }
 
 // 处理菜单选择
-const handleMenuSelect = (index) => {
+const handleMenuSelect = (index: string) => {
   if (themeConfigStore.layout === 'header-sidebar') {
     // 在header-sidebar布局下，更新当前顶部菜单
     themeConfigStore.setThemeConfig('currentTopMenu', index)
@@ -117,7 +117,7 @@ const handleMenuSelect = (index) => {
 // 递归查找第一个类型为MENU的子路由
 const findFirstMenuChild = (routes) => {
   for (const route of routes) {
-    if (route.meta && route.meta.type === 'menu') {
+    if (route.meta && route.meta.type === 'menu' && route.meta.show) {
       return route
     }
     

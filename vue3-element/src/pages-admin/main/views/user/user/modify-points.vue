@@ -46,12 +46,13 @@ import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { modifyUserPoints } from '@/pages-admin/main/api/user/userPoints'
 import { getUserInfo } from '@/pages-admin/main/api/user/user'
+import type { User } from '@/pages-admin/main/api/user/user.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const userInfo = reactive({})
+const userInfo = reactive<User>({})
 
 /**
 * 表单数据
@@ -67,8 +68,8 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const adjustedPoints = computed<string>(() => {
-    const current = parseFloat(userInfo.points);
-    const num = parseFloat(formData.change_num || 0);
+    const current = userInfo.points ?? 0;
+    const num = formData.change_num || 0;
     const result = formData.change_mode === 1 ? current + num : current - num;
     return Math.round(result).toString();
 });
@@ -87,7 +88,7 @@ const formRules = computed(() => {
                     if (value <= 0) {
                         return Promise.reject('调整积分必须大于0')
                     }
-                    if (formData.change_mode === 2 && value > parseFloat(userInfo.points)) {
+                    if (formData.change_mode === 2 && value > (userInfo.points ?? 0)) {
                         return Promise.reject('调整积分不能超过当前积分')
                     }
                     return Promise.resolve()

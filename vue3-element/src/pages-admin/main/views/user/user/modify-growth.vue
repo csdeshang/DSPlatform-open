@@ -46,12 +46,13 @@ import type { FormInstance } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 import { modifyUserGrowth } from '@/pages-admin/main/api/user/userGrowth'
 import { getUserInfo } from '@/pages-admin/main/api/user/user'
+import type { User } from '@/pages-admin/main/api/user/user.model'
 
 const dialogVisible = ref(false)
 const loading = ref(false)
 let popTitle: string = ''
 
-const userInfo = reactive({})
+const userInfo = reactive<User>({})
 
 /**
 * 表单数据
@@ -67,8 +68,8 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const adjustedGrowth = computed<string>(() => {
-    const current = parseFloat(userInfo.growth);
-    const num = parseFloat(formData.change_num || 0);
+    const current = userInfo.growth ?? 0;
+    const num = formData.change_num || 0;
     const result = formData.change_mode === 1 ? current + num : current - num;
     return Math.round(result).toString();
 });
@@ -87,7 +88,7 @@ const formRules = computed(() => {
                     if (value <= 0) {
                         return Promise.reject('调整成长值必须大于0')
                     }
-                    if (formData.change_mode === 2 && value > parseFloat(userInfo.growth)) {
+                    if (formData.change_mode === 2 && value > (userInfo.growth ?? 0)) {
                         return Promise.reject('调整成长值不能超过当前成长值')
                     }
                     return Promise.resolve()

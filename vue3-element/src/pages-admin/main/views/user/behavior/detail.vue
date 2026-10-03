@@ -13,9 +13,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { getUserBehaviorLogInfo } from '@/pages-admin/main/api/user/userBehavior';
+import type { UserBehaviorLogDetailItem } from '@/pages-admin/main/api/user/userBehavior.model';
 
 const dialogVisible = ref(false);
-const logDetail = ref([]);
+const logDetail = ref<UserBehaviorLogDetailItem[]>([]);
 const loading = ref(false);
 let popTitle: string = '';
 

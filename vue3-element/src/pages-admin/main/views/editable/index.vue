@@ -78,6 +78,7 @@ import { getEditablePages, deleteEditablePage } from '@/pages-admin/main/api/edi
 import EditablePageAdd from './add.vue'
 
 import { getSysPlatformList } from '@/pages-admin/main/api/system/SysPlatform'
+import type { SysPlatform } from '@/pages-admin/main/api/system/SysPlatform.model'
 
 const router = useRouter();
 
@@ -181,7 +182,7 @@ const handleDelete = (id: number) => {
 
 
 // 获取平台列表
-const platformList = ref<any[]>([])
+const platformList = ref<SysPlatform[]>([])
 const fetchPlatformList = async () => {
     try {
         const response = await getSysPlatformList({});

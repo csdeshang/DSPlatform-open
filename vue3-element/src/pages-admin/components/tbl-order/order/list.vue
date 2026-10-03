@@ -70,6 +70,7 @@
             <el-form-item>
                 <el-button type="primary" @click="resetPage">查询</el-button>
                 <el-button @click="resetSearchParams">重置</el-button>
+                <el-button type="success" :loading="exportLoading" @click="handleExport">导出</el-button>
             </el-form-item>
         </el-form>
     </el-card>
@@ -141,13 +142,15 @@
 <script lang="ts" setup>
 
 import { reactive, ref } from 'vue';
+import { ElMessage } from 'element-plus'
 
 import { formatImageUrl, ThumbnailPresets } from '@/utils/image'
+import { downloadBlob } from '@/utils/download'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
 import { usePagination } from '@/hooks/usePagination'
-import { getTblOrderPages } from '@/pages-admin/main/api/tbl-order/tblOrder'
+import { getTblOrderPages, exportTblOrders } from '@/pages-admin/main/api/tbl-order/tblOrder'
 
 
 
@@ -193,6 +196,24 @@ const {
     searchParams: searchParams
 })
 getTableList()
+
+const exportLoading = ref(false)
+const handleExport = async () => {
+    exportLoading.value = true
+    try {
+        const blob = await exportTblOrders({ ...searchParams }) as unknown as Blob
+        const platform = searchParams.platform || 'all'
+        const d = new Date()
+        const pad = (n: number) => String(n).padStart(2, '0')
+        const filename = `订单导出_${platform}_${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.xlsx`
+        await downloadBlob(blob, filename)
+        ElMessage.success('导出成功')
+    } catch (e: any) {
+        ElMessage.error(e?.message || '导出失败')
+    } finally {
+        exportLoading.value = false
+    }
+}
 
 // 使用枚举 Hook
 import { useEnum } from '@/hooks/useEnum'

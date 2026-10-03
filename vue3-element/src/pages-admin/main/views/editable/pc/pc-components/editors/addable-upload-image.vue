@@ -53,6 +53,13 @@ import { VueDraggable } from 'vue-draggable-plus';
 import UniappLink from './uniapp-link/index.vue'
 import Icon from '@/components/icon/index.vue';
 
+interface ImageNavItem {
+    id: string
+    image: string
+    title: string
+    link: string
+}
+
 const props = defineProps({
     modelValue: {
         type: Array,
@@ -66,7 +73,7 @@ const emit = defineEmits(['update:modelValue']);
 // 生成唯一ID
 const generateId = () => `nav_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 // 创建默认导航项
-const createDefaultNavItem = () => ({
+const createDefaultNavItem = (): ImageNavItem => ({
     id: generateId(),
     image: '',
     title: '图片标题',
@@ -74,7 +81,9 @@ const createDefaultNavItem = () => ({
 });
 
 // 用于同步 PickerImage 的值
-const imageList = ref(props.modelValue.length > 0 ? props.modelValue : [createDefaultNavItem()]);
+const imageList = ref<ImageNavItem[]>(
+    props.modelValue.length > 0 ? (props.modelValue as ImageNavItem[]) : [createDefaultNavItem()]
+);
 
 // 添加导航项
 function addImage() {
@@ -83,7 +92,7 @@ function addImage() {
 }
 
 // 移除导航项
-function removeImage(id) {
+function removeImage(id: string) {
     if (imageList.value.length > 1) {
         imageList.value = imageList.value.filter(item => item.id !== id);
     }
@@ -99,7 +108,7 @@ watch(imageList, (newVal) => {
 // 监听 props.modelValue 变化并同步到本地
 watch(() => props.modelValue, (newVal) => {
     if (newVal.length > 0) {
-        imageList.value = newVal;
+        imageList.value = newVal as ImageNavItem[];
     } else {
         imageList.value = [createDefaultNavItem()]; // 确保有默认项
     }

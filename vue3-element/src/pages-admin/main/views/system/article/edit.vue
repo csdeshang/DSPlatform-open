@@ -62,7 +62,8 @@
 import { ref, reactive, computed } from 'vue';
 
 import { createSysArticle, updateSysArticle, getSysArticleInfo, getSysArticleCategoryTree } from '@/pages-admin/main/api/system/sysArticle';
-import { ElMessage, FormInstance } from 'element-plus';
+import { ElMessage } from 'element-plus';
+import type { FormInstance } from 'element-plus';
 import PickerImage from '@/components/attachment/picker-image.vue'
 
 import RichTextEditor from '@/components/editor/index.vue'

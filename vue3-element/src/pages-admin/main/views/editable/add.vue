@@ -45,6 +45,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { createEditablePage } from '@/pages-admin/main/api/editable/editable'
 import { getSysPlatformList } from '@/pages-admin/main/api/system/SysPlatform'
+import type { SysPlatform } from '@/pages-admin/main/api/system/SysPlatform.model'
 
 
 import { useEnum } from '@/hooks/useEnum'
@@ -54,7 +55,7 @@ const { options: type_options, } = useEnum('default.editable_page.type')
 
 
 // 平台列表
-const platformList = ref([])
+const platformList = ref<SysPlatform[]>([])
 // 获取平台列表 store 类型
 const fetchSysPlatformList = async () => {
   const res = await getSysPlatformList({})

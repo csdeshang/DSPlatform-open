@@ -37,6 +37,16 @@ export function getTblOrderPayLogList(params: Record<string, any>) {
     return request.get(`${API_BASE_URLS.ADMIN}/tbl-order/order-pay-logs`, { params })
 }
 
+/** 导出订单 Excel（返回 Blob） */
+export function exportTblOrders(params: Record<string, any>) {
+    return request.get(`${API_BASE_URLS.ADMIN}/tbl-order/orders/export`, {
+        params,
+        responseType: 'blob',
+        timeout: 120000,
+        showErrorMessage: false,
+    } as any)
+}
+
 
 
 
