@@ -1,13 +1,13 @@
-## DSplatform多店铺商城+外卖+上门服务系统
-DSPlatform系统是一个集成的解决方案，基于Thinkphp8 + Vue3 + Element Plus + Uniapp 开发，系统支持多种商业模式，包括传统商城购物、外卖配送、上门服务、上门家政、短视频带货等，满足不同行业的业务需求。无论是电商平台、本地生活服务、家政服务还是内容电商，都能快速构建完整的业务体系。
+## DSMall Pro多店铺商城+外卖+上门服务系统
+DSMall Pro系统是一个集成的解决方案，基于Thinkphp8 + Vue3 + Element Plus + Uniapp 开发，系统支持多种商业模式，包括传统商城购物、外卖配送、上门服务、上门家政、短视频带货等，满足不同行业的业务需求。无论是电商平台、本地生活服务、家政服务还是内容电商，都能快速构建完整的业务体系。
 
 
-## DSPlatform导航栏目
-- <a href="http://help.dsplatform.csdeshang.com/" target="_blank">DSPlatform帮助手册  http://help.dsplatform.csdeshang.com/</a>
+## DSMall Pro导航栏目
+- <a href="http://help.dsplatform.csdeshang.com/" target="_blank">DSMall Pro帮助手册  http://help.dsplatform.csdeshang.com/</a>
 - <a href="http://www.csdeshang.com) http://www.csdeshang.com" target="_blank">官网地址 http://www.csdeshang.com) http://www.csdeshang.com</a>
 
 
-## DSPlatform演示Demo
+## DSMall Pro演示Demo
 | 演示角色  | 演示地址                                | 账号 | 账号 |
 |-------|-------------------------------------|----|----|
 | 后台PC端 | https://dsplatform.admin.csdeshang.com |  test  |  123456  |
@@ -21,7 +21,7 @@ DSPlatform系统是一个集成的解决方案，基于Thinkphp8 + Vue3 + Elemen
 
 ## 项目介绍
 
-DSPlatform是一个基于现代化技术栈构建的多端电商管理系统，支持PC管理后台、H5、小程序、APP等多个平台。系统采用前后端分离架构，提供完整的电商业务解决方案。
+DSMall Pro是一个基于现代化技术栈构建的多端电商管理系统，支持PC管理后台、H5、小程序、APP等多个平台。系统采用前后端分离架构，提供完整的电商业务解决方案。
 
 ### 核心特性
 
